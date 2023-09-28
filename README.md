@@ -2,7 +2,7 @@
 ####  **介绍** 
 
 
-1.  【 **TI Kitchen 3.0** 】 是一个永久开源的ROM工具箱，支持安卓全版本
+1.  【 **TI Kitchen 4.0** 】 是一个永久开源的ROM工具箱，支持安卓全版本
 
 2.  已支持大多常见镜像的分解/打包，较完善支持erofs/V-AB分区等
 
@@ -75,40 +75,7 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
 
 10.  手机上使用工具时如果使用 **系统ROOT** 对工程目录下进行了操作(比如： **添加文件，修改文件**等。。。 )，请记得给操作过的文件或文件夹  **777**  满权！！！
 
-####  **参与贡献(部分)** 
 
-Credit:
-1.  mke2fs & e2fsdroid [aarch64 from @小新大大](https://github.com/xiaoxindada/SGSI-build-tool)
-2.  e2fsdroid [x86_64 from Erfan Abdi](https://github.com/erfanoabdi/ErfanGSIs)
-3.  mke2fs & e2fsdroid [cygwin64 from @affggh](https://github.com/affggh/fspatch)
-4.  Magisk-bootimage-Kitchen(modified): [affggh @ Github](https://github.com/affggh/magiskbootkitchen)
-5.  termux-linux [xiliuya @ Github](https://github.com/xiliuya/termux-linux)
-6.  sdat2img.py [xpirt   @ Github](https://github.com/xpirt/sdat2img) & [img2sdat.py](https://github.com/xpirt/img2sdat)
-7.  ext4.py [Cubi  @ Github](https://github.com/cubinator/ext4)
-8.  payload-dumper-go(modified) [ssut @ Github](https://github.com/ssut/payload-dumper-go)
-9.  payload-dumper-go [cygwin64 from @affggh](https://github.com/affggh/fspatch)
-10.  dtb_tools [from 小新大大 and 黑风](https://github.com/xiaoxindada/SGSI-build-tool)(http://www.coolapk.com/u/3473348)
-11.  FlashImageTools [from @DXY](http://www.coolapk.com/u/8160711)
-12. oppo_decrypt [from bkerler @github](https://github.com/bkerler/oppo_decrypt)
-13. get_miui.py [@NightstarSakura](https://github.com/NightstarSakura) [@酷安](https://www.coolapk.com/u/2670027)
-14. fspatch.py [from @affggh](https://github.com/affggh/fspatch)
-15. imgextractor.py [from affggh & 小新大大](https://github.com/xiaoxindada)(https://github.com/affggh)
-16. lpmake & lpunpack & lpdump [aarch64 from @hais](http://z.hais.pw/)
-17. lpmake & lpunpack & lpdump [x86_64 from @yeliqin666](https://github.com/yeliqin666)
-18. mkfs.erofs [aarch64 & x86_64 from @忘川](https://github.com/bugme2/)
-19. mkfs.erofs [cygwin64 from @affggh](https://github.com/affggh)
-20. erofsUnpackKt [from @忘川](https://github.com/bugme2/erofs-oneplus)
-21. erofsUnpackRust [cygwin64 from @affggh](https://github.com/affggh)
-22. pack_ext4_with-rw.bash(modified) [from @多幸运](http://www.coolapk.com/u/8160711)
-23. pack_super.bash(modified) [from @秋水](Email：qiurigao@163.com)
-24. pack_payload_tool [x64_64 from @秋水](Email：qiurigao@163.com)
-25. resize2fs [cygwin64 from @affggh](https://github.com/affggh/fspatch)
-26. D.N.A. & CYToolkit for reference on UI [@sharpeter](https://gitee.com/sharpeter/DNA) [@NightstarSakura](https://github.com/NightstarSakura)
-27. gettype [aarch64&cygwin64&x86_64 from affggh @ Github](https://github.com/affggh/gettype)
-28. lpmake & lpunpack [cygwin64 from @affggh](https://github.com/affggh/lpunpack_and_lpmake)
-29. Android Image Kitchen (modified): [osm0sis @ XDA](https://forum.xda-developers.com/t/tool-android-image-kitchen-unpack-repack-kernel-ramdisk-win-android-linux-mac.2073775/)
-30. debuging & suggestions &PR [the active users!]
-31. TIK3 Beta [@yeliqin666](https://gitee.com/yeliqin666/TIK)
 
 ####  **参与维护途径**
 
