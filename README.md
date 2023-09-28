@@ -8,7 +8,7 @@
 
 3.  新增设置功能-调整交互习惯、打包行为
 
-4.  已支持目前安卓13新机型，包括但不限于Xiaomi OPPO Pixel等
+4.  已支持目前安卓14新机型，包括但不限于Xiaomi OPPO Pixel等
 
 5.  Magisk Boot Kitchen & AndroidImagineKitchen双方案分解合成[boot|exaid|recovery/etc].img
     
