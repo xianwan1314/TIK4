@@ -634,7 +634,11 @@ def packChoo(project):
                     partn += 1
                     parts[partn] = packs
                     types[partn] = 'bootimg'
-                    tools[partn] =
+                    if os.path.exists(project + os.sep + "config" + os.sep + packs + "_MBK"):
+                        tools[partn] = 'MBK'
+                    else:
+                        tools[partn] = 'AIK'
+                    print(f"   [{partn}]- {packs} <bootimg>\n")
 
 
 def unpack(file, info, project):
