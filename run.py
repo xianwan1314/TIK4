@@ -753,8 +753,12 @@ def autounpack(project):
                     pass
         os.makedirs(project + os.sep + "config")
         shutil.move(project + os.sep + "payload_properties.txt", project + os.sep + "config")
-        shutil.move(project+os.sep+"META-INF"+os.sep+"com"+os.sep+"android"+os.sep+"metadata", project + os.sep + "config")
-
+        shutil.move(project + os.sep + "META-INF" + os.sep + "com" + os.sep + "android" + os.sep + "metadata",
+                    project + os.sep + "config")
+    for infile in os.listdir(project):
+        filetype = gettype(os.path.abspath(infile))
+        unpack(os.path.abspath(infile), filetype, project)
+        os.remove(os.path.abspath(infile))
 
 
 promenu()
