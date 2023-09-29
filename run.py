@@ -535,6 +535,15 @@ def unpackChoo(project):
                     print(f"   [{filen}]- {ofp0}\n")
                     files[filen] = ofp0
                     infos[filen] = 'ofp'
+    if dir_has(project, '.ops'):
+        print("\033[33m [Ops]文件\033[0m\n")
+        for ops0 in os.listdir(project):
+            if ops0.endswith('.ops'):
+                if os.path.isfile(os.path.abspath(ops0)):
+                    filen += 1
+                    print(f'   [{filen}]- {ops0}\n')
+                    files[filen] = ops0
+                    infos[filen] = 'ops'
 
 
 promenu()
