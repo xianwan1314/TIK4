@@ -668,6 +668,8 @@ def packChoo(project):
                     imgtype = "erofs"
                 else:
                     imgtype = "ext"
+            else:
+                imgtype = 'ext'
             for f in parts.keys():
                 yecho(f"打包{parts[f]}...")
                 if types[f] == 'bootimg':
@@ -680,7 +682,7 @@ def packChoo(project):
                     # makedtbo $partname
                     pass
                 else:
-                    inpacker(parts[f],project,form,imgtype)
+                    inpacker(parts[f], project, form, imgtype)
         elif filed == '55':
             print()
             pacall = input("  是否打包所有镜像？ [1/0]	")
@@ -697,6 +699,8 @@ def packChoo(project):
                     imgtype = "erofs"
                 else:
                     imgtype = "ext"
+            else:
+                imgtype = 'ext'
             for f in parts.keys():
                 if pacall != '1':
                     imgcheck = input(f"  是否打包{parts[f]}?[1/0]	")
@@ -716,7 +720,7 @@ def packChoo(project):
                     pass
                 else:
                     pass
-                    inpacker(parts[f], project, form,imgtype)
+                    inpacker(parts[f], project, form, imgtype)
         elif filed == '66':
             pass
             # packsuper
@@ -735,12 +739,16 @@ def packChoo(project):
                         form = "dat"
                     else:
                         form = 'img'
+                else:
+                    form = 'img'
                 if settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
                     syscheck = input("手动打包所有分区格式为：[1]ext4 [2]erofs")
                     if syscheck == '2':
                         imgtype = "erofs"
                     else:
                         imgtype = "ext"
+                else:
+                    imgtype = 'ext'
                 yecho(f"打包{parts[int(filed)]}")
                 if types[int(filed)] == 'bootimg':
                     pass
@@ -788,7 +796,8 @@ def inpacker(name, project, form, ftype):
     contextpatch.main(in_files, file_contexts)
     utils.qc(fs_config)
     utils.qc(file_contexts)
-    size = int(img_size0 / settings.BLOCKSIZE)
+    size = img_size0 / int(settings.BLOCKSIZE)
+    size = int(size)
     if ftype == 'erofs':
         call(
             f'mkfs.erofs {settings.erofslim} --mount-point {mount_path} --fs-config-file {fs_config} --file-contexts {file_contexts} {out_img} {in_files}')
@@ -844,7 +853,8 @@ def inpacker(name, project, form, ftype):
         except:
             pass
     if form == 'br':
-        call(f'brotli -q {settings.brcom} -j -w 24 {project + os.sep + "TI_out"+os.sep+name+".new.dat"} -o {project + os.sep + "TI_out"+os.sep+name+".new.dat.br"}')
+        call(
+            f'brotli -q {settings.brcom} -j -w 24 {project + os.sep + "TI_out" + os.sep + name + ".new.dat"} -o {project + os.sep + "TI_out" + os.sep + name + ".new.dat.br"}')
 
 
 def unpack(file, info, project):
