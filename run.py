@@ -657,14 +657,11 @@ def packChoo(project):
         if filed == '0':
             op_menu = input("  输出文件格式[1]br [2]dat [3]img:")
             if op_menu == '1':
-                isbr = 1
-                isdat = 1
+                form = 'br'
             elif op_menu == '2':
-                isbr = 0
-                isdat = 1
+                form = 'dat'
             else:
-                isbr = 0
-                isdat = 0
+                form = 'img'
             if settings.diyimgtype == '1':
                 syscheck = input("手动打包所有分区格式为：[1]ext4 [2]erofs")
                 if syscheck == '2':
@@ -683,21 +680,17 @@ def packChoo(project):
                     # makedtbo $partname
                     pass
                 else:
-                    pass
-                    # inpacker $partname
+                    inpacker(parts[f],project,form,imgtype)
         elif filed == '55':
             print()
             pacall = input("  是否打包所有镜像？ [1/0]	")
             op_menu = input("  输出所有文件格式[1]br [2]dat [3]img:")
             if op_menu == '1':
-                isbr = 1
-                isdat = 1
+                form = 'br'
             elif op_menu == '2':
-                isbr = 0
-                isdat = 1
+                form = 'dat'
             else:
-                isbr = 0
-                isdat = 0
+                form = 'img'
             if settings.diyimgtype == '1':
                 syscheck = input("手动打包所有分区格式为：[1]ext4 [2]erofs")
                 if syscheck == '2':
@@ -723,7 +716,7 @@ def packChoo(project):
                     pass
                 else:
                     pass
-                    # inpacker $partname
+                    inpacker(parts[f], project, form,imgtype)
         elif filed == '66':
             pass
             # packsuper
