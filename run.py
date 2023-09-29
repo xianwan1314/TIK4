@@ -518,6 +518,14 @@ def unpackChoo(project):
                     print(f"   [{filen}]- {bin0} <BIN>\n")
                     files[filen] = bin0
                     infos[filen] = 'payload'
+    if dir_has(project, '.ozip'):
+        print("\033[33m [Ozip]文件\033[0m\n")
+        for ozip0 in os.listdir(project):
+            if ozip0.endswith('.ozip'):
+                if os.path.isfile(os.path.abspath(ozip0)) and gettype(os.path.abspath(ozip0)) == 'ozip':
+                    print(f"   [{filen}]- {ozip0}\n")
+                    files[filen] = ozip0
+                    infos[filen] = 'ozip'
 
 
 promenu()

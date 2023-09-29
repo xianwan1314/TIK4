@@ -21,7 +21,7 @@
 1. 【 *.zip, *.br, *.dat, ext4/2 *.img, bootimg 等】传统镜像识别-分解-打包
 2. 【 Super.img <A-onloy/AB/V-AB>, bootimg<header3>, erofs *.img,  等】较新镜像识别-分解-打包
 3. 【 dtbo，dtb , TWRP, ops, ofp, ozip, payload.bin, *.win000-004, *.dat.1~20等】特殊文件的解包/打包
-4. 较完善适配最新 **安卓13** **Erofs** **动态分区** **V-AB分区**
+4. 较完善适配最新 **安卓14** **Erofs** **动态分区** **V-AB分区**
 
 
 【 **软件架构  同时支持** 】
@@ -43,7 +43,7 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
     sudo chmod 777 ./TIK3/run.sh
     ./TIK3/run.sh
 
-####  **【手机端(需自行更新TIK3)】** 
+####  **【手机端】** 
 
 1----运行Termux 获取存储权限 
 
