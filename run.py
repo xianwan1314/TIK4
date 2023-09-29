@@ -856,7 +856,10 @@ def makedtb(sf,project):
 		yecho (f"正在回编译{dts_files}为{new_dtb_files}.dtb")
 		if call(f'dtc -@ -I "dts" -O "dtb" "{dtbdir+os.sep+"dts_files"+os.sep+ dts_files}" -o "$dtbdir/new_dtb_files/$new_dtb_files.dtb"') != 0:
             ywarn ("回编译dtb失败")
-	find $dtbdir/new_dtb_files -name "*.dtb" -exec cat {} \; >$PROJECT_DIR/TI_out/${sf}
+	for dtb in os.listdir(dtbdir+os.sep+"new_dtb_files"):
+		if dtb.endswith('.dtb'):
+
+	find $dtbdir/new_dtb_files -name "*.dtb" -exec cat {} \; >project+os.sep+"TI_out"+os.sep+sf
 	ysuc("回编译完成！")
 	time.sleep(2)
 
