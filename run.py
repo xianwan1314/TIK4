@@ -812,6 +812,13 @@ def inpacker(name, project, form):
                 f'mke2fs -O ^has_journal -L {name} -I 256 -i {settings.inodesize} -M {mount_path} -m 0 -t ext4 -b {settings.BLOCKSIZE} {out_img} {size}')
             call(
                 f'e2fsdroid -e -T {UTC} {settings.extrw} -C {fs_config} -S {file_contexts} -f {in_files} -a {mount_path} {out_img}')
+    if settings.diysize == '':
+        yecho("压缩img中...")
+        if form == 'erofs':
+            yecho("Erofs镜像，跳过压缩...")
+        else:
+            call(f'resize2fs - f - M {out_img}')
+
 
 
 def unpack(file, info, project):
