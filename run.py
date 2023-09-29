@@ -611,6 +611,14 @@ def unpackChoo(project):
 
 def packChoo(project):
     print(" \033[31m >打包 \033[0m\n")
+    partn = 0
+    parts = {}
+    types = {}
+    if not os.path.exists(project + os.sep + "config"):
+        os.makedirs(project + os.sep + "config")
+    if dir_has(project + os.sep + "config", "fs_config"):
+        print("   [0]- 打包所有镜像\n")
+
 
 
 def unpack(file, info, project):
