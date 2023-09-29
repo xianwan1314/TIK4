@@ -773,6 +773,17 @@ def packChoo(project):
         packChoo(project)
 
 
+def inpacker(name, project, form):
+    mount_path = f"/{name}"
+    file_contexts = project + os.sep + "config" + os.sep + name + "_file_contexts"
+    fs_config = project + os.sep + "config" + os.sep + name + "_fs_config"
+    if not settings.utcstamp:
+        UTC = int(time.time())
+    out_img = project + os.sep+name+".img"
+    in_files = project + os.sep+name
+
+
+
 def unpack(file, info, project):
     cleantemp()
     if not os.path.exists(project + os.sep + 'config'):
