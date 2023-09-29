@@ -832,7 +832,7 @@ def unpackboot(file, project):
 
 
 def undtb(project, infile):
-    dtbdir = project + os.sep + os.path.basename(infile) + "_dtbs"
+    dtbdir = project + os.sep + os.path.basename(infile.split(".")[0]) + "_dtbs"
     rmdire(dtbdir)
     if not os.path.exists(dtbdir):
         os.makedirs(dtbdir)
