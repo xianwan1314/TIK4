@@ -505,6 +505,19 @@ def unpackChoo(project):
                         ywarn(f"   [{filen}]- {img0} <UNKNOWN>\n")
                     else:
                         print(f'   [{filen}]- {img0} <{info.upper()}>\n')
+                    files[filen] = img0
+                    if info != 'sparse':
+                        infos[filen] = 'img'
+                    else:
+                        infos[filen] = 'sparse'
+    if dir_has(project, '.bin'):
+        for bin0 in os.listdir(project):
+            if bin0.endswith('.bin'):
+                if os.path.isfile(os.path.abspath(bin0)) and gettype(os.path.abspath(bin0)) == 'payload':
+                    filen += 1
+                    print(f"   [{filen}]- {bin0} <BIN>\n")
+                    files[filen] = bin0
+                    infos[filen] = 'payload'
 
 
 promenu()
