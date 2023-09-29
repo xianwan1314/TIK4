@@ -8,3 +8,10 @@ def cls():
         os.system('clear')
     else:
         print("Ctrl + L to clear the window")
+
+
+def dir_has(path, endswith):
+    for v in os.listdir(path):
+        if v.endswith(endswith):
+            return True
+    return False

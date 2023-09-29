@@ -1,9 +1,14 @@
 #!/usr/bin/env python
 import os
 import json
-from api import cls
+import sys
+
+from api import cls, dir_has
 import time
 import platform as plat
+import shutil
+from utils import gettype
+import requests
 
 LOCALDIR = os.getcwd()
 binner = LOCALDIR + os.sep + "bin"
@@ -14,6 +19,47 @@ AIK = binner + os.sep + 'AIK'
 MBK = binner + os.sep + 'AIK'
 platform = plat.machine()
 ostype = plat.system()
+PIP_MIRROR = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+ebinner = binner + os.sep + ostype + os.sep + platform
+dtc = ebinner + os.sep + "dtc"
+mkdtimg_tool = binner + os.sep + "mkdtboimg.py"
+
+
+def yecho(info): print(f"\033[36m[{time.strftime('%H:%M:%S')}]{info}\033[0m")
+
+
+def ywarn(info): print(f"\033[31m{info}\033[0m")
+
+
+def ysuc(info): print(f"\033[32m[{time.strftime('%H:%M:%S')}]{info}\033[0m")
+
+
+def rmdire(path):
+    if os.path.exists(path):
+        shutil.rmtree(path)
+
+
+def getsize(file):
+    return os.path.getsize(file)
+
+
+
+def cleantemp():
+    rmdire(tempdir)
+    os.mkdir(tempdir)
+
+
+if os.name == 'posix':
+    os.system(f'chmod -R 777 {binner}')
+
+
+def getprop(name, path):
+    with open(path, 'r') as prop:
+        for s in prop.readlines():
+            if s[:1] == '#':
+                continue
+            if name in s:
+                return s.strip().split('=')[1]
 
 
 class set_utils:
@@ -124,7 +170,7 @@ class setting:
         print("  首页banner: [1]TIK3 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧 ")
         banner = input("  请输入序号: ")
         if banner.isdigit():
-            if 0 < int(banner) < 6:
+            if 0 < int(banner) < 7:
                 settings.change('banner', banner)
 
     def settings8(self):
@@ -292,3 +338,173 @@ class setting:
         except AttributeError as e:
             print(f"Input error!{e}")
             self.__init__()
+
+
+def promenu():
+    gs = 1
+    projects = {}
+    cls()
+    try:
+        content = json.loads(requests.get('https://v1.jinrishici.com/all.json').content.decode())
+        shiju = content['content']
+        fr = content['origin']
+        another = content['author']
+    except:
+        gs = 0
+    with open(binner + os.sep + 'banners' + os.sep + settings.banner, 'r') as banner:
+        print(f'\033[31m {banner.read()} \033[0m')
+    print("\033[92;44m Beta Edition \033[0m")
+    if gs == 1:
+        print(f"\033[36m “{shiju}”")
+        print(f"\033[36m---{another}《{fr}》\033[0m\n")
+    print(" >\033[33m 项目列表 \033[0m\n")
+    print("\033[31m   [00]  删除项目\033[0m\n")
+    print("   [0]  新建项目\n")
+    pro = 0
+    del_ = 0
+    if os.listdir(LOCALDIR + os.sep):
+        for pros in os.listdir(LOCALDIR + os.sep):
+            if pros.startswith('TI_') and os.path.isdir(LOCALDIR + os.sep + pros):
+                pro += 1
+                print(f"   [{pro}]  {pros}\n")
+                projects['%s' % pro] = pros
+    print("  --------------------------------------")
+    print("\033[33m  [55] 解压  [66] 退出  [77] 设置  [88] TIK实验室\033[0m")
+    print("")
+    print(" \n")
+    op_pro = input("  请输入序号：")
+    if op_pro == '55':
+        pass
+        # unpackrom
+    elif op_pro == '88':
+        print('\n"维护中..."\n')
+    elif op_pro == '00':
+        op_pro = input("  请输入你要删除的项目序号：")
+        if op_pro in projects.keys():
+            delr = input(f"  确认删除{projects[op_pro]}？[1/0]")
+            if delr == '1':
+                rmdire(LOCALDIR + os.sep + projects[op_pro])
+                ysuc("  删除成功！")
+            else:
+                print(" 取消删除")
+        time.sleep(2)
+    elif op_pro == '0':
+        projec = input("请输入项目名称(非中文)：TI_")
+        if not projec:
+            ywarn("Input Error!")
+            time.sleep(2)
+        else:
+            project = 'TI_%s' % projec
+            if os.path.exists(LOCALDIR + os.sep + project):
+                project = f'{project}_{time.strftime("%m%d%H%M%S")}'
+                ywarn(f"项目已存在！自动命名为：{project}")
+                time.sleep(2)
+            os.makedirs(LOCALDIR + os.sep + project + os.sep + "config")
+            menu(project)
+    elif op_pro == '66':
+        cls()
+        sys.exit(0)
+    elif op_pro == '77':
+        setting()
+    elif op_pro.isdigit():
+        menu(projects[op_pro])
+    else:
+        ywarn("  Input error!")
+        time.sleep(2)
+    promenu()
+
+
+def menu(project):
+    PROJECT_DIR0 = LOCALDIR + os.sep + project
+    PROJECT_DIR = PROJECT_DIR0
+    cls()
+    os.chdir(PROJECT_DIR)
+    if not os.path.exists(os.path.abspath('config')):
+        ywarn("项目已损坏！")
+    if not os.path.exists(PROJECT_DIR + os.sep + 'TI_out'):
+        os.makedirs(PROJECT_DIR + os.sep + 'TI_out')
+    print('\n')
+    print(" \033[31m>ROM菜单 \033[0m\n")
+    print(f"  项目：{project}")
+    if os.path.exists(PROJECT_DIR + os.sep + 'system' + os.sep + 'system' + os.sep + "build.prop"):
+        SYSTEM_DIR0 = PROJECT_DIR0 + os.sep + "system" + os.sep + ("system")
+        SYSTEM_DIR = SYSTEM_DIR0
+    elif os.path.exists(PROJECT_DIR + os.sep + "system" + os.sep + "build.prop"):
+        SYSTEM_DIR0 = PROJECT_DIR0 + os.sep + "system"
+        SYSTEM_DIR = SYSTEM_DIR0
+    else:
+        SYSTEM_DIR = 0
+        ywarn("  非完整ROM项目")
+    print('')
+    print('\033[33m    1> 项目主页     2> 解包菜单\033[0m\n')
+    print('\033[36m    3> 打包菜单     4> 插件菜单\033[0m\n')
+    print('\033[32m    5> 一键封装\033[0m\n')
+    print()
+    op_menu = input("    请输入编号: ")
+    if op_menu == '1':
+        return
+    elif op_menu == '2':
+        unpackChoo(PROJECT_DIR)
+    elif op_menu == '3':
+        pass
+        # packChoo
+    elif op_menu == '4':
+        pass
+        # subbed
+    elif op_menu == '5':
+        ywarn("维护中...")
+        time.sleep(2)
+    else:
+        ywarn('   Input error!"')
+        time.sleep(2)
+    menu(project)
+
+
+def unpackChoo(project):
+    print(" \033[31m >分解 \033[0m\n")
+    filen = 0
+    files = {}
+    infos = {}
+    ywarn(f" 请将文件放于{project}根目录下！")
+    print()
+    print(" [0]- 分解所有文件\n")
+    if dir_has(project, '.br'):
+        print("\033[33m [Br]文件\033[0m\n")
+        for br0 in os.listdir(project):
+            if br0.endswith('.br'):
+                if os.path.isfile(os.path.abspath(br0)):
+                    filen += 1
+                    print(f"   [{filen}]- {br0}\n")
+                    files[filen] = br0
+                    infos[filen] = 'br'
+    if dir_has(project, '.new.dat'):
+        print("\033[33m [Dat]文件\033[0m\n")
+        for dat0 in os.listdir(project):
+            if dat0.endswith('.new.dat'):
+                if os.path.isfile(os.path.abspath(dat0)):
+                    filen += 1
+                    print(f"   [{filen}]- {dat0}\n")
+                    files[filen] = dat0
+                    infos[filen] = 'dat'
+    if dir_has(project, '.new.dat.1'):
+        for dat10 in os.listdir(project):
+            if dat10.endswith('.dat.1'):
+                if os.path.isfile(os.path.abspath(dat10)):
+                    filen += 1
+                    print(f"   [{filen}]- {dat10} <分段DAT>\n")
+                    files[filen] = dat10
+                    infos[filen] = 'dat.1'
+    if dir_has(project, '.img'):
+        print("\033[33m [Img]文件\033[0m\n")
+        for img0 in os.listdir(project):
+            if img0.endswith('.img'):
+                if os.path.isfile(os.path.abspath(img0)):
+                    filen += 1
+                    info = gettype(os.path.abspath(img0))
+                    if info == "unknow":
+                        ywarn(f"   [{filen}]- {img0} <UNKNOWN>\n")
+                    else:
+                        print(f'   [{filen}]- {img0} <{info.upper()}>\n')
+
+
+promenu()
