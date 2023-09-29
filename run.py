@@ -4,6 +4,7 @@ import json
 import re
 import sys
 
+import lpunpack
 import utils
 from api import cls, dir_has, cat, dirsize
 import time
@@ -1025,8 +1026,10 @@ def unpack(file, info, project):
                        os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
         unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
     elif info == 'erofs':
-        print(f'{file}erofs')
-        pass
+        call(f'extract.erofs -i {os.path.abspath(file)} -o {project} -x ')
+        open(project+os.sep+'cpnfig'+os.sep+os.path.basename(file)+"_erofs",'w').close()
+    elif info == 'super':
+        lpunpack.unpack(os.path.abspath(file),project)
     elif info in ['boot', 'vendor_boot']:
         unpackboot(os.path.abspath(file), project)
     else:
