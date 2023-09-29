@@ -685,7 +685,7 @@ def unpack(file, info, project):
         filepath = os.path.dirname(file)
         unpack(os.path.join(filepath, file), gettype(os.path.join(filepath, file)), project)
     elif info == 'ext':
-        imgextractor.Extractor().main(file, project+os.sep+os.path.basename(file.split('.')[0]), project)
+        imgextractor.Extractor().main(file, project + os.sep + os.path.basename(file.split('.')[0]), project)
     elif info == 'dat.1':
         for fd in [f for f in os.listdir(project) if re.search(r'\.new\.dat\.\d+', f)]:
             with open(project + os.sep + os.path.basename(fd).rsplit('.', 1)[0], 'ab') as ofd:
@@ -769,7 +769,12 @@ def autounpack(project):
             filetype = gettype(os.path.abspath(infile))
             unpack(os.path.abspath(infile), filetype, project)
             os.remove(os.path.abspath(infile))
-
+    else:
+        for infile in os.listdir(project):
+            if infile.endswith('.new.dat.br'):
+                unpack(os.path.abspath(infile), 'br', project)
+            elif infile.endswith('.dat.1'):
+                unpack(os.path.abspath(infile), 'dat.1', project)
 
 
 promenu()
