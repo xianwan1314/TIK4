@@ -881,7 +881,7 @@ def undtbo(project, infile):
         if dtbo_files.endswith('.dtbo'):
             dts_files = dtbo_files.replace("dtbo", 'dts')
             yecho(f"正在反编译{dtbo_files}为{dts_files}")
-            if call(f'dtc -@ -I "dtb" -O "dts" {dtbodir+os.sep+"dtbo_files"+os.sep+dtbo_files} -o "{dtbodir+os.sep+"dts_files"+os.sep+dts_files}"') != 0:
+            if call(f'dtc -@ -I "dtb" -O "dts" {dtbodir + os.sep + "dtbo_files" + os.sep + dtbo_files} -o "{dtbodir + os.sep + "dts_files" + os.sep + dts_files}"') != 0:
                 ywarn(f"反编译{dtbo_files}失败！")
     ysuc("完成！")
 
@@ -982,8 +982,7 @@ def unpack(file, info, project):
         simg2img(file)
         unpack(file, gettype(file), project)
     elif info == 'dtbo':
-        pass
-    # undtbo
+        undtbo(project, os.path.abspath(file))
     elif info == 'br':
         call(f'brotli -dj {file}')
         partname = os.path.basename(file).replace('.new.dat.br', '')
