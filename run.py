@@ -707,6 +707,8 @@ def packChoo(project):
             for f in parts.keys():
                 if pacall != '1':
                     imgcheck = input(f"  是否打包{parts[f]}?[1/0]	")
+                else:
+                    imgcheck = '1'
                 if not imgcheck == '1':
                     continue
                 yecho(f"打包{parts[f]}...")
@@ -722,6 +724,19 @@ def packChoo(project):
                 else:
                     pass
                     # inpacker $partname
+        elif filed == '66':
+            pass
+            # packsuper
+        elif filed == '77':
+            pass
+            # packpayload
+        elif filed == '88':
+            return
+        elif filed.isdigit():
+            if int(filed) in parts.keys():
+                ywarn("Input error!")
+                time.sleep(2)
+
 
 
 def unpack(file, info, project):
