@@ -1,14 +1,23 @@
 #!/usr/bin/env python
 import os
 import json
+import re
 import sys
 
+import utils
 from api import cls, dir_has
 import time
 import platform as plat
 import shutil
-from utils import gettype
+from utils import gettype, simg2img
 import requests
+import ofp_qc_decrypt
+import ofp_mtk_decrypt
+import ozipdecrypt
+import zipfile
+import imgextractor
+import contextpatch
+import fspatch
 
 LOCALDIR = os.getcwd()
 binner = LOCALDIR + os.sep + "bin"
@@ -20,7 +29,7 @@ MBK = binner + os.sep + 'AIK'
 platform = plat.machine()
 ostype = plat.system()
 PIP_MIRROR = "https://pypi.tuna.tsinghua.edu.cn/simple/"
-ebinner = binner + os.sep + ostype + os.sep + platform
+ebinner = binner + os.sep + ostype + os.sep + platform + os.sep
 dtc = ebinner + os.sep + "dtc"
 mkdtimg_tool = binner + os.sep + "mkdtboimg.py"
 
@@ -37,6 +46,10 @@ def ysuc(info): print(f"\033[32m[{time.strftime('%H:%M:%S')}]{info}\033[0m")
 def rmdire(path):
     if os.path.exists(path):
         shutil.rmtree(path)
+
+
+def call(command):
+    os.system(ebinner + command)
 
 
 def getsize(file):
@@ -572,11 +585,110 @@ def unpackChoo(project):
                     files[filen] = dtb0
                     infos[filen] = 'dtb'
     print()
-    print("\033[33m  [77] 菜单  [88] 循环解包  [99] 占位\033[0m")
+    print("\033[33m  [77] 菜单  [88] 循环解包  \033[0m")
     print("  --------------------------------------")
     filed = input("  请输入对应序号：")
     if filed == '0':
         print()
+        for v in files.keys():
+            pass
+            # unpack(file,info)
+    elif filed == '88':
+        print()
+        imgcheck = 0
+        upacall = input("  是否解包所有文件？ [1/0]	")
+        for v in files.keys():
+            if upacall != '1':
+                imgcheck = input(f"  是否解包{files[v]}?[1/0]	")
+            if upacall == "1" or imgcheck != "0":
+                pass
+                # unpack(file,info)
+    elif filed == '77':
+        return
+    elif filed.isdigit():
+        if int(filed) in files.keys():
+            pass
+        # unpack(file,info)
+        else:
+            ywarn("Input error!")
+            time.sleep(2)
+    else:
+        ywarn("Input error!")
+        time.sleep(2)
+    unpackChoo(project)
+
+
+def unpack(file, info, project):
+    cleantemp()
+    if not os.path.exists(project + os.sep + 'config'):
+        os.makedirs(project + os.sep + 'config')
+    yecho(f"解包{os.path.basename(file)}中...")
+    if info == 'sparse':
+        simg2img(file)
+        unpack(file, gettype(file), project)
+    elif info == 'dtbo':
+        pass
+        # undtbo
+    elif info == 'br':
+        call(f'brotli -dj {file}')
+        partname = os.path.basename(file).replace('.new.dat.br', '')
+        filepath = os.path.dirname(file)
+        utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
+                       os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
+        unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
+    elif info == 'dtb':
+        pass
+    # undtb
+    elif info == 'dat':
+        partname = os.path.basename(file).replace('.new.dat', '')
+        filepath = os.path.dirname(file)
+        utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
+                       os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
+        unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
+    elif info == 'img':
+        unpack(file, gettype(file), project)
+    elif info == 'ofp':
+        ofpm = input(" ROM机型处理器为？[1]高通 [2]MTK	")
+        if ofpm == '1':
+            ofp_qc_decrypt.main(file, project)
+        elif ofpm == '2':
+            ofp_mtk_decrypt.main(file, project)
+    elif info == 'ozip':
+        ozipdecrypt.main(file)
+        try:
+            os.remove(file)
+        except Exception as e:
+            print(f"错误！{e}")
+        zipfile.ZipFile(file.replace('.ozip', '.zip')).extractall(project)
+    elif info == 'ops':
+        call(f'python3 opscrypto.py decrypt {file}')
+    elif info == 'payload':
+        yecho(f"{os.path.basename(file)}所含分区列表：")
+        call(f'payload-dumper-go -l {file}')
+        extp = input("请输入需要解压的分区名(空格隔开)/all[全部]	")
+        if extp == 'all':
+            call(f"payload-dumper-go -o {project} {file}")
+        else:
+            for p in extp.split():
+                call(f'payload-dumper-go -p {p} -o {project} {file}')
+    elif info == 'win000':
+        for fd in [f for f in os.listdir(project) if re.search(r'\.win\d+', f)]:
+            with open(project + os.path.basename(fd).rsplit('.', 1)[0], 'ab') as ofd:
+                for fd1 in sorted(
+                        [f for f in os.listdir(project) if f.startswith(os.path.basename(fd).rsplit('.', 1)[0] + ".")],
+                        key=lambda x: int(x.rsplit('.')[3])):
+                    print("合并%s到%s" % (fd1, os.path.basename(fd).rsplit('.', 1)[0]))
+                    with open(project + fd1, 'rb') as nfd:
+                        ofd.write(nfd.read())
+                    os.remove(project + fd1)
+        filepath = os.path.dirname(file)
+        unpack(os.path.join(filepath, file), gettype(os.path.join(filepath, file)), project)
+    elif info == 'win':
+        filepath = os.path.dirname(file)
+        unpack(os.path.join(filepath, file), gettype(os.path.join(filepath, file)), project)
+    elif info == 'ext':
+        imgextractor.Extractor().main(file, os.path.dirname(file), project)
+
 
 
 promenu()
