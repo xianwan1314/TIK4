@@ -977,7 +977,7 @@ def unpack(file, info, project):
     cleantemp()
     if not os.path.exists(project + os.sep + 'config'):
         os.makedirs(project + os.sep + 'config')
-    yecho(f"解包{os.path.basename(file)}中...")
+    yecho(f"[{info}]解包{os.path.basename(file)}中...")
     if info == 'sparse':
         simg2img(file)
         unpack(file, gettype(file), project)
