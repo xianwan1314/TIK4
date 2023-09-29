@@ -673,6 +673,22 @@ def packChoo(project):
                     imgtype = "ext"
             for f in parts.keys():
                 yecho(f"打包{parts[f]}...")
+                if types[f] == 'bootimg':
+                    pass
+                    # bootpac  parts[f]
+                elif types[f] == 'dtb':
+                    # makedtb parts[f]
+                    pass
+                elif types[f] == 'dtbo':
+                    # makedtbo $partname
+                    pass
+                else:
+                    pass
+                    # inpacker $partname
+        elif filed == '55':
+            print()
+            pacall = input("  是否打包所有镜像？ [1/0]	")
+            op_menu = input("  输出所有文件格式[1]br [2]dat [3]img:")
 
 
 def unpack(file, info, project):
