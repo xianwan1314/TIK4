@@ -639,6 +639,20 @@ def packChoo(project):
                     else:
                         tools[partn] = 'AIK'
                     print(f"   [{partn}]- {packs} <bootimg>\n")
+                elif os.path.exists(project + os.sep + "config" + os.sep + "dtbinfo_" + packs):
+                    partn += 1
+                    parts[partn] = packs
+                    types[partn] = 'dtb'
+                    print(f"   [{partn}]- {packs} <dtb>\n")
+                elif os.path.exists(project + os.sep + "config" + os.sep + "dtboinfo_" + packs):
+                    partn += 1
+                    parts[partn] = packs
+                    types[partn] = 'dtbo'
+                    print(f"   [{partn}]- {packs} <dtbo>\n")
+        print()
+        print("\033[33m [55] 循环打包 [66] 打包Super [77] 打包Payload [88]菜单\033[0m")
+        print("  --------------------------------------")
+        filed = input("  请输入对应序号：")
 
 
 def unpack(file, info, project):
