@@ -751,10 +751,26 @@ def packChoo(project):
                         imgtype = "erofs"
                     else:
                         imgtype = "ext"
-                yecho(f"打包{parts}")
+                yecho(f"打包{parts[int(filed)]}")
+                if types[int(filed)] == 'bootimg':
+                    pass
+                    # bootpac  parts[f]
+                elif types[int(filed)] == 'dtb':
+                    # makedtb parts[f]
+                    pass
+                elif types[int(filed)] == 'dtbo':
+                    # makedtbo $partname
+                    pass
+                else:
+                    pass
+                    # inpacker $partname
             else:
                 ywarn("Input error!")
                 time.sleep(2)
+        else:
+            ywarn("Input error!")
+            time.sleep(2)
+        packChoo(project)
 
 
 def unpack(file, info, project):
