@@ -410,7 +410,10 @@ def promenu():
     elif op_pro == '77':
         setting()
     elif op_pro.isdigit():
-        menu(projects[op_pro])
+        if op_pro in projects.keys():
+            menu(projects[op_pro])
+        else:
+            ywarn("  Input error!")
     else:
         ywarn("  Input error!")
         time.sleep(2)
