@@ -737,14 +737,11 @@ def packChoo(project):
                 if not settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
                     op_menu = input("  输出所有文件格式[1]br [2]dat [3]img:")
                     if op_menu == '1':
-                        isbr = 1
-                        isdat = 1
+                        form = 'br'
                     elif op_menu == '2':
-                        isbr = 0
-                        isdat = 1
+                        form = "dat"
                     else:
-                        isbr = 0
-                        isdat = 0
+                        form = 'img'
                 if settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
                     syscheck = input("手动打包所有分区格式为：[1]ext4 [2]erofs")
                     if syscheck == '2':
@@ -762,8 +759,7 @@ def packChoo(project):
                     # makedtbo $partname
                     pass
                 else:
-                    pass
-                    # inpacker $partname
+                    inpacker(parts[int(filed)], project, form, imgtype)
             else:
                 ywarn("Input error!")
                 time.sleep(2)
@@ -773,7 +769,7 @@ def packChoo(project):
         packChoo(project)
 
 
-def inpacker(name, project, form):
+def inpacker(name, project, form, ftype):
     mount_path = f"/{name}"
     file_contexts = project + os.sep + "config" + os.sep + name + "_file_contexts"
     fs_config = project + os.sep + "config" + os.sep + name + "_fs_config"
@@ -800,7 +796,7 @@ def inpacker(name, project, form):
     utils.qc(fs_config)
     utils.qc(file_contexts)
     size = int(img_size0 / settings.BLOCKSIZE)
-    if form == 'erofs':
+    if ftype == 'erofs':
         call(
             f'mkfs.erofs {settings.erofslim} --mount-point {mount_path} --fs-config-file {fs_config} --file-contexts {file_contexts} {out_img} {in_files}')
     else:
@@ -821,24 +817,37 @@ def inpacker(name, project, form):
     if settings.pack_sparse == '1' or form == 'dat':
         call(f"img2simg {out_img} {out_img}.s")
         os.remove(out_img)
-        os.rename(out_img+".s",out_img)
+        os.rename(out_img + ".s", out_img)
     if form == 'br':
         try:
-            os.remove(project+os.sep+"TI_out"+os.sep+name+".new.dat.br")
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat.br")
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".transfer.list")
         except:
             pass
     elif form == 'dat':
         try:
-            os.remove(project+os.sep+"TI_out"+os.sep+name+".new.dat")
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat")
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".transfer.list")
         except:
             pass
     else:
         try:
-            os.rename(out_img,project+os.sep+"TI_out"+os.sep+name+".img")
+            os.rename(out_img, project + os.sep + "TI_out" + os.sep + name + ".img")
+        except:
+            pass
+    if form == 'dat':
+        try:
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat")
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat.br")
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".transfer.list")
+        except:
+            pass
+        utils.img2sdat(out_img, project + os.sep + "TI_out", 4, name)
+        try:
+            os.remove(out_img)
         except:
             pass
 
