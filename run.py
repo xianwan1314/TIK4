@@ -49,7 +49,7 @@ def rmdire(path):
 
 
 def call(command):
-    os.system(ebinner + command)
+    return os.system(ebinner + command)
 
 
 def getsize(file):
@@ -775,7 +775,34 @@ def bootpac(file, orig, project):
 
 
 def unpackboot(file, project):
-    pass
+    os.chdir(project)
+    if call("magiskboot unpack -h %s" % file) != 0:
+        print("Unpack %s Fail..." % file)
+        os.chdir(LOCALDIR)
+        shutil.rmtree(project+os.sep)
+        return
+    if os.access(work + f"{bn}" + os.sep + "ramdisk.cpio", os.F_OK):
+        comp = gettype(work + f"{bn}" + os.sep + "ramdisk.cpio")
+        print("Ramdisk is %s" % comp)
+        with open(work + f"{bn}" + os.sep + "comp", "w") as f:
+            f.write(comp)
+        if comp != "unknow":
+            os.rename(work + f"{bn}" + os.sep + "ramdisk.cpio",
+                      work + f"{bn}" + os.sep + "ramdisk.cpio.comp")
+            if call("magiskboot decompress %s %s" % (
+                    work + f"{bn}" + os.sep + "ramdisk.cpio.comp",
+                    work + f"{bn}" + os.sep + "ramdisk.cpio")) != 0:
+                print("Decompress Ramdisk Fail...")
+                return
+        if not os.path.exists(work + f"{bn}" + os.sep + "ramdisk"):
+            os.mkdir(work + f"{bn}" + os.sep + "ramdisk")
+        os.chdir(work + f"{bn}" + os.sep)
+        print("Unpacking Ramdisk...")
+        call("cpio -d --no-absolute-filenames -F %s -i -D %s" % ("ramdisk.cpio", "ramdisk"), kz='N')
+        os.chdir(LOCALDIR)
+    else:
+        print("Unpack Done!")
+    os.chdir(LOCALDIR)
 
 
 def inpacker(name, project, form, ftype):
