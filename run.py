@@ -749,13 +749,13 @@ def packChoo(project):
         packChoo(project)
 
 
-def dboot(infile, orig, project):
+def dboot(infile, orig):
     flag = ''
-    if not os.path.exists(work + f"{nm}"):
-        print(f"Cannot Find {nm}...")
+    if not os.path.exists(infile):
+        print(f"Cannot Find {infile}...")
         return
     try:
-        os.chdir(work + f"{nm}" + os.sep + "ramdisk")
+        os.chdir(infile + os.sep + "ramdisk")
     except Exception as e:
         print("Ramdisk Not Found.. %s" % e)
         return
@@ -764,8 +764,8 @@ def dboot(infile, orig, project):
     else:
         cpio = findfile("cpio", elocal + os.sep + "bin" + os.sep + os.name + "_" + machine())
     call(exe="busybox ash -c \"find . | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % cpio, sp=1, shstate=True)
-    os.chdir(work + f"{nm}" + os.sep)
-    with open(work + f"{nm}" + os.sep + "comp", "r", encoding='utf-8') as compf:
+    os.chdir(infile + os.sep)
+    with open(infile + os.sep + "comp", "r", encoding='utf-8') as compf:
         comp = compf.read()
     print("Compressing:%s" % comp)
     if comp != "unknow":
@@ -791,11 +791,10 @@ def dboot(infile, orig, project):
         return
     else:
         os.remove(orig)
-        os.rename(work + f"{nm}" + os.sep + "new-boot.img", orig)
-        os.chdir(elocal)
+        os.rename(infile + os.sep + "new-boot.img", orig)
+        os.chdir(LOCALDIR)
         try:
-            rmdire()
-            rmdir((work + f"{nm}"), up=1)
+            rmdire(infile)
         except:
             print("删除错误...")
         print("Pack Successful...")
