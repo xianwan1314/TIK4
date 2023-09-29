@@ -693,6 +693,9 @@ def unpack(file, info, project):
         utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
                        os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
         unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
+    elif info == 'erofs':
+        print(f'{file}erofs')
+        pass
     else:
         ywarn("未知格式！")
 
