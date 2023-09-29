@@ -610,6 +610,7 @@ def unpackChoo(project):
 
 
 def packChoo(project):
+    cls()
     print(" \033[31m >打包 \033[0m\n")
     partn = 0
     parts = {}
