@@ -749,19 +749,67 @@ def packChoo(project):
         packChoo(project)
 
 
-def bootpac(file, orig, project):
-    pass
+def dboot(infile, orig, project):
+    flag = ''
+    if not os.path.exists(work + f"{nm}"):
+        print(f"Cannot Find {nm}...")
+        return
+    try:
+        os.chdir(work + f"{nm}" + os.sep + "ramdisk")
+    except Exception as e:
+        print("Ramdisk Not Found.. %s" % e)
+        return
+    if os.name != 'posix':
+        cpio = findfile("cpio.exe", elocal + os.sep + "bin" + os.sep).replace('\\', "/")
+    else:
+        cpio = findfile("cpio", elocal + os.sep + "bin" + os.sep + os.name + "_" + machine())
+    call(exe="busybox ash -c \"find . | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % cpio, sp=1, shstate=True)
+    os.chdir(work + f"{nm}" + os.sep)
+    with open(work + f"{nm}" + os.sep + "comp", "r", encoding='utf-8') as compf:
+        comp = compf.read()
+    print("Compressing:%s" % comp)
+    if comp != "unknow":
+        if call("magiskboot compress=%s ramdisk-new.cpio" % comp) != 0:
+            print("Pack Ramdisk Fail...")
+            os.remove("ramdisk-new.cpio")
+            return
+        else:
+            print("Pack Ramdisk Successful..")
+            try:
+                os.remove("ramdisk.cpio")
+            except:
+                pass
+            os.rename("ramdisk-new.cpio.%s" % comp, "ramdisk.cpio")
+    else:
+        print("Pack Ramdisk Successful..")
+        os.remove("ramdisk.cpio")
+        os.rename("ramdisk-new.cpio", "ramdisk.cpio")
+    if comp == "cpio":
+        flag = "-n"
+    if call("magiskboot repack %s %s" % (flag, orig)) != 0:
+        print("Pack boot Fail...")
+        return
+    else:
+        os.remove(orig)
+        os.rename(work + f"{nm}" + os.sep + "new-boot.img", orig)
+        os.chdir(elocal)
+        try:
+            rmdire()
+            rmdir((work + f"{nm}"), up=1)
+        except:
+            print("删除错误...")
+        print("Pack Successful...")
 
 
 def unpackboot(file, project):
     name = os.path.basename(file).replace('.img', '')
-    rmdire(project+os.sep+name)
-    os.makedirs(project+os.sep+name)
-    os.chdir(project+os.sep+name)
+    rmdire(project + os.sep + name)
+    os.makedirs(project + os.sep + name)
+    os.chdir(project + os.sep + name)
     if call("magiskboot unpack -h %s" % file) != 0:
         print("Unpack %s Fail..." % file)
         os.chdir(LOCALDIR)
-        shutil.rmtree(project + os.sep+name)
+        shutil.rmtree(project + os.sep + name)
         return
     if os.access(project + os.sep + name + os.sep + "ramdisk.cpio", os.F_OK):
         comp = gettype(project + os.sep + name + os.sep + "ramdisk.cpio")
