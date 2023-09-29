@@ -633,6 +633,12 @@ def unpack(file, info, project):
         filepath = os.path.dirname(file)
         utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
                        os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
+        try:
+            os.remove(os.path.join(filepath, partname + ".new.dat"))
+            os.remove(os.path.join(filepath, partname + '.transfer.list'))
+            os.remove(os.path.join(filepath, partname + '.patch.dat'))
+        except:
+            pass
         unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
     elif info == 'img':
         unpack(file, gettype(file), project)
@@ -676,7 +682,7 @@ def unpack(file, info, project):
         filepath = os.path.dirname(file)
         unpack(os.path.join(filepath, file), gettype(os.path.join(filepath, file)), project)
     elif info == 'ext':
-        imgextractor.Extractor().main(file, os.path.dirname(file), project)
+        imgextractor.Extractor().main(file, project+os.sep+os.path.basename(file.split('.')[0]), project)
     elif info == 'dat.1':
         for fd in [f for f in os.listdir(project) if re.search(r'\.new\.dat\.\d+', f)]:
             with open(project + os.sep + os.path.basename(fd).rsplit('.', 1)[0], 'ab') as ofd:
@@ -730,9 +736,10 @@ def unpackrom():
             ywarn(f"项目已存在！自动命名为：{project}")
         os.makedirs(LOCALDIR + os.sep + project)
         print(f"创建{project}成功！")
+        yecho("解压刷机包中...")
         zipfile.ZipFile(os.path.abspath(zips[int(zipd)])).extractall(LOCALDIR + os.sep + project)
         menu(project)
-        yecho("解压刷机包中...")
+        yecho("分解ROM中...")
         autounpack(LOCALDIR + os.sep + project)
     else:
         ywarn("Input error!")
@@ -755,10 +762,11 @@ def autounpack(project):
         shutil.move(project + os.sep + "payload_properties.txt", project + os.sep + "config")
         shutil.move(project + os.sep + "META-INF" + os.sep + "com" + os.sep + "android" + os.sep + "metadata",
                     project + os.sep + "config")
-    for infile in os.listdir(project):
-        filetype = gettype(os.path.abspath(infile))
-        unpack(os.path.abspath(infile), filetype, project)
-        os.remove(os.path.abspath(infile))
+        for infile in os.listdir(project):
+            filetype = gettype(os.path.abspath(infile))
+            unpack(os.path.abspath(infile), filetype, project)
+            os.remove(os.path.abspath(infile))
+
 
 
 promenu()
