@@ -652,8 +652,7 @@ def packChoo(project):
             for f in parts.keys():
                 yecho(f"打包{parts[f]}...")
                 if types[f] == 'bootimg':
-                    pass
-                    # bootpac  parts[f]
+                    dboot(project+os.sep+parts[f], project+os.sep+parts[f]+".img")
                 elif types[f] == 'dtb':
                     # makedtb parts[f]
                     pass
@@ -689,8 +688,7 @@ def packChoo(project):
                     continue
                 yecho(f"打包{parts[f]}...")
                 if types[f] == 'bootimg':
-                    pass
-                    # bootpac  parts[f]
+                    dboot(project+os.sep+parts[f], project+os.sep+parts[f]+".img")
                 elif types[f] == 'dtb':
                     # makedtb parts[f]
                     pass
@@ -730,8 +728,7 @@ def packChoo(project):
                     imgtype = 'ext'
                 yecho(f"打包{parts[int(filed)]}")
                 if types[int(filed)] == 'bootimg':
-                    pass
-                    # bootpac  parts[f]
+                    dboot(project+os.sep+parts[int(filed)], project+os.sep+parts[int(filed)]+".img")
                 elif types[int(filed)] == 'dtb':
                     # makedtb parts[f]
                     pass
