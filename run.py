@@ -759,11 +759,8 @@ def dboot(infile, orig):
     except Exception as e:
         print("Ramdisk Not Found.. %s" % e)
         return
-    if os.name != 'posix':
-        cpio = findfile("cpio.exe", elocal + os.sep + "bin" + os.sep).replace('\\', "/")
-    else:
-        cpio = findfile("cpio", elocal + os.sep + "bin" + os.sep + os.name + "_" + machine())
-    call(exe="busybox ash -c \"find . | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % cpio, sp=1, shstate=True)
+    cpio = ebinner + os.sep+"cpio"
+    call(exe="busybox find . | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio" % cpio, sp=1, shstate=True)
     os.chdir(infile + os.sep)
     with open(infile + os.sep + "comp", "r", encoding='utf-8') as compf:
         comp = compf.read()
