@@ -260,7 +260,6 @@ class setting:
         else:
             settings.change('diyimgtype', '')
 
-
     def packset11(self):
         chboottool = input("  默认Boot解、打包工具[1]AndroidImageKitchen [2]MagiskBootKitchen: ")
         if chboottool == '1':
@@ -379,8 +378,7 @@ def promenu():
     print(" \n")
     op_pro = input("  请输入序号：")
     if op_pro == '55':
-        pass
-        # unpackrom
+        unpackrom()
     elif op_pro == '88':
         print('\n"维护中..."\n')
     elif op_pro == '00':
@@ -447,6 +445,7 @@ def menu(project):
     print()
     op_menu = input("    请输入编号: ")
     if op_menu == '1':
+        os.chdir(LOCALDIR)
         return
     elif op_menu == '2':
         unpackChoo(PROJECT_DIR)
@@ -698,6 +697,62 @@ def unpack(file, info, project):
         pass
     else:
         ywarn("未知格式！")
+
+
+def unpackrom():
+    os.chdir(LOCALDIR)
+    cls()
+    zipn = 0
+    zips = {}
+    print(" \033[31m >ROM列表 \033[0m\n")
+    ywarn(f"   请将ROM置于{LOCALDIR}下！")
+    if dir_has(LOCALDIR, '.zip'):
+        for zip0 in os.listdir(LOCALDIR):
+            if zip0.endswith('.zip'):
+                if os.path.isfile(os.path.abspath(zip0)):
+                    if getsize(os.path.abspath(zip0)) >= int(settings.plugromlit):
+                        zipn += 1
+                        print(f"   [{zipn}]- {zip0}\n")
+                        zips[zipn] = zip0
+    else:
+        ywarn("	没有ROM文件！")
+    print("--------------------------------------------------\n")
+    print()
+    zipd = input("请输入对应序列号：")
+    if int(zipd) in zips.keys():
+        projec = input("请输入项目名称(可留空)：")
+        if projec:
+            project = "TI_%s" % projec
+        else:
+            project = "TI_%s" % os.path.basename(zips[int(zipd)]).replace('.zip', '')
+        if os.path.exists(LOCALDIR + os.sep + project):
+            project = project + time.strftime("%m%d%H%M%S")
+            ywarn(f"项目已存在！自动命名为：{project}")
+        os.makedirs(LOCALDIR + os.sep + project)
+        print(f"创建{project}成功！")
+        zipfile.ZipFile(os.path.abspath(zips[int(zipd)])).extractall(LOCALDIR + os.sep + project)
+        menu(project)
+        yecho("解压刷机包中...")
+        autounpack(LOCALDIR + os.sep + project)
+    else:
+        ywarn("Input error!")
+
+
+def autounpack(project):
+    cleantemp()
+    yecho("自动解包开始！")
+    if os.path.exists(project + os.sep + "payload.bin"):
+        yecho('读取机型为:动态VAB设备\n解包 payload.bin...')
+        call(f"payload-dumper-go {project + os.sep + 'payload.bin'} -o {project}")
+        yecho("payload.bin解包完成！")
+        for waste in ['payload.bin', 'care_map.pb', 'apex_info.pb']:
+            if os.path.exists(project + os.sep + waste):
+                try:
+                    os.remove(project + os.sep + waste)
+                except:
+                    pass
+        os.makedirs(project + os.sep + "config")
+        shutil.move(project + os.sep + "payload_properties.txt", project + os.sep + "config")
 
 
 promenu()
