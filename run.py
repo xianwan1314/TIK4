@@ -818,7 +818,10 @@ def inpacker(name, project, form):
             yecho("Erofs镜像，跳过压缩...")
         else:
             call(f'resize2fs - f - M {out_img}')
-
+    if settings.pack_sparse == '1' or form == 'dat':
+        call(f"img2simg {out_img} {out_img}.s")
+        os.remove(out_img)
+        os.rename(out_img+".s",out_img)
 
 
 def unpack(file, info, project):
