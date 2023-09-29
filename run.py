@@ -18,6 +18,8 @@ import zipfile
 import imgextractor
 import contextpatch
 import fspatch
+import extract_dtb
+from argparse import Namespace
 
 LOCALDIR = os.getcwd()
 binner = LOCALDIR + os.sep + "bin"
@@ -614,7 +616,7 @@ def packChoo(project):
                         typeo = 'ext'
                     types[partn] = typeo
                     print(f"   [{partn}]- {packs} <{typeo}>\n")
-                elif os.path.exists(project + os.sep + "config" + os.sep + "header"):
+                elif os.path.exists(project + os.sep + packs + os.sep + "comp"):
                     partn += 1
                     parts[partn] = packs
                     types[partn] = 'bootimg'
@@ -652,7 +654,7 @@ def packChoo(project):
             for f in parts.keys():
                 yecho(f"打包{parts[f]}...")
                 if types[f] == 'bootimg':
-                    dboot(project+os.sep+parts[f], project+os.sep+parts[f]+".img")
+                    dboot(project + os.sep + parts[f], project + os.sep + parts[f] + ".img")
                 elif types[f] == 'dtb':
                     # makedtb parts[f]
                     pass
@@ -688,7 +690,7 @@ def packChoo(project):
                     continue
                 yecho(f"打包{parts[f]}...")
                 if types[f] == 'bootimg':
-                    dboot(project+os.sep+parts[f], project+os.sep+parts[f]+".img")
+                    dboot(project + os.sep + parts[f], project + os.sep + parts[f] + ".img")
                 elif types[f] == 'dtb':
                     # makedtb parts[f]
                     pass
@@ -728,7 +730,7 @@ def packChoo(project):
                     imgtype = 'ext'
                 yecho(f"打包{parts[int(filed)]}")
                 if types[int(filed)] == 'bootimg':
-                    dboot(project+os.sep+parts[int(filed)], project+os.sep+parts[int(filed)]+".img")
+                    dboot(project + os.sep + parts[int(filed)], project + os.sep + parts[int(filed)] + ".img")
                 elif types[int(filed)] == 'dtb':
                     # makedtb parts[f]
                     pass
@@ -756,8 +758,8 @@ def dboot(infile, orig):
     except Exception as e:
         print("Ramdisk Not Found.. %s" % e)
         return
-    cpio = ebinner + os.sep+"cpio"
-    call(exe="busybox find . | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio" % cpio, sp=1, shstate=True)
+    cpio = ebinner + os.sep + "cpio"
+    call("busybox find . | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio" % cpio)
     os.chdir(infile + os.sep)
     with open(infile + os.sep + "comp", "r", encoding='utf-8') as compf:
         comp = compf.read()
@@ -826,6 +828,23 @@ def unpackboot(file, project):
     else:
         print("Unpack Done!")
     os.chdir(LOCALDIR)
+
+
+def undtb(project, infile):
+    dtbdir = project + os.sep + os.path.basename(infile) + "_dtbs"
+    rmdire(dtbdir)
+    if not os.path.exists(dtbdir):
+        os.makedirs(dtbdir)
+    extract_dtb.extract_dtb.split(Namespace(filename=infile, output_dir=dtbdir + os.sep + "dtb_files"))
+    yecho("正在反编译dtb...")
+    for i in os.listdir(dtbdir + os.sep + "dtb_files"):
+        if i.endswith('.dtb'):
+            name = i.split('.')[0]
+            call(
+                f'dtc -@ -I dtb -O dts {dtbdir + os.sep + "dtb_files" + os.sep + name + ".dtb"} -o {dtbdir + os.sep + "dtb_files" + os.sep + name + ".dts"}')
+    open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile)).close()
+    ysuc("反编译完成!")
+    time.sleep(1)
 
 
 def inpacker(name, project, form, ftype):
@@ -934,8 +953,7 @@ def unpack(file, info, project):
                        os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
         unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
     elif info == 'dtb':
-        pass
-    # undtb
+        undtb(project, os.path.abspath(file))
     elif info == 'dat':
         partname = os.path.basename(file).replace('.new.dat', '')
         filepath = os.path.dirname(file)
