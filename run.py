@@ -111,7 +111,6 @@ class setting:
            7>[EXT4]InodeSize\n
            8>[Img]创建sparse\n
            9>[~4]Img文件系统\n
-           10> 补全fs_config\n
            11>默认BOOT打包Tool\n
            12>返回上一级菜单
            --------------------------
@@ -261,12 +260,6 @@ class setting:
         else:
             settings.change('diyimgtype', '')
 
-    def packset10(self):
-        pack_op = input("  是否自动补全fs_config[谨慎!]: [1]是 [2]否\n请输入序号: ")
-        if pack_op == '2':
-            settings.change('auto_fsconfig', '0')
-        else:
-            settings.change('auto_fsconfig', '1')
 
     def packset11(self):
         chboottool = input("  默认Boot解、打包工具[1]AndroidImageKitchen [2]MagiskBootKitchen: ")

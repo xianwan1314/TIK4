@@ -13,7 +13,6 @@
     "fullsuper": "-F",
     "BLOCKSIZE": "4096",
     "SBLOCKSIZE": "4096",
-    "auto_fsconfig": "1",
     "metadatasize": "65536",
     "inodesize": "102400",
     "super_group": "qti_dynamic_partitions",
