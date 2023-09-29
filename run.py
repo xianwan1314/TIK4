@@ -780,7 +780,7 @@ def unpackboot(file, project):
             os.mkdir(project + os.sep + name + os.sep + "ramdisk")
         os.chdir(project + os.sep + name + os.sep)
         print("Unpacking Ramdisk...")
-        call("cpio -d --no-absolute-filenames -F %s -i -D %s" % ("ramdisk.cpio", "ramdisk"), kz='N')
+        call("cpio -d --no-absolute-filenames -F %s -i -D %s" % ("ramdisk.cpio", "ramdisk"))
         os.chdir(LOCALDIR)
     else:
         print("Unpack Done!")
