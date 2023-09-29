@@ -832,7 +832,7 @@ def unpackboot(file, project):
 
 
 def undtb(project, infile):
-    dtbdir = project + os.sep + os.path.basename(infile.split(".")[0]) + "_dtbs"
+    dtbdir = project + os.sep + os.path.basename(infile).split(".")[0] + "_dtbs"
     rmdire(dtbdir)
     if not os.path.exists(dtbdir):
         os.makedirs(dtbdir)
@@ -867,7 +867,7 @@ def makedtb(sf, project):
 
 
 def undtbo(project, infile):
-    dtbodir = project + os.sep + os.path.basename(infile.split('.')[0]) + "_dtbo"
+    dtbodir = project + os.sep + os.path.basename(infile).split('.')[0] + "_dtbo"
     open(project+os.sep+"config"+os.sep+"dtboinfo_"+os.path.basename(infile.split('.')[0]),'w').close()
     rmdire(dtbodir)
     if not os.path.exists(dtbodir + os.sep + "dtbo_files"):
@@ -885,6 +885,7 @@ def undtbo(project, infile):
             if call(f'dtc -@ -I "dtb" -O "dts" {dtbodir + os.sep + "dtbo_files" + os.sep + dtbo_files} -o "{dtbodir + os.sep + "dts_files" + os.sep + dts_files}"') != 0:
                 ywarn(f"反编译{dtbo_files}失败！")
     ysuc("完成！")
+    time.sleep(1)
 
 
 def inpacker(name, project, form, ftype):
