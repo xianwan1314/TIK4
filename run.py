@@ -630,6 +630,11 @@ def packChoo(project):
                         typeo = 'ext'
                     types[partn] = typeo
                     print(f"   [{partn}]- {packs} <{typeo}>\n")
+                elif os.path.exists(project + os.sep + "config" + os.sep + packs + ".info"):
+                    partn += 1
+                    parts[partn] = packs
+                    types[partn] = 'bootimg'
+                    tools[partn] =
 
 
 def unpack(file, info, project):
