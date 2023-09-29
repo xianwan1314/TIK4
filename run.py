@@ -614,11 +614,16 @@ def packChoo(project):
     partn = 0
     parts = {}
     types = {}
+    tools = {}
     if not os.path.exists(project + os.sep + "config"):
         os.makedirs(project + os.sep + "config")
     if dir_has(project + os.sep + "config", "fs_config"):
         print("   [0]- 打包所有镜像\n")
-
+        for packs in os.listdir(project):
+            if os.path.isdir(project + os.sep + packs):
+                if os.path.exists(project + os.sep + "config" + os.sep + packs + "_fs_config"):
+                    partn += 1
+                    parts[partn] = packs
 
 
 def unpack(file, info, project):
