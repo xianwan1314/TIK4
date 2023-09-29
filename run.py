@@ -453,8 +453,7 @@ def menu(project):
     elif op_menu == '2':
         unpackChoo(PROJECT_DIR)
     elif op_menu == '3':
-        pass
-        # packChoo
+        packChoo(PROJECT_DIR)
     elif op_menu == '4':
         pass
         # subbed
@@ -608,6 +607,10 @@ def unpackChoo(project):
         ywarn("Input error!")
         time.sleep(2)
     unpackChoo(project)
+
+
+def packChoo(project):
+    print(" \033[31m >打包 \033[0m\n")
 
 
 def unpack(file, info, project):
