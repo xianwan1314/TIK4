@@ -624,6 +624,12 @@ def packChoo(project):
                 if os.path.exists(project + os.sep + "config" + os.sep + packs + "_fs_config"):
                     partn += 1
                     parts[partn] = packs
+                    if os.path.exists(project + os.sep + "config" + os.sep + packs + "_erofs"):
+                        typeo = 'erofs'
+                    else:
+                        typeo = 'ext'
+                    types[partn] = typeo
+                    print(f"   [{partn}]- {packs} <{typeo}>\n")
 
 
 def unpack(file, info, project):
