@@ -967,9 +967,7 @@ def unpack(file, info, project):
         call(f'brotli -dj {file}')
         partname = os.path.basename(file).replace('.new.dat.br', '')
         filepath = os.path.dirname(file)
-        utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
-                       os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
-        unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
+        unpack(os.path.join(filepath, partname + ".new.dat"), 'dat', project)
     elif info == 'dtb':
         undtb(project, os.path.abspath(file))
     elif info == 'dat':
@@ -1027,6 +1025,9 @@ def unpack(file, info, project):
         unpack(os.path.join(filepath, file), gettype(os.path.join(filepath, file)), project)
     elif info == 'ext':
         imgextractor.Extractor().main(file, project + os.sep + os.path.basename(file.split('.')[0]), project)
+        try:
+            os.remove(file)
+        except:pass
     elif info == 'dat.1':
         for fd in [f for f in os.listdir(project) if re.search(r'\.new\.dat\.\d+', f)]:
             with open(project + os.sep + os.path.basename(fd).rsplit('.', 1)[0], 'ab') as ofd:
