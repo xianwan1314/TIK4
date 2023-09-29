@@ -671,6 +671,8 @@ def packChoo(project):
                     imgtype = "erofs"
                 else:
                     imgtype = "ext"
+            for f in parts.keys():
+                yecho(f"打包{parts[f]}...")
 
 
 def unpack(file, info, project):
