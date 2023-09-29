@@ -868,7 +868,7 @@ def makedtb(sf, project):
 
 def undtbo(project, infile):
     dtbodir = project + os.sep + os.path.basename(infile).split('.')[0]
-    open(project+os.sep+"config"+os.sep+"dtboinfo_"+os.path.basename(infile).split('.')[0],'w').close()
+    open(project + os.sep + "config" + os.sep + "dtboinfo_" + os.path.basename(infile).split('.')[0], 'w').close()
     rmdire(dtbodir)
     if not os.path.exists(dtbodir + os.sep + "dtbo_files"):
         os.makedirs(dtbodir + os.sep + "dtbo_files")
@@ -886,6 +886,10 @@ def undtbo(project, infile):
                 ywarn(f"反编译{dtbo_files}失败！")
     ysuc("完成！")
     time.sleep(1)
+
+
+def makedtbo(sf, project):
+    dtbodir = project + os.sep + os.path.basename(sf).split('.')[0]
 
 
 def inpacker(name, project, form, ftype):
