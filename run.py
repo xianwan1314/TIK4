@@ -843,7 +843,7 @@ def undtb(project, infile):
             name = i.split('.')[0]
             call(
                 f'dtc -@ -I dtb -O dts {dtbdir + os.sep + "dtb_files" + os.sep + name + ".dtb"} -o {dtbdir + os.sep + "dtb_files" + os.sep + name + ".dts"}')
-    open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile)).close()
+    open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile).split(".")[0]).close()
     ysuc("反编译完成!")
     time.sleep(1)
 
@@ -868,7 +868,7 @@ def makedtb(sf, project):
 
 def undtbo(project, infile):
     dtbodir = project + os.sep + os.path.basename(infile).split('.')[0]
-    open(project+os.sep+"config"+os.sep+"dtboinfo_"+os.path.basename(infile.split('.')[0]),'w').close()
+    open(project+os.sep+"config"+os.sep+"dtboinfo_"+os.path.basename(infile).split('.')[0],'w').close()
     rmdire(dtbodir)
     if not os.path.exists(dtbodir + os.sep + "dtbo_files"):
         os.makedirs(dtbodir + os.sep + "dtbo_files")
