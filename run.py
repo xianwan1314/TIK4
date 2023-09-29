@@ -780,7 +780,7 @@ def inpacker(name, project, form):
     if not settings.utcstamp:
         UTC = int(time.time())
     else:
-
+        UTC = settings.utcstamp
     out_img = project + os.sep + name + ".img"
     in_files = project + os.sep + name
     if os.path.exists(project + os.sep + "config" + os.sep + name + "_size.txt"):
@@ -805,10 +805,13 @@ def inpacker(name, project, form):
             f'mkfs.erofs {settings.erofslim} --mount-point {mount_path} --fs-config-file {fs_config} --file-contexts {file_contexts} {out_img} {in_files}')
     else:
         if settings.pack_e2 == '0':
-            call(f'make_ext4fs -J -T {UTC} -S {file_contexts} -l {img_size0} -C {fs_config} -L {name} -a {name} {out_img} {in_files}')
+            call(
+                f'make_ext4fs -J -T {UTC} -S {file_contexts} -l {img_size0} -C {fs_config} -L {name} -a {name} {out_img} {in_files}')
         else:
-            call('mke2fs -O ^has_journal -L $name -I 256 -i $inodesize -M $mount_path -m 0 -t ext4 -b $BLOCKSIZE $out_img $size')
-
+            call(
+                f'mke2fs -O ^has_journal -L {name} -I 256 -i {settings.inodesize} -M {mount_path} -m 0 -t ext4 -b {settings.BLOCKSIZE} {out_img} {size}')
+            call(
+                f'e2fsdroid -e -T {UTC} {settings.extrw} -C {fs_config} -S {file_contexts} -f {in_files} -a {mount_path} {out_img}')
 
 
 def unpack(file, info, project):
