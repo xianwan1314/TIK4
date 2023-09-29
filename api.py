@@ -18,6 +18,11 @@ def dir_has(path, endswith):
     return False
 
 
+def cat(file):
+    with open(file, 'r') as f:
+        return f.read()
+
+
 class dirsize(object):
     # get-command
     # 1 - retun True value of dir size
@@ -59,7 +64,7 @@ class dirsize(object):
             else:
                 bs = 1.1258
         print(f"Multiple:{bs}")
-        if self.get == 3:
+        if self.list_f:
             self.rsizelist(self.dname, int(size_ * bs), self.list_f)
         self.rsize_v = int(size_ * bs / num)
 

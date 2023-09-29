@@ -5,7 +5,7 @@ import re
 import sys
 
 import utils
-from api import cls, dir_has
+from api import cls, dir_has, cat, dirsize
 import time
 import platform as plat
 import shutil
@@ -779,8 +779,35 @@ def inpacker(name, project, form):
     fs_config = project + os.sep + "config" + os.sep + name + "_fs_config"
     if not settings.utcstamp:
         UTC = int(time.time())
-    out_img = project + os.sep+name+".img"
-    in_files = project + os.sep+name
+    else:
+
+    out_img = project + os.sep + name + ".img"
+    in_files = project + os.sep + name
+    if os.path.exists(project + os.sep + "config" + os.sep + name + "_size.txt"):
+        img_size0 = int(cat(project + os.sep + "config" + os.sep + name + "_size.txt"))
+    else:
+        img_size0 = 0
+    img_size1 = dirsize(in_files, 1, 1).rsize_v
+    if settings.diysize == '1' and img_size0 < img_size1:
+        ywarn("您设置的size过小,将动态调整size!")
+        img_size0 = dirsize(in_files, 1, 3, project + os.sep + "dynamic_partitions_op_list").rsize_v
+    elif settings.diysize == '1':
+        img_size0 = dirsize(in_files, 1, 3, project + os.sep + "dynamic_partitions_op_list").rsize_v
+    else:
+        img_size0 = dirsize(in_files, 1, 1, project + os.sep + "dynamic_partitions_op_list").rsize_v
+    fspatch.main(in_files, fs_config)
+    contextpatch.main(in_files, file_contexts)
+    utils.qc(fs_config)
+    utils.qc(file_contexts)
+    size = int(img_size0 / settings.BLOCKSIZE)
+    if form == 'erofs':
+        call(
+            f'mkfs.erofs {settings.erofslim} --mount-point {mount_path} --fs-config-file {fs_config} --file-contexts {file_contexts} {out_img} {in_files}')
+    else:
+        if settings.pack_e2 == '0':
+            call(f'make_ext4fs -J -T {UTC} -S {file_contexts} -l {img_size0} -C {fs_config} -L {name} -a {name} {out_img} {in_files}')
+        else:
+            call('mke2fs -O ^has_journal -L $name -I 256 -i $inodesize -M $mount_path -m 0 -t ext4 -b $BLOCKSIZE $out_img $size')
 
 
 
