@@ -775,6 +775,10 @@ def autounpack(project):
                 unpack(os.path.abspath(infile), 'br', project)
             elif infile.endswith('.dat.1'):
                 unpack(os.path.abspath(infile), 'dat.1', project)
+            elif infile.endswith('.new.dat'):
+                unpack(os.path.abspath(infile), 'dat', project)
+            elif infile.endswith('.img'):
+                unpack(os.path.abspath(infile), 'img', project)
 
 
 promenu()
