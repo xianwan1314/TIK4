@@ -111,7 +111,6 @@ class setting:
            7>[EXT4]InodeSize\n
            8>[Img]创建sparse\n
            9>[~4]Img文件系统\n
-           11>默认BOOT打包Tool\n
            12>返回上一级菜单
            --------------------------
         ''')
@@ -259,13 +258,6 @@ class setting:
             settings.change('diyimgtype', '1')
         else:
             settings.change('diyimgtype', '')
-
-    def packset11(self):
-        chboottool = input("  默认Boot解、打包工具[1]AndroidImageKitchen [2]MagiskBootKitchen: ")
-        if chboottool == '1':
-            settings.change('default_boot_tool', 'AIK')
-        else:
-            settings.change('default_boot_tool', 'MBK')
 
     def dyset1(self):
         super_group = input(f"  当前动态分区簇名/GROUPNAME：{settings.super_group}\n  请输入（无特殊字符）: ")
@@ -615,7 +607,6 @@ def packChoo(project):
     partn = 0
     parts = {}
     types = {}
-    tools = {}
     if not os.path.exists(project + os.sep + "config"):
         os.makedirs(project + os.sep + "config")
     if project:
@@ -631,14 +622,10 @@ def packChoo(project):
                         typeo = 'ext'
                     types[partn] = typeo
                     print(f"   [{partn}]- {packs} <{typeo}>\n")
-                elif os.path.exists(project + os.sep + "config" + os.sep + packs + ".info"):
+                elif os.path.exists(project + os.sep + "config" + os.sep + "header"):
                     partn += 1
                     parts[partn] = packs
                     types[partn] = 'bootimg'
-                    if os.path.exists(project + os.sep + "config" + os.sep + packs + "_MBK"):
-                        tools[partn] = 'MBK'
-                    else:
-                        tools[partn] = 'AIK'
                     print(f"   [{partn}]- {packs} <bootimg>\n")
                 elif os.path.exists(project + os.sep + "config" + os.sep + "dtbinfo_" + packs):
                     partn += 1
@@ -776,27 +763,28 @@ def bootpac(file, orig, project):
 
 def unpackboot(file, project):
     os.chdir(project)
+    name = os.path.basename(file).replace('.img', '')
     if call("magiskboot unpack -h %s" % file) != 0:
         print("Unpack %s Fail..." % file)
         os.chdir(LOCALDIR)
-        shutil.rmtree(project+os.sep)
+        shutil.rmtree(project + os.sep)
         return
-    if os.access(work + f"{bn}" + os.sep + "ramdisk.cpio", os.F_OK):
-        comp = gettype(work + f"{bn}" + os.sep + "ramdisk.cpio")
+    if os.access(project + os.sep + name + os.sep + "ramdisk.cpio", os.F_OK):
+        comp = gettype(project + os.sep + name + os.sep + "ramdisk.cpio")
         print("Ramdisk is %s" % comp)
-        with open(work + f"{bn}" + os.sep + "comp", "w") as f:
+        with open(project + os.sep + name + os.sep + "comp", "w") as f:
             f.write(comp)
         if comp != "unknow":
-            os.rename(work + f"{bn}" + os.sep + "ramdisk.cpio",
-                      work + f"{bn}" + os.sep + "ramdisk.cpio.comp")
+            os.rename(project + os.sep + name + os.sep + "ramdisk.cpio",
+                      project + os.sep + name + os.sep + "ramdisk.cpio.comp")
             if call("magiskboot decompress %s %s" % (
-                    work + f"{bn}" + os.sep + "ramdisk.cpio.comp",
-                    work + f"{bn}" + os.sep + "ramdisk.cpio")) != 0:
+                    project + os.sep + name + os.sep + "ramdisk.cpio.comp",
+                    project + os.sep + name + os.sep + "ramdisk.cpio")) != 0:
                 print("Decompress Ramdisk Fail...")
                 return
-        if not os.path.exists(work + f"{bn}" + os.sep + "ramdisk"):
-            os.mkdir(work + f"{bn}" + os.sep + "ramdisk")
-        os.chdir(work + f"{bn}" + os.sep)
+        if not os.path.exists(project + os.sep + name + os.sep + "ramdisk"):
+            os.mkdir(project + os.sep + name + os.sep + "ramdisk")
+        os.chdir(project + os.sep + name + os.sep)
         print("Unpacking Ramdisk...")
         call("cpio -d --no-absolute-filenames -F %s -i -D %s" % ("ramdisk.cpio", "ramdisk"), kz='N')
         os.chdir(LOCALDIR)
@@ -986,6 +974,9 @@ def unpack(file, info, project):
     elif info == 'erofs':
         print(f'{file}erofs')
         pass
+    elif info in ['boot', 'vendor_boot']:
+        filepath = os.path.dirname(file)
+        unpackboot(os.path.join(filepath, file), project)
     else:
         ywarn("未知格式！")
 

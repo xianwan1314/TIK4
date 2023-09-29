@@ -16,7 +16,6 @@
     "metadatasize": "65536",
     "inodesize": "102400",
     "super_group": "qti_dynamic_partitions",
-    "default_boot_tool": "MBK",
     "superpart_list": "system odm vendor system_ext product",
     "erofslim": "lz4hc,8",
     "extrw": "",
