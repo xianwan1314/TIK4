@@ -5,6 +5,7 @@ import re
 import sys
 
 import lpunpack
+import mkdtboimg
 import utils
 from api import cls, dir_has, cat, dirsize
 import time
@@ -865,6 +866,26 @@ def makedtb(sf, project):
     time.sleep(2)
 
 
+def undtbo(project, infile):
+    dtbodir = project + os.sep + os.path.basename(infile) + "_dtbo"
+    rmdire(dtbodir)
+    if not os.path.exists(dtbodir + os.sep + "dtbo_files"):
+        os.makedirs(dtbodir + os.sep + "dtbo_files")
+        try:
+            os.makedirs(dtbodir + os.sep + "dts_files")
+        except:
+            pass
+    yecho("正在解压dtbo.img")
+    mkdtboimg.dump_dtbo(infile, dtbodir + os.sep + "dtbo_files" + os.sep + "dtbo")
+    for dtbo_files in os.listdir(dtbodir + os.sep + "dtbo_files"):
+        if dtbo_files.endswith('.dtbo'):
+            dts_files = dtbo_files.replace("dtbo", 'dts')
+            yecho(f"正在反编译{dtbo_files}为{dts_files}")
+            if call(f'dtc -@ -I "dtb" -O "dts" {dtbodir+os.sep+"dtbo_files"+os.sep+dtbo_files} -o "{dtbodir+os.sep+"dts_files"+os.sep+dts_files}"') != 0:
+                ywarn(f"反编译{dtbo_files}失败！")
+    ysuc("完成！")
+
+
 def inpacker(name, project, form, ftype):
     mount_path = f"/{name}"
     file_contexts = project + os.sep + "config" + os.sep + name + "_file_contexts"
@@ -1027,7 +1048,8 @@ def unpack(file, info, project):
         imgextractor.Extractor().main(file, project + os.sep + os.path.basename(file.split('.')[0]), project)
         try:
             os.remove(file)
-        except:pass
+        except:
+            pass
     elif info == 'dat.1':
         for fd in [f for f in os.listdir(project) if re.search(r'\.new\.dat\.\d+', f)]:
             with open(project + os.sep + os.path.basename(fd).rsplit('.', 1)[0], 'ab') as ofd:
