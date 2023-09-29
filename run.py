@@ -689,6 +689,21 @@ def packChoo(project):
             print()
             pacall = input("  是否打包所有镜像？ [1/0]	")
             op_menu = input("  输出所有文件格式[1]br [2]dat [3]img:")
+            if op_menu == '1':
+                isbr = 1
+                isdat = 1
+            elif op_menu == '2':
+                isbr = 0
+                isdat = 1
+            else:
+                isbr = 0
+                isdat = 0
+            if settings.diyimgtype == '1':
+                syscheck = input("手动打包所有分区格式为：[1]ext4 [2]erofs")
+                if syscheck == '2':
+                    imgtype = "erofs"
+                else:
+                    imgtype = "ext"
 
 
 def unpack(file, info, project):
