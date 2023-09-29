@@ -591,8 +591,7 @@ def unpackChoo(project):
     if filed == '0':
         print()
         for v in files.keys():
-            pass
-            # unpack(file,info)
+            unpack(files[v], infos[v], project)
     elif filed == '88':
         print()
         imgcheck = 0
@@ -601,14 +600,12 @@ def unpackChoo(project):
             if upacall != '1':
                 imgcheck = input(f"  是否解包{files[v]}?[1/0]	")
             if upacall == "1" or imgcheck != "0":
-                pass
-                # unpack(file,info)
+                unpack(files[v], infos[v], project)
     elif filed == '77':
         return
     elif filed.isdigit():
         if int(filed) in files.keys():
-            pass
-        # unpack(file,info)
+            unpack(files[int(filed)], infos[int(filed)], project)
         else:
             ywarn("Input error!")
             time.sleep(2)
@@ -678,9 +675,9 @@ def unpack(file, info, project):
                         [f for f in os.listdir(project) if f.startswith(os.path.basename(fd).rsplit('.', 1)[0] + ".")],
                         key=lambda x: int(x.rsplit('.')[3])):
                     print("合并%s到%s" % (fd1, os.path.basename(fd).rsplit('.', 1)[0]))
-                    with open(project + fd1, 'rb') as nfd:
+                    with open(project + os.sep + fd1, 'rb') as nfd:
                         ofd.write(nfd.read())
-                    os.remove(project + fd1)
+                    os.remove(project + os.sep + fd1)
         filepath = os.path.dirname(file)
         unpack(os.path.join(filepath, file), gettype(os.path.join(filepath, file)), project)
     elif info == 'win':
@@ -690,14 +687,14 @@ def unpack(file, info, project):
         imgextractor.Extractor().main(file, os.path.dirname(file), project)
     elif info == 'dat.1':
         for fd in [f for f in os.listdir(project) if re.search(r'\.new\.dat\.\d+', f)]:
-            with open(project + os.path.basename(fd).rsplit('.', 1)[0], 'ab') as ofd:
+            with open(project + os.sep + os.path.basename(fd).rsplit('.', 1)[0], 'ab') as ofd:
                 for fd1 in sorted(
                         [f for f in os.listdir(project) if f.startswith(os.path.basename(fd).rsplit('.', 1)[0] + ".")],
                         key=lambda x: int(x.rsplit('.')[3])):
                     print("合并%s到%s" % (fd1, os.path.basename(fd).rsplit('.', 1)[0]))
-                    with open(project + fd1, 'rb') as nfd:
+                    with open(project + os.sep + fd1, 'rb') as nfd:
                         ofd.write(nfd.read())
-                    os.remove(project + fd1)
+                    os.remove(project + os.sep + fd1)
         partname = os.path.basename(file).replace('.new.dat.1', '')
         filepath = os.path.dirname(file)
         utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
@@ -705,7 +702,6 @@ def unpack(file, info, project):
         unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
     else:
         ywarn("未知格式！")
-
 
 
 promenu()
