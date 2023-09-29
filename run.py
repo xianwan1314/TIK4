@@ -843,6 +843,8 @@ def inpacker(name, project, form, ftype):
             os.remove(out_img)
         except:
             pass
+    if form == 'br':
+        call(f'brotli -q {settings.brcom} -j -w 24 {project + os.sep + "TI_out"+os.sep+name+".new.dat"} -o {project + os.sep + "TI_out"+os.sep+name+".new.dat.br"}')
 
 
 def unpack(file, info, project):
