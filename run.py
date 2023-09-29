@@ -754,12 +754,13 @@ def bootpac(file, orig, project):
 
 
 def unpackboot(file, project):
-    os.chdir(project)
     name = os.path.basename(file).replace('.img', '')
+    os.makedirs(project+os.sep+name)
+    os.chdir(project+os.sep+name)
     if call("magiskboot unpack -h %s" % file) != 0:
         print("Unpack %s Fail..." % file)
         os.chdir(LOCALDIR)
-        shutil.rmtree(project + os.sep)
+        shutil.rmtree(project + os.sep+name)
         return
     if os.access(project + os.sep + name + os.sep + "ramdisk.cpio", os.F_OK):
         comp = gettype(project + os.sep + name + os.sep + "ramdisk.cpio")
@@ -967,8 +968,7 @@ def unpack(file, info, project):
         print(f'{file}erofs')
         pass
     elif info in ['boot', 'vendor_boot']:
-        filepath = os.path.dirname(file)
-        unpackboot(os.path.join(filepath, file), project)
+        unpackboot(os.path.abspath(file), project)
     else:
         ywarn("未知格式！")
 
