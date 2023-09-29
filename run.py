@@ -617,7 +617,7 @@ def packChoo(project):
     tools = {}
     if not os.path.exists(project + os.sep + "config"):
         os.makedirs(project + os.sep + "config")
-    if dir_has(project + os.sep + "config", "fs_config"):
+    if project:
         print("   [0]- 打包所有镜像\n")
         for packs in os.listdir(project):
             if os.path.isdir(project + os.sep + packs):
