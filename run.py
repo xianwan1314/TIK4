@@ -688,6 +688,23 @@ def unpack(file, info, project):
         unpack(os.path.join(filepath, file), gettype(os.path.join(filepath, file)), project)
     elif info == 'ext':
         imgextractor.Extractor().main(file, os.path.dirname(file), project)
+    elif info == 'dat.1':
+        for fd in [f for f in os.listdir(project) if re.search(r'\.new\.dat\.\d+', f)]:
+            with open(project + os.path.basename(fd).rsplit('.', 1)[0], 'ab') as ofd:
+                for fd1 in sorted(
+                        [f for f in os.listdir(project) if f.startswith(os.path.basename(fd).rsplit('.', 1)[0] + ".")],
+                        key=lambda x: int(x.rsplit('.')[3])):
+                    print("合并%s到%s" % (fd1, os.path.basename(fd).rsplit('.', 1)[0]))
+                    with open(project + fd1, 'rb') as nfd:
+                        ofd.write(nfd.read())
+                    os.remove(project + fd1)
+        partname = os.path.basename(file).replace('.new.dat.1', '')
+        filepath = os.path.dirname(file)
+        utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
+                       os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
+        unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
+    else:
+        ywarn("未知格式！")
 
 
 
