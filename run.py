@@ -755,6 +755,7 @@ def bootpac(file, orig, project):
 
 def unpackboot(file, project):
     name = os.path.basename(file).replace('.img', '')
+    rmdire(project+os.sep+name)
     os.makedirs(project+os.sep+name)
     os.chdir(project+os.sep+name)
     if call("magiskboot unpack -h %s" % file) != 0:
