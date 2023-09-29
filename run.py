@@ -867,7 +867,7 @@ def makedtb(sf, project):
 
 
 def undtbo(project, infile):
-    dtbodir = project + os.sep + os.path.basename(infile).split('.')[0] + "_dtbo"
+    dtbodir = project + os.sep + os.path.basename(infile).split('.')[0]
     open(project+os.sep+"config"+os.sep+"dtboinfo_"+os.path.basename(infile.split('.')[0]),'w').close()
     rmdire(dtbodir)
     if not os.path.exists(dtbodir + os.sep + "dtbo_files"):
