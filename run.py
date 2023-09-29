@@ -424,15 +424,6 @@ def menu(project):
     print('\n')
     print(" \033[31m>ROM菜单 \033[0m\n")
     print(f"  项目：{project}")
-    if os.path.exists(PROJECT_DIR + os.sep + 'system' + os.sep + 'system' + os.sep + "build.prop"):
-        SYSTEM_DIR0 = PROJECT_DIR0 + os.sep + "system" + os.sep + ("system")
-        SYSTEM_DIR = SYSTEM_DIR0
-    elif os.path.exists(PROJECT_DIR + os.sep + "system" + os.sep + "build.prop"):
-        SYSTEM_DIR0 = PROJECT_DIR0 + os.sep + "system"
-        SYSTEM_DIR = SYSTEM_DIR0
-    else:
-        SYSTEM_DIR = 0
-        ywarn("  非完整ROM项目")
     print('')
     print('\033[33m    1> 项目主页     2> 解包菜单\033[0m\n')
     print('\033[36m    3> 打包菜单     4> 插件菜单\033[0m\n')
@@ -460,6 +451,7 @@ def menu(project):
 
 def unpackChoo(project):
     cls()
+    os.chdir(project)
     print(" \033[31m >分解 \033[0m\n")
     filen = 0
     files = {}
