@@ -822,6 +822,25 @@ def inpacker(name, project, form):
         call(f"img2simg {out_img} {out_img}.s")
         os.remove(out_img)
         os.rename(out_img+".s",out_img)
+    if form == 'br':
+        try:
+            os.remove(project+os.sep+"TI_out"+os.sep+name+".new.dat.br")
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".transfer.list")
+        except:
+            pass
+    elif form == 'dat':
+        try:
+            os.remove(project+os.sep+"TI_out"+os.sep+name+".new.dat")
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".transfer.list")
+        except:
+            pass
+    else:
+        try:
+            os.rename(out_img,project+os.sep+"TI_out"+os.sep+name+".img")
+        except:
+            pass
 
 
 def unpack(file, info, project):
