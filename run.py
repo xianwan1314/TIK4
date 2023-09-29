@@ -878,7 +878,7 @@ def undtbo(project, infile):
     yecho("正在解压dtbo.img")
     mkdtboimg.dump_dtbo(infile, dtbodir + os.sep + "dtbo_files" + os.sep + "dtbo")
     for dtbo_files in os.listdir(dtbodir + os.sep + "dtbo_files"):
-        if dtbo_files.endswith('.dtbo'):
+        if dtbo_files.startswith('dtbo.'):
             dts_files = dtbo_files.replace("dtbo", 'dts')
             yecho(f"正在反编译{dtbo_files}为{dts_files}")
             if call(f'dtc -@ -I "dtb" -O "dts" {dtbodir + os.sep + "dtbo_files" + os.sep + dtbo_files} -o "{dtbodir + os.sep + "dts_files" + os.sep + dts_files}"') != 0:
