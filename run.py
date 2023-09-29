@@ -460,11 +460,12 @@ def menu(project):
 
 
 def unpackChoo(project):
+    cls()
     print(" \033[31m >分解 \033[0m\n")
     filen = 0
     files = {}
     infos = {}
-    ywarn(f" 请将文件放于{project}根目录下！")
+    ywarn(f"  请将文件放于{project}根目录下！")
     print()
     print(" [0]- 分解所有文件\n")
     if dir_has(project, '.br'):
@@ -544,6 +545,38 @@ def unpackChoo(project):
                     print(f'   [{filen}]- {ops0}\n')
                     files[filen] = ops0
                     infos[filen] = 'ops'
+    if dir_has(project, '.win'):
+        print("\033[33m [Win]文件\033[0m\n")
+        for win0 in os.listdir(project):
+            if win0.endswith('.win'):
+                if os.path.isfile(os.path.abspath(win0)):
+                    filen += 1
+                    print(f"   [{filen}]- {win0} <WIN> \n")
+                    files[filen] = win0
+                    infos[filen] = 'win'
+    if dir_has(project, '.win000'):
+        for win0000 in os.listdir(project):
+            if win0000.endswith('.win000'):
+                if os.path.isfile(os.path.abspath(win0000)):
+                    filen += 1
+                    print(f"   [{filen}]- {win0000} <分段WIN> \n")
+                    files[filen] = win0000
+                    infos[filen] = 'win000'
+    if dir_has(project, '.dtb'):
+        print("\033[33m [Dtb]文件\033[0m\n")
+        for dtb0 in os.listdir(project):
+            if dtb0.endswith('.dtb'):
+                if os.path.isfile(os.path.abspath(dtb0)) and gettype(os.path.abspath(dtb0)) == 'dtb':
+                    filen += 1
+                    print(f'   [{filen}]- {dtb0}\n')
+                    files[filen] = dtb0
+                    infos[filen] = 'dtb'
+    print()
+    print("\033[33m  [77] 菜单  [88] 循环解包  [99] 占位\033[0m")
+    print("  --------------------------------------")
+    filed = input("  请输入对应序号：")
+    if filed == '0':
+        print()
 
 
 promenu()
