@@ -734,9 +734,27 @@ def packChoo(project):
             return
         elif filed.isdigit():
             if int(filed) in parts.keys():
+                if not settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
+                    op_menu = input("  输出所有文件格式[1]br [2]dat [3]img:")
+                    if op_menu == '1':
+                        isbr = 1
+                        isdat = 1
+                    elif op_menu == '2':
+                        isbr = 0
+                        isdat = 1
+                    else:
+                        isbr = 0
+                        isdat = 0
+                if settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
+                    syscheck = input("手动打包所有分区格式为：[1]ext4 [2]erofs")
+                    if syscheck == '2':
+                        imgtype = "erofs"
+                    else:
+                        imgtype = "ext"
+                yecho(f"打包{parts}")
+            else:
                 ywarn("Input error!")
                 time.sleep(2)
-
 
 
 def unpack(file, info, project):
