@@ -43,7 +43,6 @@ def getsize(file):
     return os.path.getsize(file)
 
 
-
 def cleantemp():
     rmdire(tempdir)
     os.mkdir(tempdir)
@@ -523,9 +522,19 @@ def unpackChoo(project):
         for ozip0 in os.listdir(project):
             if ozip0.endswith('.ozip'):
                 if os.path.isfile(os.path.abspath(ozip0)) and gettype(os.path.abspath(ozip0)) == 'ozip':
+                    filen += 1
                     print(f"   [{filen}]- {ozip0}\n")
                     files[filen] = ozip0
                     infos[filen] = 'ozip'
+    if dir_has(project, '.ofp'):
+        print("\033[33m [Ofp]文件\033[0m\n")
+        for ofp0 in os.listdir(project):
+            if ofp0.endswith('.ofp'):
+                if os.path.isfile(os.path.abspath(ofp0)):
+                    filen += 1
+                    print(f"   [{filen}]- {ofp0}\n")
+                    files[filen] = ofp0
+                    infos[filen] = 'ofp'
 
 
 promenu()
