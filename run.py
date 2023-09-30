@@ -461,7 +461,12 @@ def subbed(project):
     print()
     op_pro = input("请输入序号：")
     if op_pro == '66':
-        pass
+        path = input("请输入插件路径或[拖入]:")
+        if os.path.exists(path):
+            install(path)
+        else:
+            ywarn(f"{path}不存在！")
+        time.sleep(2)
     elif op_pro == '77':
         chose = input("输入插件序号:")
         if int(chose) in mysubs.keys():
@@ -475,8 +480,16 @@ def subbed(project):
         return
     elif op_pro.isdigit():
         if int(op_pro) in mysubs.keys():
-            call(f'busybox ash {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "run.sh"} {project}')
+            if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "run.sh"):
+                call(f'busybox ash {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "run.sh"} {project}')
+            else:
+                ywarn(f"{mysubs[int(op_pro)]}已损坏！请手动卸载")
+            time.sleep(2)
     subbed(project)
+
+
+def install(plugin):
+    pass
 
 
 def unpackChoo(project):
