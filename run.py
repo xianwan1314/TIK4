@@ -660,7 +660,7 @@ def packChoo(project):
                 elif types[f] == 'dtb':
                     makedtb(project + os.sep + parts[f], project)
                 elif types[f] == 'dtbo':
-                    makedtbo(parts[f],project)
+                    makedtbo(parts[f], project)
                 else:
                     inpacker(parts[f], project, form, imgtype)
         elif filed == '55':
@@ -695,7 +695,7 @@ def packChoo(project):
                     makedtb(project + os.sep + parts[f], project)
                     pass
                 elif types[f] == 'dtbo':
-                    makedtbo(parts[f],project)
+                    makedtbo(parts[f], project)
                 else:
                     pass
                     inpacker(parts[f], project, form, imgtype)
@@ -734,7 +734,7 @@ def packChoo(project):
                     makedtb(project + os.sep + parts[int(filed)], project)
                     pass
                 elif types[int(filed)] == 'dtbo':
-                    makedtbo(parts[int(filed)],project)
+                    makedtbo(parts[int(filed)], project)
                 else:
                     inpacker(parts[int(filed)], project, form, imgtype)
             else:
@@ -895,12 +895,12 @@ def makedtbo(sf, project):
         new_dtbo_files = dts_files.replace('dts', 'dtbo')
         yecho(f"正在回编译{dts_files}为{new_dtbo_files}")
         call(
-            f'dtc -@ -I "dts" -O "dtb" {dtbodir + os.sep + "dts_files" +os.sep+ dts_files} -o {dtbodir + os.sep + "new_dtbo_files" + os.sep + new_dtbo_files}')
+            f'dtc -@ -I "dts" -O "dtb" {dtbodir + os.sep + "dts_files" + os.sep + dts_files} -o {dtbodir + os.sep + "new_dtbo_files" + os.sep + new_dtbo_files}')
     yecho("正在生成dtbo.img...")
     list_ = []
     for b in os.listdir(dtbodir + os.sep + "new_dtbo_files"):
         if b.startswith('dtbo.'):
-            list_.append(dtbodir + os.sep + "new_dtbo_files"+os.sep+b)
+            list_.append(dtbodir + os.sep + "new_dtbo_files" + os.sep + b)
     list_ = sorted(list_, key=lambda x: int(x.rsplit('.')[1]))
     try:
         mkdtboimg.create_dtbo(project + os.sep + os.path.basename(sf).split('.')[0] + '.img', list_, 4096)
@@ -996,6 +996,11 @@ def inpacker(name, project, form, ftype):
     if form == 'br':
         call(
             f'brotli -q {settings.brcom} -j -w 24 {project + os.sep + "TI_out" + os.sep + name + ".new.dat"} -o {project + os.sep + "TI_out" + os.sep + name + ".new.dat.br"}')
+
+
+def packsuper(project):
+    if os.path.exists(project + os.sep + "super" + os.sep + "super.img"):
+        os.remove(project + os.sep + "super" + os.sep + "super.img")
 
 
 def unpack(file, info, project):
