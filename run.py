@@ -1,29 +1,29 @@
 #!/usr/bin/env python
-import os
 import json
-import re
-import sys
-
-import lpunpack
-import mkdtboimg
-import utils
-from api import cls, dir_has, cat, dirsize, re_folder, f_remove
-import time
+import os
 import platform as plat
+import re
 import shutil
-
-from log import LOG, LOGS, LOGE, LOGW
-from utils import gettype, simg2img
-import requests
-import ofp_qc_decrypt
-import ofp_mtk_decrypt
-import ozipdecrypt
+import sys
+import time
 import zipfile
-import imgextractor
+from argparse import Namespace
+
+import extract_dtb
+import requests
+
 import contextpatch
 import fspatch
-import extract_dtb
-from argparse import Namespace
+import imgextractor
+import lpunpack
+import mkdtboimg
+import ofp_mtk_decrypt
+import ofp_qc_decrypt
+import ozipdecrypt
+import utils
+from api import cls, dir_has, cat, dirsize, re_folder, f_remove
+from log import LOGS, LOGE, LOGW
+from utils import gettype, simg2img
 
 LOCALDIR = os.getcwd()
 binner = LOCALDIR + os.sep + "bin"
@@ -98,19 +98,19 @@ class setting:
     def settings4(self):
         cls()
         print('''
-		\033[33m  > 打包设置 \033[0m
-		   1>Brotli 压缩等级\n
-		   2>[EXT4] Size处理\n
-		   3>[EXT4] 打包工具\n
-		   4>[EXT4]打包RO/RW\n
-		   5>[Erofs]压缩方式\n
-		   6>[EXT4]UTC时间戳\n
-		   7>[EXT4]InodeSize\n
-		   8>[Img]创建sparse\n
-		   9>[~4]Img文件系统\n
-		   12>返回上一级菜单
-		   --------------------------
-		''')
+        \033[33m  > 打包设置 \033[0m
+           1>Brotli 压缩等级\n
+           2>[EXT4] Size处理\n
+           3>[EXT4] 打包工具\n
+           4>[EXT4]打包RO/RW\n
+           5>[Erofs]压缩方式\n
+           6>[EXT4]UTC时间戳\n
+           7>[EXT4]InodeSize\n
+           8>[Img]创建sparse\n
+           9>[~4]Img文件系统\n
+           12>返回上一级菜单
+           --------------------------
+        ''')
         op_pro = input("   请输入编号: ")
         if op_pro == "12":
             return 1
@@ -124,20 +124,20 @@ class setting:
     def settings5(self):
         cls()
         print('''
-		\033[33m  > 动态分区设置 \033[0m
-		   1> dynamic_partitions簇名\n
-		   2> [Metadata]元数据插槽数\n
-		   3> [Metadata]最大保留Size\n
-		   4> [分区] 默认扇区/块大小\n
-		   5> [Super] 指定/block大小\n
-		   6> [Super] 更改物理分区名\n
-		   7> [Super] 更改逻辑分区表\n
-		   8> [Super]强制烧写完整Img\n
-		   9> [Super] 标记分区槽后缀\n
-		   10>[Payload]靶定HeaderVer\n
-		   11>返回上一级菜单
-		   --------------------------
-		''')
+        \033[33m  > 动态分区设置 \033[0m
+           1> dynamic_partitions簇名\n
+           2> [Metadata]元数据插槽数\n
+           3> [Metadata]最大保留Size\n
+           4> [分区] 默认扇区/块大小\n
+           5> [Super] 指定/block大小\n
+           6> [Super] 更改物理分区名\n
+           7> [Super] 更改逻辑分区表\n
+           8> [Super]强制烧写完整Img\n
+           9> [Super] 标记分区槽后缀\n
+           10>[Payload]靶定HeaderVer\n
+           11>返回上一级菜单
+           --------------------------
+        ''')
         op_pro = input("   请输入编号: ")
         if op_pro == "11":
             return 1
@@ -310,18 +310,18 @@ class setting:
     def __init__(self):
         cls()
         print('''
-	\033[33m  > 设置 \033[0m
-	   1> 待定
-	   2>[Droid]存储ROM目录
-	   3>[修复]工具部分依赖
-	   4>[打包]相关细则设置
-	   5>[动态分区]相关设置
-	   6>自定义 ROM作者信息
-	   7>自定义 首页Banner
-	   8>修改Plug/ROM限Size
-	   9>返回主页
-	   --------------------------
-	''')
+    \033[33m  > 设置 \033[0m
+       1> 待定
+       2>[Droid]存储ROM目录
+       3>[修复]工具部分依赖
+       4>[打包]相关细则设置
+       5>[动态分区]相关设置
+       6>自定义 ROM作者信息
+       7>自定义 首页Banner
+       8>修改Plug/ROM限Size
+       9>返回主页
+       --------------------------
+    ''')
         op_pro = input("   请输入编号: ")
         if op_pro == "9":
             return
