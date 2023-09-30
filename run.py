@@ -1042,13 +1042,20 @@ def insuper(Imgdir, outputimg, supersize, stype, sparse, minsize):
                 os.remove(file_path)
     superpa = f"--metadata-size {settings.metadatasize} --super-name {settings.supername} "
     if sparse == '1':
-        superpa+="--sparse "
+        superpa += "--sparse "
     if stype == 'VAB':
         superpa += "--virtual-ab "
     superpa += f"-block-size={settings.SBLOCKSIZE} "
     for imag in os.listdir(Imgdir):
         if imag.endswith('.img'):
-            image = imag.split('.')[0].replace('_a','').replace('_b','')
+            image = imag.split('.')[0].replace('_a', '').replace('_b', '')
+            if not f'partition {image}:readonly' in superpa and not f'partition {image}_a:readonly' in superpa:
+                if stype in ['VAB','AB']:
+                    if os.path.isfile()
+                else:
+                    img_size = os.path.getsize(Imgdir+os.sep+image+".img")
+                    superpa += f"--partition {image}:readonly:{img_size}:{settings.super_group} --image {image}={Imgdir}{os.sep}{image}.img "
+                    group_size_a += img_size
 
 
 
