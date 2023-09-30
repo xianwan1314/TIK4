@@ -474,7 +474,7 @@ def subbed(project):
     elif op_pro == '77':
         chose = input("输入插件序号:")
         if int(chose) in mysubs.keys():
-            f_remove(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)])
+            f_remove(binner + os.sep + "subs" + os.sep + mysubs[int(chose)])
         else:
             print("序号错误")
     elif op_pro == '88':
