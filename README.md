@@ -12,7 +12,7 @@
 
 3. 已支持目前安卓14新机型，包括但不限于Xiaomi OPPO Pixel等
 
-4. Magisk Boot Kitchen & AndroidImagineKitchen双方案分解合成[boot|exaid|recovery/etc].img
+4. 全新MKC_Boot_Kitchen解打[boot|exaid|recovery/etc].img
     
 5. 支持分解全版本super.img(V-AB)支持各种类型打包（半自动识别，高效稳定）
 
