@@ -1127,6 +1127,10 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse, minsize):
 
 
 def packpayload(project):
+    if platform != 'Linux':
+        print(f"不支持当前系统:{platform}")
+        time.sleep(2)
+        return
     re_folder(project + os.sep + 'super')
     re_folder(project + os.sep + 'payload')
     re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
@@ -1357,6 +1361,7 @@ def autounpack(project):
                 unpack(os.path.abspath(infile), 'dat', project)
             elif infile.endswith('.img'):
                 unpack(os.path.abspath(infile), 'img', project)
+
 
 if __name__ == '__main__':
     promenu()
