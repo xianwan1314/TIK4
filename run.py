@@ -508,7 +508,7 @@ class installmpk:
                 self.inner_zipdata = inner_file.read()
                 self.inner_filenames = zipfile.ZipFile(BytesIO(self.inner_zipdata)).namelist()
         print('''
-         \033[31m
+         \033[34m
         ----------------
            MIO-PACKAGE
         ----------------
