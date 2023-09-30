@@ -1050,13 +1050,24 @@ def insuper(Imgdir, outputimg, supersize, stype, sparse, minsize):
         if imag.endswith('.img'):
             image = imag.split('.')[0].replace('_a', '').replace('_b', '')
             if not f'partition {image}:readonly' in superpa and not f'partition {image}_a:readonly' in superpa:
-                if stype in ['VAB','AB']:
-                    if os.path.isfile()
+                if stype in ['VAB', 'AB']:
+                    if os.path.isfile(Imgdir + os.sep + image + "_a.img") and os.path.isfile(
+                            Imgdir + os.sep + image + "_b.img"):
+                        groupaab = 1
+                        img_sizea = os.path.getsize(Imgdir + os.sep + image + "_a.img")
+                        img_sizeb = os.path.getsize(Imgdir + os.sep + image + "_b.img")
+                        group_size_a += img_sizea
+                        group_size_b += img_sizeb
+                        superpa += f"--partition {image}_a:readonly:{img_sizea}:{settings.super_group}_a --image {image}_a={Imgdir}{os.sep}{image}_a.img --partition {image}_b:readonly:{img_sizeb}:{settings.super_group}_b --image {image}_b={Imgdir}{os.sep}{image}_b.img "
+                    else:
+                        img_size = os.path.getsize(Imgdir + os.sep + image + ".img")
+                        group_size_a += img_size
+                        group_size_b += img_size
+                        superpa += f"--partition {image}_a:readonly:{img_size}:{settings.super_group}_a --image {image}_a={Imgdir}{os.sep}{image}.img --partition {image}_b:readonly:0:{settings.super_group}_b "
                 else:
-                    img_size = os.path.getsize(Imgdir+os.sep+image+".img")
+                    img_size = os.path.getsize(Imgdir + os.sep + image + ".img")
                     superpa += f"--partition {image}:readonly:{img_size}:{settings.super_group} --image {image}={Imgdir}{os.sep}{image}.img "
                     group_size_a += img_size
-
 
 
 def unpack(file, info, project):
