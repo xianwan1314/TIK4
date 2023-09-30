@@ -11,6 +11,8 @@ from api import cls, dir_has, cat, dirsize, re_folder, f_remove
 import time
 import platform as plat
 import shutil
+
+from log import LOG, LOGS
 from utils import gettype, simg2img
 import requests
 import ofp_qc_decrypt
@@ -1099,7 +1101,7 @@ def packpayload(project):
     re_folder(project + os.sep + 'payload')
     re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
     f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
-    ywarn(f"请将所有分区镜像放置于{project}/payload中（非super）！")
+    LOG(f"请将所有分区镜像放置于{project}/payload中（非super）！")
     ywarn("请MIUI14用户注意！mi_ext分区也属于super，请及时到主页输入77、5、7来修改动态分区内逻辑分区表")
     ywarn("很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
     checkssize = input("请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [4]压缩到最小 [5]自定义")
@@ -1139,7 +1141,7 @@ def inpayload(supersize, project):
     call(
         f"delta_generator --out_file={project + os.sep + 'TI_out' + os.sep + 'payload' + os.sep + 'payload.bin'} {inparts} --dynamic_partition_info_file={project + os.sep + 'payload' + os.sep + 'dynamic_partitions_info.txt'}")
     if call(f"delta_generator --in_file={project + os.sep + 'TI_out' + os.sep + 'payload' + os.sep + 'payload.bin'} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0:
-        ysuc("成功创建payload!")
+        LOGS("成功创建payload!")
     else:
         ywarn("创建payload失败！")
     time.sleep(2)
