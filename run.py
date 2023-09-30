@@ -438,8 +438,7 @@ def menu(project):
     elif op_menu == '3':
         packChoo(PROJECT_DIR)
     elif op_menu == '4':
-        pass
-    # subbed
+        subbed(project)
     elif op_menu == '5':
         ywarn("维护中...")
         time.sleep(2)
@@ -447,6 +446,14 @@ def menu(project):
         ywarn('   Input error!"')
         time.sleep(2)
     menu(project)
+
+
+def subbed(project):
+    if not os.path.exists(binner + os.sep + "subs"):
+        os.makedirs(binner + os.sep + "subs")
+    cls()
+    subn = 0
+    print(" >\033[31m插件列表 \033[0m\n")
 
 
 def unpackChoo(project):
