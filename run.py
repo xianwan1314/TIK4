@@ -1072,9 +1072,9 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse, minsize):
                     superpa += f"--partition {image}:readonly:{img_size}:{settings.super_group} --image {image}={Imgdir}{os.sep}{image}.img "
                     group_size_a += img_size
     if not groupaab:
-        supermsize = group_size_a + settings.SBLOCKSIZE * 1000
+        supermsize = group_size_a + int(settings.SBLOCKSIZE) * 1000
     elif groupaab == 1:
-        supermsize = group_size_a + group_size_b + settings.SBLOCKSIZE * 1000
+        supermsize = group_size_a + group_size_b + int(settings.SBLOCKSIZE) * 1000
     if minsize == 1:
         supersize = supermsize
         if supermsize < ssize:
