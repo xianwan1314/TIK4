@@ -508,15 +508,16 @@ class installmpk:
                 self.inner_zipdata = inner_file.read()
                 self.inner_filenames = zipfile.ZipFile(BytesIO(self.inner_zipdata)).namelist()
         print('''
+         \033[31m
         ----------------
            MIO-PACKAGE
         ----------------
-        信息：
         ''')
         print("插件名称：" + self.mconf.get('module', 'name'))
         print("版本:%s\n作者：%s" % (self.mconf.get('module', 'version'), (self.mconf.get('module', 'author'))))
         print("介绍:")
         print(self.mconf.get('module', 'describe'))
+        print("\033[0m\n")
         install = input("要安装吗? [1/0]")
         if install == '1':
             self.install()
