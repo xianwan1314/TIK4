@@ -1,2 +1,3 @@
 extract-dtb
 pyinstaller
+pycryptodome
