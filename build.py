@@ -2,7 +2,7 @@ import os
 import shutil
 
 local = os.getcwd()
-print("正在构建...")
+print("Building...")
 os.system("pyinstaller -F run.py --exclude-module=numpy -i icon.ico")
 if os.name == 'nt':
     if os.path.exists(local + os.sep + "dist" + os.sep + "run.exe"):
@@ -32,5 +32,5 @@ for i in os.listdir(local):
 if os.name == 'posix':
     for root, dirs, files in os.walk(local, topdown=True):
         for i in files:
-            print(f"设置权限{i}")
-            os.system(f"chmod a+x {os.path.abspath(i)}")
+            print(f"Chmod {os.path.join(root,i)}")
+            os.system(f"chmod a+x {os.path.join(root,i)}")
