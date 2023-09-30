@@ -75,7 +75,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Pack tool
         run: |
-             pyinstaller -Fw run.py --exclude-module=numpy -i icon.ico
+             pyinstaller -F run.py --exclude-module=numpy -i icon.ico
              move dist/run.exe ./
              del *.py
              Remove-Item bin/Linux -Recurse
@@ -112,7 +112,7 @@ jobs:
             sudo apt update -y && sudo apt install python3-tk -y
       - name: Pack Tool
         run: |
-             pyinstaller -Fw run.py --exclude-module=numpy -i icon.ico
+             pyinstaller -F run.py --exclude-module=numpy -i icon.ico
              mv dist/* ./
              rm -rf .git
              rm -rf .github
