@@ -476,7 +476,7 @@ def subbed(project):
     elif op_pro == '77':
         chose = input("输入插件序号:")
         if int(chose) in mysubs.keys():
-            if input(f"确认删除{names[int(chose)]}吗 [1/0]") == 1:
+            if input(f"确认删除{names[int(chose)]}吗 [1/0]") == '1':
                 f_remove(binner + os.sep + "subs" + os.sep + mysubs[int(chose)])
             else:
                 yecho("不删除")
