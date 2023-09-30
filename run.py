@@ -474,7 +474,7 @@ def subbed(project):
         return
     elif op_pro.isdigit():
         if int(op_pro) in mysubs.keys():
-            call('busybox ash ')
+            call(f'busybox ash {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)]+os.sep+"run.sh"} {project}')
     subbed(project)
 
 
