@@ -20,12 +20,12 @@ jobs:
       - name: Get Version
         id: tool_version
         run: |
-            echo "::set-output name=version::4.0"
+            echo "version=4.0" >> >> $GITHUB_OUTPUT
       - name: Get last commit SHA
-        run: echo "::set-output name=sha::$(git rev-parse HEAD)"
+        run: echo "sha=$(git rev-parse HEAD)" >> >> $GITHUB_OUTPUT
       - name: Get last commit message
         id: commit_message
-        run: echo "::set-output name=message::$(git log -1 --pretty=%B ${{ steps.get_sha.outputs.sha }})"
+        run: echo "message=$(git log -1 --pretty=%B ${{ steps.get_sha.outputs.sha }})" >> $GITHUB_OUTPUT
       - name: Rename Tool
         run: |
           cd TIK-win
