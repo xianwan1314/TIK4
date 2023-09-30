@@ -475,7 +475,7 @@ def subbed(project):
     elif op_pro == '77':
         chose = input("输入插件序号:")
         if int(chose) in mysubs.keys():
-            unmpk(mysubs[int(chose)], names[int(chose)], binner + os.sep + "subs" + os.sep)
+            unmpk(mysubs[int(chose)], names[int(chose)], binner + os.sep + "subs")
         else:
             print("序号错误")
     elif op_pro == '88':
