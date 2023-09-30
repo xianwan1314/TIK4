@@ -1001,6 +1001,17 @@ def inpacker(name, project, form, ftype):
 def packsuper(project):
     if os.path.exists(project + os.sep + "super" + os.sep + "super.img"):
         os.remove(project + os.sep + "super" + os.sep + "super.img")
+    if not os.path.exists(project + os.sep + "super"):
+        os.makedirs(project + os.sep + "super")
+    cls()
+    ywarn(f"请将需要打包的分区镜像放置于{project}/super中！")
+    supertype = input("请输入打包模式：[1]A_only [2]AB [3]V-AB	")
+    if supertype == '3':
+        supertype = 'VAB'
+    elif supertype == '2':
+        supertype = 'AB'
+    else:
+        supertype = 'A_only'
 
 
 def unpack(file, info, project):
