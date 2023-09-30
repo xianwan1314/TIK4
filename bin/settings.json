@@ -16,7 +16,7 @@
     "metadatasize": "65536",
     "inodesize": "102400",
     "super_group": "qti_dynamic_partitions",
-    "superpart_list": "vendor",
+    "superpart_list": "system odm vendor system_ext product",
     "erofslim": "lz4hc,8",
     "extrw": "",
     "utcstamp": "1230768000",
