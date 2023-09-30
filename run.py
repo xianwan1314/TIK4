@@ -452,6 +452,7 @@ def subbed(project):
     cls()
     subn = 0
     mysubs = {}
+    names = {}
     print(" >\033[31m插件列表 \033[0m\n")
     for sub in os.listdir(binner + os.sep + "subs"):
         if os.path.isfile(binner + os.sep + "subs" + os.sep + sub+os.sep+"info.json"):
@@ -460,6 +461,7 @@ def subbed(project):
             subn += 1
             print(f"   [{subn}]- {name}\n")
             mysubs[subn] = sub
+            names[subn] = name
     print("----------------------------------------------\n")
     print("\033[33m> [66]-安装 [77]-删除 [88]-在线Plug仓库 [99]-项目菜单\033[0m")
     print()
@@ -474,7 +476,8 @@ def subbed(project):
     elif op_pro == '77':
         chose = input("输入插件序号:")
         if int(chose) in mysubs.keys():
-            f_remove(binner + os.sep + "subs" + os.sep + mysubs[int(chose)])
+            if input(f"确认删除{names[int(chose)]}吗 [1/0]") == 1:
+                f_remove(binner + os.sep + "subs" + os.sep + mysubs[int(chose)])
         else:
             print("序号错误")
     elif op_pro == '88':
