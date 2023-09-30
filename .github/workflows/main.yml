@@ -16,6 +16,7 @@ jobs:
       matrix:
         python-version: ["3.8.10"]
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v3
       - name: Get Version
         id: tool_version
