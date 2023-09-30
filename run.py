@@ -453,7 +453,29 @@ def subbed(project):
         os.makedirs(binner + os.sep + "subs")
     cls()
     subn = 0
+    mysubs = {}
     print(" >\033[31m插件列表 \033[0m\n")
+    for sub in os.listdir(binner + os.sep + "subs"):
+        if os.path.isdir(binner + os.sep + "subs" + os.sep + sub):
+            subn += 1
+            print(f"   [{subn}]- {sub}\n")
+            mysubs[subn] = sub
+    print("----------------------------------------------\n")
+    print("\033[33m> [66]-安装 [77]-删除 [88]-在线Plug仓库 [99]-项目菜单\033[0m")
+    print()
+    op_pro = input("请输入序号：")
+    if op_pro == '66':
+        pass
+    elif op_pro == '77':
+        pass
+    elif op_pro == '88':
+        pass
+    elif op_pro == '99':
+        return
+    elif op_pro.isdigit():
+        if int(op_pro) in mysubs.keys():
+            call('busybox ash ')
+    subbed(project)
 
 
 def unpackChoo(project):
