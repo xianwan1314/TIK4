@@ -18,7 +18,6 @@ jobs:
       - name: Rename Tool
         run: |
           cd TIK-win
-          Remove-Item .git -Recurse
           ls
           Compress-Archive -Path ./* -DestinationPath ../TIK-win.zip
           cd ..
