@@ -6,6 +6,7 @@ on:
   push:
     paths:
       - "run.py"
+      - "build.py"
   pull_request:
   workflow_dispatch:
 jobs:
