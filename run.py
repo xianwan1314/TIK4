@@ -999,6 +999,7 @@ def inpacker(name, project, form, ftype):
 
 
 def packsuper(project):
+    minssize = 0
     if os.path.exists(project + os.sep + "super" + os.sep + "super.img"):
         os.remove(project + os.sep + "super" + os.sep + "super.img")
     if not os.path.exists(project + os.sep + "super"):
@@ -1013,7 +1014,7 @@ def packsuper(project):
     else:
         supertype = 'A_only'
     ifsparse = input("是否打包为sparse镜像？[1/0]	")
-    checkssize= input("请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [4]压缩到最小 [5]自定义")
+    checkssize = input("请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [4]压缩到最小 [5]自定义")
     if checkssize == '1':
         supersize = 9126805504
     elif checkssize == '2':
@@ -1028,8 +1029,14 @@ def packsuper(project):
     else:
         supersize = input("请输入super分区大小（字节数）	")
     yecho("打包到super/super.img...")
-    insuper(project+os.sep+'super',project+os.sep+'super'+os.sep+"super.img",supersize,supertype,ifsparse,minssize)
-def insuper(Imgdir,outputimg, supersize,stype,sparse,minsize):
+    insuper(project + os.sep + 'super', project + os.sep + 'super' + os.sep + "super.img", supersize, supertype,
+            ifsparse, minssize)
+
+
+def insuper(Imgdir, outputimg, supersize, stype, sparse, minsize):
+    group_size = 0
+    group_size_a = 0
+    group_size_b = 0
 
 
 def unpack(file, info, project):
