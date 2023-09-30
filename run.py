@@ -700,8 +700,7 @@ def packChoo(project):
                     pass
                     inpacker(parts[f], project, form, imgtype)
         elif filed == '66':
-            pass
-        # packsuper
+            packsuper(project)
         elif filed == '77':
             pass
         # packpayload
