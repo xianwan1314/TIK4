@@ -19,9 +19,20 @@ Options:
 
 """
 
-from docopt import docopt
+'''
+{'--firmwarename': None,
+ '--help': False,
+ '--mbox': '5',
+ '--projid': None,
+ '--savename': 'out.ops',
+ '<directory>': None,
+ '<filename>': 'G',
+ 'decrypt': True,
+ 'decryptfile': False,
+ 'encrypt': False,
+ 'encryptfile': False}
+'''
 
-args = docopt(__doc__, version='1.2')
 import shutil
 
 import os
@@ -548,7 +559,7 @@ def copyitem(item, directory, pos, wf):
     return item, pos
 
 
-def main():
+def main(args):
     global mbox
     print("Oneplus CryptTools V1.4 (c) B. Kerler 2019-2021\n----------------------------\n")
     if args["decrypt"]:
