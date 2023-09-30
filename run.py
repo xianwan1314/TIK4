@@ -35,7 +35,8 @@ ostype = plat.system()
 ebinner = binner + os.sep + ostype + os.sep + platform + os.sep
 dtc = ebinner + os.sep + "dtc"
 mkdtimg_tool = binner + os.sep + "mkdtboimg.py"
-temp = LOCALDIR+os.sep+'temp'
+temp = LOCALDIR + os.sep + 'temp'
+
 
 def yecho(info): print(f"\033[36m[{time.strftime('%H:%M:%S')}]{info}\033[0m")
 
@@ -486,15 +487,26 @@ def subbed(project):
     elif op_pro.isdigit():
         if int(op_pro) in mysubs.keys():
             if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh"):
-
+                gen = gen_sh_engine(project)
                 call(
-                    f'busybox ash {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh"}')
+                    f'busybox ash {gen} {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh"}')
+                f_remove(gen)
             else:
                 ywarn(f"{mysubs[int(op_pro)]}为环境插件，不可运行！")
             time.sleep(2)
     subbed(project)
 
-def gen_sh_engine():
+
+def gen_sh_engine(project):
+    if not os.path.exists(temp):
+        os.makedirs(temp)
+    engine = temp + os.sep + utils.v_code()
+    with open(engine, 'w', encoding='utf-8', newline='\n') as en:
+        en.write(f"export project={project}\n")
+        en.write(f'export tool_bin={ebinner}\n')
+        en.write(f'source $1')
+    return engine
+
 
 class installmpk:
     def __init__(self, mpk):
