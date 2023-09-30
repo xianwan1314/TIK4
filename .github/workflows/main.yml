@@ -46,7 +46,7 @@ jobs:
           allowUpdates: true
           omitBodyDuringUpdate: true
           removeArtifacts: true
-          name: "MIO-KITCHEN-${{ steps.tool_version.outputs.version }}"
+          name: "TIK-${{ steps.tool_version.outputs.version }}-${{ github.run_number }}"
           tag: "CI_BUILD_${{ github.run_number }}"
           body: |
             Changelog: ${{ steps.commit_message.outputs.message }}
