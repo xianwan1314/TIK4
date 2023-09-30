@@ -1012,6 +1012,15 @@ def packsuper(project):
         supertype = 'AB'
     else:
         supertype = 'A_only'
+    ifsparse = input("是否打包为sparse镜像？[1/0]	")
+    checkssize= input("请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [4]压缩到最小 [5]自定义")
+    if checkssize == '1':
+        supersize = 9126805504
+    elif checkssize == '2':
+        supersize = 10200547328
+    elif checkssize == '3':
+        supersize = 16106127360
+
 
 
 def unpack(file, info, project):
