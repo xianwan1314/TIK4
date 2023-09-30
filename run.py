@@ -498,6 +498,9 @@ class installmpk:
         if not mpk:
             ywarn("插件不存在")
             return
+        if not zipfile.is_zipfile(mpk):
+            ywarn("非插件！")
+            input("任意按钮返回")
         with zipfile.ZipFile(mpk, 'r') as myfile:
             with myfile.open('info') as info_file:
                 self.mconf.read_string(info_file.read().decode('utf-8'))
