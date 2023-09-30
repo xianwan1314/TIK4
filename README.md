@@ -39,9 +39,9 @@
 Note: WSL 可能存在权限出错的问题 请自行判断测试！
 
 #### **合作伙伴**
-#### Sakura
-#### Affggh
-#### Yeliqin666
+1. Sakura
+2. Affggh
+3. Yeliqin666
 ####  **安装教程** 
 
     git clone https://github.com/ColdWindScholar/TIK
