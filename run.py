@@ -1035,6 +1035,20 @@ def insuper(Imgdir, outputimg, supersize, stype, sparse, minsize):
     group_size = 0
     group_size_a = 0
     group_size_b = 0
+    for root, dirs, files in os.walk(Imgdir):
+        for file in files:
+            file_path = os.path.join(root, file)
+            if os.path.isfile(file_path) and os.path.getsize(file_path) == 0:
+                os.remove(file_path)
+    superpa = f"--metadata-size {settings.metadatasize} --super-name {settings.supername} "
+    if sparse == '1':
+        superpa+="--sparse "
+    if stype == 'VAB':
+        superpa += "--virtual-ab "
+    superpa += f"-block-size={settings.SBLOCKSIZE} "
+    for imag in os.listdir(Imgdir):
+        if imag.endswith('.img'):
+
 
 
 def unpack(file, info, project):
