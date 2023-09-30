@@ -890,6 +890,28 @@ def undtbo(project, infile):
 
 def makedtbo(sf, project):
     dtbodir = project + os.sep + os.path.basename(sf).split('.')[0]
+    rmdire(dtbodir + os.sep + 'new_dtbo_files')
+    if os.path.exists(project + os.sep + os.path.basename(sf).split('.')[0] + '.img'): os.remove(
+        project + os.sep + os.path.basename(sf).split('.')[0] + '.img')
+    os.makedirs(dtbodir + os.sep + 'new_dtbo_files')
+    for dts_files in os.listdir(dtbodir + os.sep + 'dts_files'):
+        new_dtbo_files = dts_files.replace('dts', 'dtbo')
+        yecho(f"正在回编译{dts_files}为{new_dtbo_files}")
+        call(
+            f'dtc -@ -I "dts" -O "dtb" {dtbodir + os.sep + "dts_files" + dts_files} -o {dtbodir + os.sep + "new_dtbo_files" + os.sep + new_dtbo_files}')
+    yecho("正在生成dtbo.img...")
+    list_ = []
+    for b in os.listdir(dtbodir + os.sep + "new_dtbo_files"):
+        if b.startswith('dtbo.'):
+            list_.append(dtbodir + os.sep + "new_dtbo_files"+os.sep+b)
+    list_ = sorted(list_, key=lambda x: int(x.rsplit('.')[1]))
+    try:
+        mkdtboimg.create_dtbo(project + os.sep + os.path.basename(sf).split('.')[0] + '.img', list_, 4096)
+    except:
+        ywarn(f"{os.path.basename(sf).split('.')[0]}.img生成失败!")
+    else:
+        ysuc(f"{os.path.basename(sf).split('.')[0]}.img生成完毕!")
+    time.sleep(2)
 
 
 def inpacker(name, project, form, ftype):
