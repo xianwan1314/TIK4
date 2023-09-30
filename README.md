@@ -44,20 +44,9 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
 #### Yeliqin666
 ####  **安装教程** 
 
-    git clone https://gitee.com/yzdhz/TIK TIK3
-    sudo chmod 777 ./TIK3/run.sh
-    ./TIK3/run.sh
-
-####  **【手机端】** 
-
-1----运行Termux 获取存储权限 
-
-    termux-setup-storage
-
-2----一键配置proot并下载工具
-
-    bash <(curl -s https://gitee.com/yeliqin666/proot-ubuntu/raw/master/onekey_install.sh)
-
+    git clone https://github.com/ColdWindScholar/TIK
+    sudo chmod 777 ./TIK/run.py
+    ./TIK/run.py
 
 ####  **使用说明** 
 
@@ -89,7 +78,7 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
 
 ####  **交流反馈** 
 
-  QQ群：[932388310](https://jq.qq.com/?_wv=1027&k=HOJVFqzP)( 点击群号即可加群 )
+  QQ群：[932388310]
 
 
 
