@@ -35,7 +35,7 @@ ostype = plat.system()
 ebinner = binner + os.sep + ostype + os.sep + platform + os.sep
 dtc = ebinner + os.sep + "dtc"
 mkdtimg_tool = binner + os.sep + "mkdtboimg.py"
-
+temp = LOCALDIR+os.sep+'temp'
 
 def yecho(info): print(f"\033[36m[{time.strftime('%H:%M:%S')}]{info}\033[0m")
 
@@ -494,6 +494,7 @@ def subbed(project):
             time.sleep(2)
     subbed(project)
 
+def gen_sh_engine():
 
 class installmpk:
     def __init__(self, mpk):
