@@ -60,11 +60,6 @@ def getsize(file):
     return os.path.getsize(file)
 
 
-def cleantemp():
-    rmdire(tempdir)
-    os.mkdir(tempdir)
-
-
 if os.name == 'posix':
     os.system(f'chmod -R 777 {binner}')
 
@@ -1151,7 +1146,6 @@ def inpayload(supersize, project):
 
 
 def unpack(file, info, project):
-    cleantemp()
     if not os.path.exists(project + os.sep + 'config'):
         os.makedirs(project + os.sep + 'config')
     yecho(f"[{info}]解包{os.path.basename(file)}中...")
@@ -1293,7 +1287,6 @@ def unpackrom():
 
 
 def autounpack(project):
-    cleantemp()
     yecho("自动解包开始！")
     os.chdir(project)
     if os.path.exists(project + os.sep + "payload.bin"):
