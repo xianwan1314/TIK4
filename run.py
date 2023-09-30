@@ -1121,6 +1121,12 @@ def packpayload(project):
     else:
         supersize = input("请输入super分区大小（字节数）	")
     yecho(f"打包到{project}/TI_out/payload...")
+    inpayload(supersize, project)
+
+
+def inpayload(supersize, project):
+    re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
+    f_remove(project + os.sep + 'TI_out' + os.sep + "payload"+os.sep+'dynamic_partitions_info.txt')
 
 
 def unpack(file, info, project):
