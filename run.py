@@ -1097,6 +1097,8 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse, minsize):
 def packpayload(project):
     re_folder(project + os.sep + 'super')
     re_folder(project + os.sep + 'payload')
+    re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
+    f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
     ywarn(f"请将所有分区镜像放置于{project}/payload中（非super）！")
     ywarn("请MIUI14用户注意！mi_ext分区也属于super，请及时到主页输入77、5、7来修改动态分区内逻辑分区表")
     ywarn("很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
@@ -1119,12 +1121,11 @@ def packpayload(project):
 
 
 def inpayload(supersize, project):
-    re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
-    f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
     yecho("将打包至：TI_out/payload，payload.bin & payload_properties.txt")
     partname = ''
     pimages = ''
     for sf in os.listdir(project + os.sep + 'payload'):
+        print(sf)
         if sf.endswith('.img'):
             partname += sf.replace('.img', '') + ":"
             pimages += f"{pimages}{project}{os.sep}payload{os.sep}{sf.replace('.img', '')}.img:"
