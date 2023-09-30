@@ -1048,6 +1048,7 @@ def insuper(Imgdir, outputimg, supersize, stype, sparse, minsize):
     superpa += f"-block-size={settings.SBLOCKSIZE} "
     for imag in os.listdir(Imgdir):
         if imag.endswith('.img'):
+            image = imag.split('.')[0].replace('_a','').replace('_b','')
 
 
 
