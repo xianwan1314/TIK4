@@ -73,20 +73,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Pack tool
         run: |
-             pyinstaller -F run.py --exclude-module=numpy -i icon.ico
-             move dist/run.exe ./
-             del *.py
-             Remove-Item bin/Linux -Recurse
-             Remove-Item build -Recurse
-             Remove-Item dist -Recurse
-             Remove-Item .github -Recurse
-             del *.spec
-             del *.ico
-             del *.bat
-             del *.txt
-             del *.md
-             del *.png
-             ls
+             python build.py
       - name: Upload Win Build
         if: success()
         uses: actions/upload-artifact@v3
@@ -110,18 +97,7 @@ jobs:
             sudo apt update -y && sudo apt install python3-tk -y
       - name: Pack Tool
         run: |
-             pyinstaller -F run.py --exclude-module=numpy -i icon.ico
-             mv dist/* ./
-             rm -rf .git
-             rm -rf .github
-             rm -rf bin/Windows
-             rm -rf *.*
-             rm -rf build
-             rm -rf dist
-             rm -rf splash.png
-             find . | xargs chmod a+x 
-             chmod a+x ./*
-             ls
+             python3 build.py
       - name: Upload Linux Build
         if: success()
         uses: actions/upload-artifact@v3
