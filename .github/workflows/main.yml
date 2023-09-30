@@ -15,16 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v3
-      - name: Get Version
-        id: tool_version
-        run: |
-            echo "version=4.0" >> $GITHUB_OUTPUT
-      - name: Get last commit SHA
-        id: get_sha
-        run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-      - name: Get last commit message
-        id: commit_message
-        run: echo "message=$(git log -1 --pretty=%B ${{ steps.get_sha.outputs.sha }})" >> $GITHUB_OUTPUT
       - name: Rename Tool
         run: |
           cd TIK-win
@@ -36,20 +26,19 @@ jobs:
           ls
           Compress-Archive -Path ./* -DestinationPath ../TIK-linux.zip
           cd ..
-          move TIK-win.zip TIK-${{ steps.tool_version.outputs.version }}-${{ github.run_number }}-win.zip
-          move TIK-linux.zip TIK-${{ steps.tool_version.outputs.version }}-${{ github.run_number }}-linux.zip
+          move TIK-win.zip TIK-4-${{ github.run_number }}-win.zip
+          move TIK-linux.zip TIK-4-${{ github.run_number }}-linux.zip
       - name: Upload release
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
           omitBodyDuringUpdate: true
           removeArtifacts: true
-          name: "TIK-${{ steps.tool_version.outputs.version }}-${{ github.run_number }}"
+          name: "TIK-4-${{ github.run_number }}"
           tag: "CI_BUILD_${{ github.run_number }}"
           body: |
-            Changelog: ${{ steps.commit_message.outputs.message }}
             Build times: ${{ github.run_number }}
-            Version: ${{ steps.tool_version.outputs.version }}
+            Version: 4
             Note:If u cannot run it in linux,you may need do "chmod a+x ./*"
             Author: ColdWindScholar
             Minimum support: Ubuntu 20.04 (64bit),Windows Vista (32bit)
