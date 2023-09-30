@@ -386,7 +386,6 @@ def promenu():
                 ysuc("  删除成功！")
             else:
                 print(" 取消删除")
-        time.sleep(2)
     elif op_pro == '0':
         projec = input("请输入项目名称(非中文)：TI_")
         if not projec:
@@ -397,7 +396,7 @@ def promenu():
             if os.path.exists(LOCALDIR + os.sep + project):
                 project = f'{project}_{time.strftime("%m%d%H%M%S")}'
                 ywarn(f"项目已存在！自动命名为：{project}")
-                time.sleep(2)
+                time.sleep(1)
             os.makedirs(LOCALDIR + os.sep + project + os.sep + "config")
             menu(project)
     elif op_pro == '66':
@@ -1109,7 +1108,7 @@ def unpack(file, info, project):
         filepath = os.path.dirname(file)
         unpack(os.path.join(filepath, file), gettype(os.path.join(filepath, file)), project)
     elif info == 'ext':
-        imgextractor.Extractor().main(file, project + os.sep + os.path.basename(file.split('.')[0]), project)
+        imgextractor.Extractor().main(file, project + os.sep + os.path.basename(file).split('.')[0], project)
         try:
             os.remove(file)
         except:
@@ -1173,9 +1172,9 @@ def unpackrom():
         print(f"创建{project}成功！")
         yecho("解压刷机包中...")
         zipfile.ZipFile(os.path.abspath(zips[int(zipd)])).extractall(LOCALDIR + os.sep + project)
-        menu(project)
         yecho("分解ROM中...")
         autounpack(LOCALDIR + os.sep + project)
+        menu(project)
     else:
         ywarn("Input error!")
 
@@ -1183,6 +1182,7 @@ def unpackrom():
 def autounpack(project):
     cleantemp()
     yecho("自动解包开始！")
+    os.chdir(project)
     if os.path.exists(project + os.sep + "payload.bin"):
         yecho('读取机型为:动态VAB设备\n解包 payload.bin...')
         call(f"payload-dumper-go {project + os.sep + 'payload.bin'} -o {project}")
@@ -1203,6 +1203,7 @@ def autounpack(project):
             os.remove(os.path.abspath(infile))
     else:
         for infile in os.listdir(project):
+            os.chdir(project)
             if infile.endswith('.new.dat.br'):
                 unpack(os.path.abspath(infile), 'br', project)
             elif infile.endswith('.dat.1'):
