@@ -1344,15 +1344,17 @@ def autounpack(project):
             unpack(os.path.abspath(infile), filetype, project)
             os.remove(os.path.abspath(infile))
     else:
+        ask_ = input("解包所有文件？[1/0]")
         for infile in os.listdir(project):
             os.chdir(project)
             if os.path.isdir(os.path.abspath(infile)):
                 continue
             elif os.path.getsize(os.path.abspath(infile)) == 0:
                 continue
-            ask = input(f"要分解{infile}吗 [1/0]")
-            if ask == '0':
-                continue
+            if not ask_:
+                ask = input(f"要分解{infile}吗 [1/0]")
+                if ask == '0':
+                    continue
             if infile.endswith('.new.dat.br'):
                 unpack(os.path.abspath(infile), 'br', project)
             elif infile.endswith('.dat.1'):
