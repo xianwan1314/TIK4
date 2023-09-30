@@ -1267,6 +1267,9 @@ def autounpack(project):
     else:
         for infile in os.listdir(project):
             os.chdir(project)
+            ask=input(f"要分解{infile}吗 [1/0]")
+            if ask == '0':
+                continue
             if infile.endswith('.new.dat.br'):
                 unpack(os.path.abspath(infile), 'br', project)
             elif infile.endswith('.dat.1'):
