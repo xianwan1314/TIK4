@@ -454,9 +454,11 @@ def subbed(project):
     mysubs = {}
     print(" >\033[31m插件列表 \033[0m\n")
     for sub in os.listdir(binner + os.sep + "subs"):
-        if os.path.isdir(binner + os.sep + "subs" + os.sep + sub):
+        if os.path.isfile(binner + os.sep + "subs" + os.sep + sub+os.sep+"info.json"):
+            with open(binner + os.sep + "subs" + os.sep + sub+os.sep+"info.json") as l_info:
+                name = json.load(l_info)['name']
             subn += 1
-            print(f"   [{subn}]- {sub}\n")
+            print(f"   [{subn}]- {name}\n")
             mysubs[subn] = sub
     print("----------------------------------------------\n")
     print("\033[33m> [66]-安装 [77]-删除 [88]-在线Plug仓库 [99]-项目菜单\033[0m")
