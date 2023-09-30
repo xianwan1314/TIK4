@@ -12,9 +12,6 @@ jobs:
   build:
     needs: [build-win,build-linux]
     runs-on: windows-latest
-    strategy:
-      matrix:
-        python-version: ["3.8.10"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v3
