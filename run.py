@@ -701,8 +701,7 @@ def packChoo(project):
         elif filed == '66':
             packsuper(project)
         elif filed == '77':
-            pass
-        # packpayload
+            packpayload(project)
         elif filed == '88':
             return
         elif filed.isdigit():
