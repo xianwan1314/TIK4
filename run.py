@@ -28,8 +28,6 @@ from argparse import Namespace
 LOCALDIR = os.getcwd()
 binner = LOCALDIR + os.sep + "bin"
 setfile = LOCALDIR + os.sep + "bin" + os.sep + "settings.json"
-tempdir = LOCALDIR + os.sep + 'TEMP'
-tiklog = LOCALDIR + os.sep + f'TIK4_{time.strftime("%Y%m%d")}.log'
 platform = plat.machine()
 ostype = plat.system()
 PIP_MIRROR = "https://pypi.tuna.tsinghua.edu.cn/simple/"
