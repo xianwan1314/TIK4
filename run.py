@@ -544,7 +544,7 @@ class installmpk:
         if os.path.exists(binner + os.sep + "subs" + os.sep + self.mconf.get('module', 'identifier')):
             shutil.rmtree(binner + os.sep + "subs" + os.sep + self.mconf.get('module', 'identifier'))
         fz = zipfile.ZipFile(BytesIO(self.inner_zipdata), 'r')
-        LOGI("正在安装")
+        LOGI("正在安装...")
         for file in self.inner_filenames:
             try:
                 file = str(file).encode('cp437').decode('gbk')
