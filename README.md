@@ -32,9 +32,7 @@
 
 2. 虚拟机或实体机 Ubuntu 20.04及以上版本 x86_64[x64] 
 
-3. 不再支持Cygwin
-
-4. 电脑 Win10/11上的Wsl/Wsl2 Ubuntu 20.04及以上版本 x86_64[x64]
+3.Windows 7 and Newer[x64/x86]
 
 Note: WSL 可能存在权限出错的问题 请自行判断测试！
 
