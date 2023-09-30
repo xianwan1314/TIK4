@@ -1128,7 +1128,10 @@ def inpayload(supersize, project):
     re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
     f_remove(project + os.sep + 'TI_out' + os.sep + "payload"+os.sep+'dynamic_partitions_info.txt')
     yecho("将打包至：TI_out/payload，payload.bin & payload_properties.txt")
+    partname = ''
     for sf in os.listdir(project + os.sep+'payload'):
+        if sf.endswith('.img'):
+            partname
 
 
 def unpack(file, info, project):

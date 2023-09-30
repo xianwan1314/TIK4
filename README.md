@@ -6,15 +6,15 @@
 1.  【 **TI Kitchen 4.0** 】 是一个永久开源的ROM工具箱，支持安卓全版本
 
 
-2.  已支持大多常见镜像的分解/打包，较完善支持erofs/V-AB分区等
+1. 已支持大多常见镜像的分解/打包，较完善支持erofs/V-AB分区等
 
-3.  新增设置功能-调整交互习惯、打包行为
+2. 新增设置功能-调整交互习惯、打包行为
 
-4.  已支持目前安卓14新机型，包括但不限于Xiaomi OPPO Pixel等
+3. 已支持目前安卓14新机型，包括但不限于Xiaomi OPPO Pixel等
 
-5.  Magisk Boot Kitchen & AndroidImagineKitchen双方案分解合成[boot|exaid|recovery/etc].img
+4. Magisk Boot Kitchen & AndroidImagineKitchen双方案分解合成[boot|exaid|recovery/etc].img
     
-6.  支持分解全版本super.img(V-AB)支持各种类型打包（半自动识别，高效稳定）
+5. 支持分解全版本super.img(V-AB)支持各种类型打包（半自动识别，高效稳定）
 
 ####  **支持** 
 
@@ -38,7 +38,10 @@
 
 Note: WSL 可能存在权限出错的问题 请自行判断测试！
 
-
+#### **合作伙伴**
+#### Sakura
+#### Affggh
+#### Yeliqin666
 ####  **安装教程** 
 
     git clone https://gitee.com/yzdhz/TIK TIK3
@@ -86,7 +89,7 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
 
 ####  **交流反馈** 
 
-  QQ群：[939212867](https://jq.qq.com/?_wv=1027&k=HOJVFqzP)( 点击群号即可加群 )
+  QQ群：[932388310](https://jq.qq.com/?_wv=1027&k=HOJVFqzP)( 点击群号即可加群 )
 
 
 
@@ -97,5 +100,5 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
 2.  此工具不含任何【破坏系统、获取数据】等其他不法代码 ！！！
 
 3.  **如果由于用户利用root权限对工具中的工程目录进行操作导致的数据丢失、损毁，不承担任何责任 ！！！** 
-
-
+####  [TIK4.0](https://github.com/ColdWindScholar/TIK) 
+#### ColdWindScholar(3590361911@qq.com).All rights reserved.
