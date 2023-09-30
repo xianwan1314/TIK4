@@ -1319,8 +1319,12 @@ def unpackrom():
             yecho("分解ROM中...")
             autounpack(LOCALDIR + os.sep + project)
             menu(project)
+        else:
+            ywarn("Input Error")
+            time.sleep(0.5)
     else:
         ywarn("Input error!")
+        time.sleep(0.5)
 
 
 def autounpack(project):
