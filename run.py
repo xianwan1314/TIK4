@@ -660,8 +660,7 @@ def packChoo(project):
                 elif types[f] == 'dtb':
                     makedtb(project + os.sep + parts[f], project)
                 elif types[f] == 'dtbo':
-                    # makedtbo $partname
-                    pass
+                    makedtbo(parts[f],project)
                 else:
                     inpacker(parts[f], project, form, imgtype)
         elif filed == '55':
@@ -696,8 +695,7 @@ def packChoo(project):
                     makedtb(project + os.sep + parts[f], project)
                     pass
                 elif types[f] == 'dtbo':
-                    # makedtbo $partname
-                    pass
+                    makedtbo(parts[f],project)
                 else:
                     pass
                     inpacker(parts[f], project, form, imgtype)
@@ -736,8 +734,7 @@ def packChoo(project):
                     makedtb(project + os.sep + parts[int(filed)], project)
                     pass
                 elif types[int(filed)] == 'dtbo':
-                    # makedtbo $partname
-                    pass
+                    makedtbo(parts[int(filed)],project)
                 else:
                     inpacker(parts[int(filed)], project, form, imgtype)
             else:
