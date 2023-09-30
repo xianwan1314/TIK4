@@ -32,4 +32,5 @@ for i in os.listdir(local):
 if os.name == 'posix':
     for root, dirs, files in os.walk(local, topdown=True):
         for i in files:
+            print(f"设置权限{i}")
             os.system(f"chmod a+x {os.path.abspath(i)}")
