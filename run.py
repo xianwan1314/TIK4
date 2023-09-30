@@ -1362,5 +1362,5 @@ def autounpack(project):
             elif infile.endswith('.img'):
                 unpack(os.path.abspath(infile), 'img', project)
 
-
-promenu()
+if __name__ == '__main__':
+    promenu()
