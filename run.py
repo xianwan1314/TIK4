@@ -454,8 +454,8 @@ def subbed(project):
     names = {}
     print(" >\033[31m插件列表 \033[0m\n")
     for sub in os.listdir(binner + os.sep + "subs"):
-        if os.path.isfile(binner + os.sep + "subs" + os.sep + sub+os.sep+"info.json"):
-            with open(binner + os.sep + "subs" + os.sep + sub+os.sep+"info.json") as l_info:
+        if os.path.isfile(binner + os.sep + "subs" + os.sep + sub + os.sep + "info.json"):
+            with open(binner + os.sep + "subs" + os.sep + sub + os.sep + "info.json") as l_info:
                 name = json.load(l_info)['name']
             subn += 1
             print(f"   [{subn}]- {name}\n")
@@ -475,11 +475,7 @@ def subbed(project):
     elif op_pro == '77':
         chose = input("输入插件序号:")
         if int(chose) in mysubs.keys():
-            if input(f"确认删除{names[int(chose)]}吗 [1/0]") == '1':
-                f_remove(binner + os.sep + "subs" + os.sep + mysubs[int(chose)])
-            else:
-                yecho("不删除")
-                time.sleep(2)
+            unmpk(mysubs[int(chose)], names[int(chose)], binner + os.sep + "subs" + os.sep)
         else:
             print("序号错误")
     elif op_pro == '88':
@@ -570,6 +566,66 @@ class installmpk:
         with open(binner + os.sep + "subs" + os.sep + self.mconf.get('module', 'identifier') + os.sep + "info.json",
                   'w') as f:
             json.dump(minfo, f, indent=2)
+
+
+class unmpk:
+    def __init__(self, plug, name, moduledir):
+        self.arr = []
+        self.arr2 = []
+        if plug:
+            self.value = plug
+            self.value2 = name
+            self.moddir = moduledir
+            self.lfdep()
+            self.ask()
+        else:
+            ywarn("请选择插件！")
+            time.sleep(2)
+
+    def ask(self):
+        cls()
+        print(f"\033[31m >删除{self.value2} \033[0m\n")
+        if self.arr2:
+            print("\033[31m将会同时卸载以下插件")
+            for i in self.arr2:
+                print(i)
+            print("\033[0m\n")
+        if input("确定卸载吗 [1/0]") == '1':
+            self.unloop()
+        else:
+            ysuc("取消")
+            pass
+        input("任意按钮继续")
+
+    def lfdep(self, name=None):
+        if not name:
+            name = self.value
+        for i in [i for i in os.listdir(self.moddir) if os.path.isdir(self.moddir + os.sep + i)]:
+            with open(self.moddir + os.sep + i + os.sep + "info.json", 'r', encoding='UTF-8') as f:
+                data = json.load(f)
+                for n in data['depend'].split():
+                    if name == n:
+                        self.arr.append(i)
+                        self.arr2.append(data['name'])
+                        self.lfdep(i)
+                        break
+                self.arr = sorted(set(self.arr), key=self.arr.index)
+                self.arr2 = sorted(set(self.arr2), key=self.arr2.index)
+
+    def unloop(self):
+        for i in self.arr:
+            self.umpk(i)
+        self.umpk(self.value)
+
+    def umpk(self, name=None) -> None:
+        if name:
+            print(f"正在卸载:{name}")
+            if os.path.exists(self.moddir + os.sep + name):
+                shutil.rmtree(self.moddir + os.sep + name)
+            if os.path.exists(self.moddir + os.sep + name):
+                ywarn(f"卸载{name}失败！")
+            else:
+                yecho(f"卸载{name}成功！")
 
 
 def unpackChoo(project):
