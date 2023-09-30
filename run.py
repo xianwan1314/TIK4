@@ -1031,10 +1031,13 @@ def packsuper(project):
             ifsparse, minssize)
 
 
-def insuper(Imgdir, outputimg, supersize, stype, sparse, minsize):
+def insuper(Imgdir, outputimg, ssize, stype, sparse, minsize):
     group_size = 0
     group_size_a = 0
     group_size_b = 0
+    groupaab = None
+    supermsize = 0
+    supersize = None
     for root, dirs, files in os.walk(Imgdir):
         for file in files:
             file_path = os.path.join(root, file)
@@ -1068,6 +1071,21 @@ def insuper(Imgdir, outputimg, supersize, stype, sparse, minsize):
                     img_size = os.path.getsize(Imgdir + os.sep + image + ".img")
                     superpa += f"--partition {image}:readonly:{img_size}:{settings.super_group} --image {image}={Imgdir}{os.sep}{image}.img "
                     group_size_a += img_size
+    if not groupaab:
+        supermsize = group_size_a + settings.SBLOCKSIZE * 1000
+    elif groupaab == 1:
+        supermsize = group_size_a + group_size_b + settings.SBLOCKSIZE * 1000
+    if minsize == 1:
+        supersize = supermsize
+        if supermsize < ssize:
+            ywarn("设置SuperSize过小！已自动扩大！")
+            supersize = supermsize + 4096000
+    else:
+        supersize = ssize
+    if not supersize:
+        supersize += group_size_a + 4096000
+    superpa += f"--device super:{supersize} "
+
 
 
 def unpack(file, info, project):
