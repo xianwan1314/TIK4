@@ -18,7 +18,6 @@ Options:
     --savename=name         Set ops filename [default: out.ops]
 
 """
-import sys
 
 from docopt import docopt
 
