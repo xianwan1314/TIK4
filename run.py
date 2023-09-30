@@ -913,7 +913,7 @@ def inpacker(name, project, form, ftype):
         UTC = int(time.time())
     else:
         UTC = settings.utcstamp
-    out_img = project + os.sep + name + ".img"
+    out_img = project + os.sep + "TI_out" + os.sep + name + ".img"
     in_files = project + os.sep + name
     if os.path.exists(project + os.sep + "config" + os.sep + name + "_size.txt"):
         img_size0 = int(cat(project + os.sep + "config" + os.sep + name + "_size.txt"))
