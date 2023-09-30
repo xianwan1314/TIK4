@@ -586,7 +586,7 @@ class unmpk:
         cls()
         print(f"\033[31m >删除{self.value2} \033[0m\n")
         if self.arr2:
-            print("\033[31m将会同时卸载以下插件")
+            print("\033[36m将会同时卸载以下插件")
             for i in self.arr2:
                 print(i)
             print("\033[0m\n")
