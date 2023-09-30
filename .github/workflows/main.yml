@@ -1,0 +1,181 @@
+name: "Build Tool"
+permissions:
+  contents: write
+  discussions: write
+on:
+  push:
+    paths:
+      - "run.py"
+  pull_request:
+  workflow_dispatch:
+jobs:
+  build:
+    needs: [build-win,build-linux]
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: ["3.8.10"]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+      - name: Get Version
+        id: tool_version
+        run: |
+            echo "::set-output name=version::4.0"
+      - name: Get last commit SHA
+        run: echo "::set-output name=sha::$(git rev-parse HEAD)"
+      - name: Get last commit message
+        id: commit_message
+        run: echo "::set-output name=message::$(git log -1 --pretty=%B ${{ steps.get_sha.outputs.sha }})"
+      - name: Rename Tool
+        run: |
+          cd TIK-win
+          Remove-Item .git -Recurse
+          ls
+          Compress-Archive -Path ./* -DestinationPath ../TIK-win.zip
+          cd ..
+          cd TIK-linux
+          ls
+          Compress-Archive -Path ./* -DestinationPath ../TIK-linux.zip
+          cd ..
+          move TIK-win.zip TIK-${{ steps.tool_version.outputs.version }}-${{ github.run_number }}-win.zip
+          move TIK-linux.zip TIK-${{ steps.tool_version.outputs.version }}-${{ github.run_number }}-linux.zip
+      - name: Upload release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          omitBodyDuringUpdate: true
+          removeArtifacts: true
+          name: "MIO-KITCHEN-${{ steps.tool_version.outputs.version }}"
+          tag: "CI_BUILD_${{ github.run_number }}"
+          body: |
+            Changelog: ${{ steps.commit_message.outputs.message }}
+            Build times: ${{ github.run_number }}
+            Version: ${{ steps.tool_version.outputs.version }}
+            Note:If u cannot run it in linux,you may need do "chmod a+x ./*"
+            Author: ColdWindScholar
+            Minimum support: Ubuntu 20.04 (64bit),Windows Vista (32bit)
+          artifacts: "*.zip"
+
+  build-win:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.8.10
+        uses: actions/setup-python@v4
+        with:
+          # Semantic version range syntax or exact version of a Python version
+          python-version: '3.8.10'
+          # Optional - x64 or x86 architecture, defaults to x64
+          architecture: 'x86'
+      # You can test your matrix by printing the current Python version
+      - name: Update pip
+        run:  python -m pip install -U --force-reinstall pip
+      - name: Install Packages
+        run: pip install -r requirements.txt
+      - name: Pack tool
+        run: |
+             pyinstaller -Fw run.py --exclude-module=numpy -i icon.ico
+             move dist/run.exe ./
+             del *.py
+             Remove-Item bin/Linux -Recurse
+             Remove-Item build -Recurse
+             Remove-Item dist -Recurse
+             Remove-Item .github -Recurse
+             del *.spec
+             del *.ico
+             del *.bat
+             del *.txt
+             del *.md
+             del *.png
+             ls
+      - name: Upload Win Build
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: TIK-win
+          path: './*'
+  build-linux:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          # Semantic version range syntax or exact version of a Python version
+          python-version: '3.10'
+          # Optional - x64 or x86 architecture, defaults to x64
+      - name: Install Packages
+        run: |
+            python3 -m pip install -U --force-reinstall pip
+            pip3 install -r requirements.txt
+            sudo apt update -y && sudo apt install python3-tk -y
+      - name: Pack Tool
+        run: |
+             pyinstaller -Fw run.py --exclude-module=numpy -i icon.ico
+             mv dist/* ./
+             rm -rf .git
+             rm -rf .github
+             rm -rf bin/Windows
+             rm -rf *.*
+             rm -rf build
+             rm -rf dist
+             rm -rf splash.png
+             find . | xargs chmod a+x 
+             chmod a+x ./*
+             ls
+      - name: Upload Linux Build
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: TIK-linux
+          path: './*'
+  build-linux-aarch64:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: uraimo/run-on-arch-action@v2
+        name: Pack Tool
+        if: failure()
+        id: runcmd
+        with:
+            arch: aarch64
+            distro: ubuntu20.04
+            githubToken: ${{ github.token }}
+            run: |
+              uname -a
+              apt update
+              echo '
+              deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy main restricted universe multiverse
+              # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy main restricted universe multiverse
+              deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy-updates main restricted universe multiverse
+              # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy-updates main restricted universe multiverse
+              deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy-backports main restricted universe multiverse
+              # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy-backports main restricted universe multiverse
+              # deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy-security main restricted universe multiverse
+              # # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy-security main restricted universe multiverse
+              deb http://ports.ubuntu.com/ubuntu-ports/ jammy-security main restricted universe multiverse' > /etc/apt/sources.list
+              apt update
+              python3 -m pip install -U --force-reinstall pip
+              pip3 install -r requirements.txt
+              apt update -y 
+              apt install python3-tk -y
+              pyinstaller -Fw tool.py --exclude-module=numpy -i icon.ico --collect-data sv_ttk --hidden-import=tkinter --hidden-import=PIL --hidden-import=PIL._tkinter_finder --splash splash.png
+              mv dist/* ./
+              rm -rf .git
+              rm -rf .github
+              rm -rf bin/nt_*
+              rm -rf bin/posix_x86_64
+              rm -rf *.*
+              rm -rf build
+              rm -rf dist
+              rm -rf splash.png
+              find . | xargs chmod a+x
+              chmod a+x ./*
+              ls
+      - name: Upload Linux Build
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: MIO-KITCHEN-linux-aarch64
+          path: './*'
