@@ -1020,7 +1020,16 @@ def packsuper(project):
         supersize = 10200547328
     elif checkssize == '3':
         supersize = 16106127360
-
+    elif checkssize == '4':
+        minssize = 1
+        supersize = 0
+        ywarn("您已设置压缩镜像至最小,对齐不规范的镜像将造成打包失败；Size超出物理分区大小会造成刷入失败！")
+        time.sleep(4)
+    else:
+        supersize = input("请输入super分区大小（字节数）	")
+    yecho("打包到super/super.img...")
+    insuper(project+os.sep+'super',project+os.sep+'super'+os.sep+"super.img",supersize,supertype,ifsparse,minssize)
+def insuper(Imgdir,outputimg, supersize,stype,sparse,minsize):
 
 
 def unpack(file, info, project):
