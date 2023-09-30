@@ -895,7 +895,7 @@ def makedtbo(sf, project):
         new_dtbo_files = dts_files.replace('dts', 'dtbo')
         yecho(f"正在回编译{dts_files}为{new_dtbo_files}")
         call(
-            f'dtc -@ -I "dts" -O "dtb" {dtbodir + os.sep + "dts_files" + dts_files} -o {dtbodir + os.sep + "new_dtbo_files" + os.sep + new_dtbo_files}')
+            f'dtc -@ -I "dts" -O "dtb" {dtbodir + os.sep + "dts_files" +os.sep+ dts_files} -o {dtbodir + os.sep + "new_dtbo_files" + os.sep + new_dtbo_files}')
     yecho("正在生成dtbo.img...")
     list_ = []
     for b in os.listdir(dtbodir + os.sep + "new_dtbo_files"):
