@@ -494,7 +494,7 @@ def subbed(project):
                 call(
                     f'busybox ash {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh"}')
             else:
-                ywarn(f"{mysubs[int(op_pro)]}已损坏！请手动卸载")
+                ywarn(f"{mysubs[int(op_pro)]}为环境插件，不可运行！")
             time.sleep(2)
     subbed(project)
 
