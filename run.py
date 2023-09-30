@@ -1085,9 +1085,19 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse, minsize):
     if not supersize:
         supersize += group_size_a + 4096000
     superpa += f"--device super:{supersize} "
-    if stype in ['VAB','AB']:
-
-
+    if stype in ['VAB', 'AB']:
+        superpa += "--metadata-slots 3 "
+        superpa += f" --group {settings.super_group}_a:{supersize} "
+        superpa += f" --group {settings.super_group}_b:{supersize} "
+    else:
+        superpa += "--metadata-slots 2 "
+        superpa += f" --group {settings.super_group}:{supersize} "
+    superpa += f"{settings.fullsuper} {settings.autoslotsuffixing} --output {outputimg}"
+    if call(f'lpmake {superpa}') != 0:
+        ywarn("创建super.img失败！")
+    else:
+        ysuc("成功创建super.img!")
+    time.sleep(2)
 
 
 def unpack(file, info, project):
