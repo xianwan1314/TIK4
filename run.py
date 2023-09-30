@@ -1085,6 +1085,8 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse, minsize):
     if not supersize:
         supersize += group_size_a + 4096000
     superpa += f"--device super:{supersize} "
+    if stype in ['VAB','AB']:
+
 
 
 
