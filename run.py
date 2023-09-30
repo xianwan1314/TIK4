@@ -7,7 +7,7 @@ import sys
 import lpunpack
 import mkdtboimg
 import utils
-from api import cls, dir_has, cat, dirsize
+from api import cls, dir_has, cat, dirsize, re_folder
 import time
 import platform as plat
 import shutil
@@ -1098,6 +1098,10 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse, minsize):
     else:
         ysuc("成功创建super.img!")
     time.sleep(2)
+
+
+def packpayload(project):
+    re_folder
 
 
 def unpack(file, info, project):

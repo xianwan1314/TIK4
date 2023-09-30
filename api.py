@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 
 
 def cls():
@@ -21,6 +22,20 @@ def dir_has(path, endswith):
 def cat(file):
     with open(file, 'r') as f:
         return f.read()
+
+
+def f_remove(file):
+    if os.path.exists(file):
+        if os.path.isdir(file):
+            shutil.rmtree(file)
+        elif os.path.isfile(file):
+            os.remove(file)
+
+
+def re_folder(path):
+    f_remove(path)
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 
 class dirsize(object):
