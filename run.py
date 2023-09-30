@@ -9,6 +9,7 @@ import time
 import zipfile
 from argparse import Namespace
 from configparser import ConfigParser
+from io import BytesIO
 
 import extract_dtb
 import requests
@@ -482,7 +483,8 @@ def subbed(project):
     elif op_pro.isdigit():
         if int(op_pro) in mysubs.keys():
             if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "run.sh"):
-                call(f'busybox ash {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "run.sh"} {project}')
+                call(
+                    f'busybox ash {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "run.sh"} {project}')
             else:
                 ywarn(f"{mysubs[int(op_pro)]}已损坏！请手动卸载")
             time.sleep(2)
@@ -494,81 +496,54 @@ class installmpk:
         super().__init__()
         self.mconf = ConfigParser()
         if not mpk:
-            messpop(lang.warn2)
-            self.destroy()
+            ywarn("插件不存在")
             return
-        self.title(lang.text31)
-        self.resizable(False, False)
         with zipfile.ZipFile(mpk, 'r') as myfile:
             with myfile.open('info') as info_file:
                 self.mconf.read_string(info_file.read().decode('utf-8'))
-            try:
-                with myfile.open('icon') as myfi:
-                    try:
-                        pyt = ImageTk.PhotoImage(Image.open(BytesIO(myfi.read())))
-                    except Exception as e:
-                        print(e)
-                        pyt = ImageTk.PhotoImage(Image.open(elocal + os.sep + "images" + os.sep + "none"))
-            except:
-                pyt = ImageTk.PhotoImage(Image.open("".join([elocal, os.sep, "bin", os.sep, "images", os.sep, "none"])))
             with myfile.open('%s' % (self.mconf.get('module', 'resource')), 'r') as inner_file:
                 self.inner_zipdata = inner_file.read()
                 self.inner_filenames = zipfile.ZipFile(BytesIO(self.inner_zipdata)).namelist()
-        Label(self, image=pyt).pack(padx=10, pady=10)
-        Label(self, text="%s" % (self.mconf.get('module', 'name')), font=('黑体', 14)).pack(padx=10, pady=10)
-        Label(self, text=lang.text32.format((self.mconf.get('module', 'version'))), font=('黑体', 12)).pack(padx=10,
-                                                                                                            pady=10)
-        Label(self, text=lang.text33.format((self.mconf.get('module', 'author'))), font=('黑体', 12)).pack(padx=10,
-                                                                                                           pady=10)
-        text = Text(self)
-        text.insert("insert", "%s" % (self.mconf.get('module', 'describe')))
-        text.pack(padx=10, pady=10)
-        self.prog = ttk.Progressbar(self, length=200, mode='determinate', orient=HORIZONTAL, maximum=100, value=0)
-        self.prog.pack()
-        self.state = Label(self, text=lang.text40, font=('黑体', 12))
-        self.state.pack(padx=10, pady=10)
-        self.installb = ttk.Button(self, text=lang.text41, command=lambda: cz(self.install))
-        self.installb.pack(padx=10, pady=10, expand=True, fill=X)
-        jzxs(self)
-        self.wait_window()
+        print('''
+        ----------------
+           MIO-PACKAGE
+        ----------------
+        信息：
+        ''')
+        print("插件名称：" + self.mconf.get('module', 'name'))
+        print("版本:%s\n作者：%s" % (self.mconf.get('module', 'version'), (self.mconf.get('module', 'author'))))
+        print("介绍:")
+        print(self.mconf.get('module', 'describe'))
+        install = input("要安装吗? [1/0]")
+        if install == '1':
+            self.install()
+        else:
+            yecho("取消安装")
+            input("任意按钮返回")
 
     def install(self):
-        if self.installb.cget('text') == lang.text34:
-            self.destroy()
-            return True
-        self.installb.config(state=DISABLED)
         try:
             supports = self.mconf.get('module', 'supports').split()
         except:
             supports = [sys.platform]
         if sys.platform not in supports:
-            self.state['text'] = lang.warn15.format(sys.platform)
+            ywarn(f"[!]安装失败:不支持的系统{sys.platform}")
+            input("任意按钮返回")
             return False
         for dep in self.mconf.get('module', 'depend').split():
-            if not os.path.isdir("".join([elocal, os.sep, "bin", os.sep, "module", os.sep, dep])):
-                self.state['text'] = lang.text36 % (self.mconf.get('module', 'name'), dep, dep)
-                self.installb['text'] = lang.text37
-                self.installb.config(state='normal')
+            if not os.path.isdir(binner + os.sep + "subs" + os.sep + dep):
+                ywarn(f"[!]安装失败:不满足依赖{dep}")
+                input("任意按钮返回")
                 return False
-        if os.path.exists(
-                "".join([elocal, os.sep, "bin", os.sep, "module", os.sep, self.mconf.get('module', 'identifier')])
-        ):
-            rmtree("".join([elocal, os.sep, "bin", os.sep, "module", os.sep, self.mconf.get('module', 'identifier')]))
+        if os.path.exists(binner + os.sep + "subs" + os.sep + self.mconf.get('module', 'identifier')):
+            shutil.rmtree(binner + os.sep + "subs" + os.sep + self.mconf.get('module', 'identifier'))
         fz = zipfile.ZipFile(BytesIO(self.inner_zipdata), 'r')
-        uncompress_size = sum((file.file_size for file in fz.infolist()))
-        extracted_size = 0
         for file in self.inner_filenames:
             try:
                 file = str(file).encode('cp437').decode('gbk')
             except:
                 file = str(file).encode('utf-8').decode('utf-8')
-            info = fz.getinfo(file)
-            extracted_size += info.file_size
-            self.state['text'] = lang.text38.format(file)
-            fz.extract(file,
-                       "".join(
-                           [elocal, os.sep, "bin", os.sep, "module", os.sep, self.mconf.get('module', 'identifier')]))
-            self.prog['value'] = extracted_size * 100 / uncompress_size
+            fz.extract(file, binner + os.sep + "subs" + os.sep + self.mconf.get('module', 'identifier'))
         try:
             depends = self.mconf.get('module', 'depend')
         except:
@@ -579,13 +554,9 @@ class installmpk:
                  "identifier": "%s" % (self.mconf.get('module', 'identifier')),
                  "describe": "%s" % (self.mconf.get('module', 'describe')),
                  "depend": "%s" % depends}
-        with open("".join([elocal, os.sep, "bin", os.sep, "module", os.sep, self.mconf.get('module', 'identifier'),
-                           os.sep, "info.json"]),
+        with open(binner + os.sep + "subs" + os.sep + self.mconf.get('module', 'identifier') + os.sep + "info.json",
                   'w') as f:
             json.dump(minfo, f, indent=2)
-        self.state['text'] = lang.text39
-        self.installb['text'] = lang.text34
-        self.installb.config(state='normal')
 
 
 def unpackChoo(project):
