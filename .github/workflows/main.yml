@@ -20,9 +20,9 @@ jobs:
       - name: Get Version
         id: tool_version
         run: |
-            echo "version=4.0" >> >> $GITHUB_OUTPUT
+            echo "version=4.0" >> $GITHUB_OUTPUT
       - name: Get last commit SHA
-        run: echo "sha=$(git rev-parse HEAD)" >> >> $GITHUB_OUTPUT
+        run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
       - name: Get last commit message
         id: commit_message
         run: echo "message=$(git log -1 --pretty=%B ${{ steps.get_sha.outputs.sha }})" >> $GITHUB_OUTPUT
