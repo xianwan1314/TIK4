@@ -467,14 +467,18 @@ def subbed(project):
     if op_pro == '66':
         pass
     elif op_pro == '77':
-        pass
+        chose = input("输入插件序号:")
+        if int(chose) in mysubs.keys():
+            f_remove(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)])
+        else:
+            print("序号错误")
     elif op_pro == '88':
         pass
     elif op_pro == '99':
         return
     elif op_pro.isdigit():
         if int(op_pro) in mysubs.keys():
-            call(f'busybox ash {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)]+os.sep+"run.sh"} {project}')
+            call(f'busybox ash {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "run.sh"} {project}')
     subbed(project)
 
 
