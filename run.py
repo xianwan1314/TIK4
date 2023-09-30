@@ -473,7 +473,8 @@ def subbed(project):
         else:
             print("序号错误")
     elif op_pro == '88':
-        pass
+        print("开发中。。。")
+        time.sleep(2)
     elif op_pro == '99':
         return
     elif op_pro.isdigit():
