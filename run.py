@@ -24,7 +24,7 @@ import ofp_qc_decrypt
 import ozipdecrypt
 import utils
 from api import cls, dir_has, cat, dirsize, re_folder, f_remove
-from log import LOGS, LOGE, LOGW
+from log import LOGS, LOGE, LOGW, LOGI
 from utils import gettype, simg2img
 
 LOCALDIR = os.getcwd()
@@ -544,6 +544,7 @@ class installmpk:
         if os.path.exists(binner + os.sep + "subs" + os.sep + self.mconf.get('module', 'identifier')):
             shutil.rmtree(binner + os.sep + "subs" + os.sep + self.mconf.get('module', 'identifier'))
         fz = zipfile.ZipFile(BytesIO(self.inner_zipdata), 'r')
+        LOGI("正在安装")
         for file in self.inner_filenames:
             try:
                 file = str(file).encode('cp437').decode('gbk')
