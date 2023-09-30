@@ -32,7 +32,6 @@ binner = LOCALDIR + os.sep + "bin"
 setfile = LOCALDIR + os.sep + "bin" + os.sep + "settings.json"
 platform = plat.machine()
 ostype = plat.system()
-PIP_MIRROR = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 ebinner = binner + os.sep + ostype + os.sep + platform + os.sep
 dtc = ebinner + os.sep + "dtc"
 mkdtimg_tool = binner + os.sep + "mkdtboimg.py"
@@ -490,9 +489,10 @@ def subbed(project):
         return
     elif op_pro.isdigit():
         if int(op_pro) in mysubs.keys():
-            if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "run.sh"):
+            if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh"):
+
                 call(
-                    f'busybox ash {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "run.sh"} {project}')
+                    f'busybox ash {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh"}')
             else:
                 ywarn(f"{mysubs[int(op_pro)]}已损坏！请手动卸载")
             time.sleep(2)
