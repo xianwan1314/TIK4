@@ -1528,7 +1528,9 @@ def autounpack(project):
                 continue
             if ask_ != '1':
                 ask = input(f"要分解{infile}吗 [1/0]")
-                if ask == '0':
+                if ask == '1':
+                    pass
+                else:
                     continue
             if infile.endswith('.new.dat.br'):
                 unpack(os.path.abspath(infile), 'br', project)
