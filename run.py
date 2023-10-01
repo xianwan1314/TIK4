@@ -33,8 +33,6 @@ setfile = LOCALDIR + os.sep + "bin" + os.sep + "settings.json"
 platform = plat.machine()
 ostype = plat.system()
 ebinner = binner + os.sep + ostype + os.sep + platform + os.sep
-dtc = ebinner + os.sep + "dtc"
-mkdtimg_tool = binner + os.sep + "mkdtboimg.py"
 temp = LOCALDIR + os.sep + 'temp'
 
 
