@@ -1303,9 +1303,9 @@ def packpayload(project):
     re_folder(project + os.sep + 'payload')
     re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
     f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
-    LOGW(f"请将所有分区镜像放置于{project}/payload中（非super）！")
-    ywarn("请MIUI14用户注意！mi_ext分区也属于super，请及时到主页输入77、5、7来修改动态分区内逻辑分区表")
-    ywarn("很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
+    ywarn(f"请将所有分区镜像放置于{project}/payload中（非super）！")
+    yecho("请MIUI14用户注意！mi_ext分区也属于super，请及时到主页输入77、5、7来修改动态分区内逻辑分区表")
+    yecho("很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
     checkssize = input("请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [4]压缩到最小 [5]自定义")
     if checkssize == '1':
         supersize = 9126805504
