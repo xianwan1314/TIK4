@@ -1522,6 +1522,8 @@ def autounpack(project):
             os.chdir(project)
             if os.path.isdir(os.path.abspath(infile)):
                 continue
+            elif not os.path.exists(os.path.abspath(infile)):
+                continue
             elif os.path.getsize(os.path.abspath(infile)) == 0:
                 continue
             if ask_ != '1':
