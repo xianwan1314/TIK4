@@ -2,3 +2,4 @@ extract-dtb
 pyinstaller
 pycryptodome
 Requests
+rich

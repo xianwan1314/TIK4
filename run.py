@@ -26,7 +26,7 @@ import utils
 from api import cls, dir_has, cat, dirsize, re_folder, f_remove
 from log import LOGS, LOGE, LOGW, LOGI
 from utils import gettype, simg2img
-
+import rich
 LOCALDIR = os.getcwd()
 binner = LOCALDIR + os.sep + "bin"
 setfile = LOCALDIR + os.sep + "bin" + os.sep + "settings.json"
