@@ -7,6 +7,8 @@ import subprocess
 import traceback
 from timeit import default_timer as dti
 
+import rich
+
 EXT4_HEADER_MAGIC = 0xED26FF3A
 EXT4_SPARSE_HEADER_LEN = 28
 EXT4_CHUNK_HEADER_SIZE = 12
@@ -656,10 +658,11 @@ class Extractor(object):
             if moto:
                 print(".....Finding MOTO structure! Fixing.....")
                 self.fixmoto(os.path.abspath(self.OUTPUT_IMAGE_FILE))
-            print("Extracting %s --> %s" % (os.path.basename(target), os.path.basename(self.EXTRACT_DIR)))
-            start = dti()
-            self.__ext4extractor()
-            print("Done! [%s]" % (dti() - start))
+
+            with rich.console.Console().status("[yellow]Extracting %s --> %s[/]" % (os.path.basename(target), os.path.basename(self.EXTRACT_DIR))):
+                start = dti()
+                self.__ext4extractor()
+                print("Done! [%s]" % (dti() - start))
         if target_type == 'img':
             with open(os.path.abspath(self.OUTPUT_IMAGE_FILE), 'rb') as f:
                 data = f.read(500000)
@@ -667,7 +670,7 @@ class Extractor(object):
             if moto:
                 print(".....Finding MOTO structure! Fixing.....")
                 self.fixmoto(os.path.abspath(self.OUTPUT_IMAGE_FILE))
-            print("Extracting %s --> %s" % (os.path.basename(target), os.path.basename(self.EXTRACT_DIR)))
-            start = dti()
-            self.__ext4extractor()
-            print("Done! [%s]" % (dti() - start))
+            with rich.console.Console().status("[yellow]Extracting %s --> %s[/]" % (os.path.basename(target), os.path.basename(self.EXTRACT_DIR))):
+                start = dti()
+                self.__ext4extractor()
+                print("Done! [%s]" % (dti() - start))
