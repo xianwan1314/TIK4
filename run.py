@@ -1526,6 +1526,8 @@ def autounpack(project):
                 continue
             elif os.path.getsize(os.path.abspath(infile)) == 0:
                 continue
+            elif os.path.abspath(infile).endswith('.list') or os.path.abspath(infile).endswith('.patch.dat'):
+                continue
             if ask_ != '1':
                 ask = input(f"要分解{infile}吗 [1/0]")
                 if not ask == '1':
