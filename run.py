@@ -1482,7 +1482,7 @@ def unpackrom():
                 ywarn(f"项目已存在！自动命名为：{project}")
             os.makedirs(LOCALDIR + os.sep + project)
             print(f"创建{project}成功！")
-            with rich.console.Console().status("[red]解压刷机包中...[/]"):
+            with rich.console.Console().status("[yellow]解压刷机包中...[/]"):
                 zipfile.ZipFile(os.path.abspath(zips[int(zipd)])).extractall(LOCALDIR + os.sep + project)
             yecho("分解ROM中...")
             autounpack(LOCALDIR + os.sep + project)
