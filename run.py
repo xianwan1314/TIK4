@@ -1145,7 +1145,7 @@ def inpacker(name, project, form, ftype):
                 f'e2fsdroid -e -T {UTC} {settings.extrw} -C {fs_config} -S {file_contexts} -f {in_files} -a {mount_path} {out_img}')
     if settings.diysize == '':
         yecho("压缩img中...")
-        if form == 'erofs':
+        if ftype == 'erofs':
             yecho("Erofs镜像，跳过压缩...")
         else:
             call(f'resize2fs - f - M {out_img}')
