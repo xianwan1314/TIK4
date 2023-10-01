@@ -171,20 +171,23 @@ class setting:
         else:
             print("非LINUX，无法修复")
 
-    def settings6(self):
+    @staticmethod
+    def settings6():
         print(f"  打包时ROM作者为：{settings.Romer}")
         Romer = input("  请输入（无特殊字符）: ")
         if Romer:
             settings.change('Romer', Romer)
 
-    def settings7(self):
+    @staticmethod
+    def settings7():
         print("  首页banner: [1]TIK3 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧 ")
         banner = input("  请输入序号: ")
         if banner.isdigit():
             if 0 < int(banner) < 7:
                 settings.change('banner', banner)
 
-    def settings8(self):
+    @staticmethod
+    def settings8():
         plugromlit = input("  设置区分ROM/Plug的Size界限[1]125829120 [2]自定义: ")
         if plugromlit == '2':
             plugromlit = input("  请输入：")
@@ -193,7 +196,8 @@ class setting:
         else:
             settings.change('plugromlit', '125829120')
 
-    def packset1(self):
+    @staticmethod
+    def packset1():
         print(f"  调整brotli压缩等级（整数1-9，级别越高，压缩率越大，耗时越长），当前为：{settings.brcom}级")
         brcom = input("  请输入（1-9）: ")
         if brcom.isdigit():
