@@ -1295,8 +1295,8 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse, minsize):
 
 
 def packpayload(project):
-    if platform != 'Linux':
-        print(f"不支持当前系统:{platform}")
+    if ostype != 'Linux':
+        print(f"不支持当前系统:{ostype}")
         time.sleep(2)
         return
     re_folder(project + os.sep + 'super')
