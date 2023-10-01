@@ -570,7 +570,6 @@ class installmpk:
                 file = str(file).encode('cp437').decode('gbk')
             except:
                 file = str(file).encode('utf-8').decode('utf-8')
-            print(f"正在抽取:{file}")
             fz.extract(file, binner + os.sep + "subs" + os.sep + self.mconf.get('module', 'identifier'))
         try:
             depends = self.mconf.get('module', 'depend')
