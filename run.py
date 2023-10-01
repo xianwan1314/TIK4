@@ -13,7 +13,8 @@ from io import BytesIO
 
 import extract_dtb
 import requests
-
+from rich.progress import track
+import rich.console
 import contextpatch
 import fspatch
 import imgextractor
@@ -24,9 +25,9 @@ import ofp_qc_decrypt
 import ozipdecrypt
 import utils
 from api import cls, dir_has, cat, dirsize, re_folder, f_remove
-from log import LOGS, LOGE, LOGW, LOGI
+from log import LOGS, LOGE, LOGW
 from utils import gettype, simg2img
-from rich.progress import track
+
 LOCALDIR = os.getcwd()
 binner = LOCALDIR + os.sep + "bin"
 setfile = LOCALDIR + os.sep + "bin" + os.sep + "settings.json"
@@ -1481,8 +1482,8 @@ def unpackrom():
                 ywarn(f"项目已存在！自动命名为：{project}")
             os.makedirs(LOCALDIR + os.sep + project)
             print(f"创建{project}成功！")
-            yecho("解压刷机包中...")
-            zipfile.ZipFile(os.path.abspath(zips[int(zipd)])).extractall(LOCALDIR + os.sep + project)
+            with rich.console.Console().status("[red]解压刷机包中...[/]"):
+                zipfile.ZipFile(os.path.abspath(zips[int(zipd)])).extractall(LOCALDIR + os.sep + project)
             yecho("分解ROM中...")
             autounpack(LOCALDIR + os.sep + project)
             menu(project)
@@ -1523,7 +1524,7 @@ def autounpack(project):
                 continue
             elif os.path.getsize(os.path.abspath(infile)) == 0:
                 continue
-            if not ask_:
+            if ask_ != '1':
                 ask = input(f"要分解{infile}吗 [1/0]")
                 if ask == '0':
                     continue
