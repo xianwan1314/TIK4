@@ -152,7 +152,8 @@ class setting:
             print("Input error!")
             self.settings5()
 
-    def settings2(self):
+    @staticmethod
+    def settings2():
         print(f"修改安卓端在内置存储识别ROM的路径。当前为/sdcard/{settings.mydir}")
         mydir = input('   请输入文件夹名称(英文):')
         if mydir:
@@ -486,7 +487,9 @@ def subbed(project):
         return
     elif op_pro.isdigit():
         if int(op_pro) in mysubs.keys():
-            if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh") and not binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.json":
+            if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[
+                int(op_pro)] + os.sep + "main.sh") and not binner + os.sep + "subs" + os.sep + mysubs[
+                int(op_pro)] + os.sep + "main.json":
                 gen = gen_sh_engine(project)
                 call(
                     f'busybox ash {gen} {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh"}')
