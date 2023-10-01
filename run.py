@@ -1439,6 +1439,15 @@ def unpack(file, info, project):
         open(project + os.sep + 'config' + os.sep + os.path.basename(file).split('.')[0] + "_erofs", 'w').close()
     elif info == 'super':
         lpunpack.unpack(os.path.abspath(file), project)
+        for v in os.listdir(project):
+            if os.path.isfile(project+os.sep+v):
+                if os.path.getsize(project+os.sep+v) == 0:
+                    os.remove(project+os.sep+v)
+                else:
+                    if v.endswith('_a.img'):
+                        shutil.move(project+os.sep+v,project+os.sep+v.replace('_a',''))
+                    elif v.endswith('_b.img'):
+                        shutil.move(project + os.sep + v, project + os.sep + v.replace('_b', ''))
     elif info in ['boot', 'vendor_boot']:
         unpackboot(os.path.abspath(file), project)
     else:
