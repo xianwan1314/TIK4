@@ -159,7 +159,8 @@ class setting:
         if mydir:
             settings.change('mydir', mydir)
 
-    def settings3(self):
+    @staticmethod
+    def settings3():
         if os.name == "posix":
             for age in ['python3', 'simg2img', 'img2simg', 'cpio', 'sed', 'libnss3-tools', 'python3-pip', 'brotli',
                         'curl', 'bc', 'cpio', 'default-jre', 'android-sdk-libsparse-utils', 'openjdk-11-jre', 'aria2',
