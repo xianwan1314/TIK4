@@ -1133,7 +1133,7 @@ def inpacker(name, project, form, ftype):
     size = int(size)
     if ftype == 'erofs':
         call(
-            f'mkfs.erofs -z{settings.erofslim}  -T {UTC}--mount-point={mount_path} --fs-config-file={fs_config} --product-out={os.path.dirname(out_img)} --file-contexts={file_contexts} {out_img} {in_files}')
+            f'mkfs.erofs -z{settings.erofslim}  -T {UTC} --mount-point={mount_path} --fs-config-file={fs_config} --product-out={os.path.dirname(out_img)} --file-contexts={file_contexts} {out_img} {in_files}')
     else:
         if settings.pack_e2 == '0':
             call(
