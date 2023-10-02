@@ -412,7 +412,7 @@ def promenu():
         projec = input("请输入项目名称(非中文)：TI_")
         if not projec:
             ywarn("Input Error!")
-            time.sleep(2)
+            input("任意按钮继续")
         else:
             project = 'TI_%s' % projec
             if os.path.exists(LOCALDIR + os.sep + project):
@@ -433,7 +433,7 @@ def promenu():
             ywarn("  Input error!")
     else:
         ywarn("  Input error!")
-        time.sleep(2)
+        input("任意按钮继续")
     promenu()
 
 
@@ -466,10 +466,10 @@ def menu(project):
         subbed(PROJECT_DIR)
     elif op_menu == '5':
         ywarn("维护中...")
-        time.sleep(2)
+        input("任意按钮继续")
     else:
         ywarn('   Input error!"')
-        time.sleep(2)
+        input("任意按钮继续")
     menu(project)
 
 
@@ -498,7 +498,7 @@ def subbed(project):
             installmpk(path)
         else:
             ywarn(f"{path}不存在！")
-        time.sleep(2)
+        input("任意按钮继续")
     elif op_pro == '77':
         chose = input("输入插件序号:")
         if int(chose) in mysubs.keys():
@@ -507,7 +507,7 @@ def subbed(project):
             print("序号错误")
     elif op_pro == '88':
         print("开发中。。。")
-        time.sleep(2)
+        input("任意按钮继续")
     elif op_pro == '99':
         return
     elif op_pro.isdigit():
@@ -620,7 +620,7 @@ class unmpk:
             self.ask()
         else:
             ywarn("请选择插件！")
-            time.sleep(2)
+            input("任意按钮继续")
 
     def ask(self):
         cls()
@@ -805,10 +805,10 @@ def unpackChoo(project):
             unpack(files[int(filed)], infos[int(filed)], project)
         else:
             ywarn("Input error!")
-            time.sleep(2)
+            input("任意按钮继续")
     else:
         ywarn("Input error!")
-        time.sleep(2)
+        input("任意按钮继续")
     unpackChoo(project)
 
 
@@ -952,10 +952,10 @@ def packChoo(project):
                     inpacker(parts[int(filed)], project, form, imgtype)
             else:
                 ywarn("Input error!")
-                time.sleep(2)
+                input("任意按钮继续")
         else:
             ywarn("Input error!")
-            time.sleep(2)
+            input("任意按钮继续")
         packChoo(project)
 
 
@@ -1073,7 +1073,7 @@ def makedtb(sf, project):
                 with open(os.path.abspath(dtb), 'rb') as f:
                     sff.write(f.read())
     ysuc("回编译完成！")
-    time.sleep(2)
+    input("任意按钮继续")
 
 
 def undtbo(project, infile):
@@ -1121,7 +1121,7 @@ def makedtbo(sf, project):
         ywarn(f"{os.path.basename(sf).split('.')[0]}.img生成失败!")
     else:
         ysuc(f"{os.path.basename(sf).split('.')[0]}.img生成完毕!")
-    time.sleep(2)
+    input("任意按钮继续")
 
 
 def inpacker(name, project, form, ftype):
@@ -1312,13 +1312,13 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse, minsize):
         ywarn("创建super.img失败！")
     else:
         ysuc("成功创建super.img!")
-    time.sleep(2)
+    input("任意按钮继续")
 
 
 def packpayload(project):
     if ostype != 'Linux':
         print(f"不支持当前系统:{ostype}")
-        time.sleep(2)
+        input("任意按钮继续")
         return
     re_folder(project + os.sep + 'super')
     re_folder(project + os.sep + 'payload')
@@ -1362,7 +1362,7 @@ def inpayload(supersize, project):
         LOGS("成功创建payload!")
     else:
         LOGE("创建payload失败！")
-    time.sleep(2)
+    input("任意按钮继续")
 
 
 def unpack(file, info, project):
