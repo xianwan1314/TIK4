@@ -441,7 +441,7 @@ def menu(project):
     elif op_menu == '3':
         packChoo(PROJECT_DIR)
     elif op_menu == '4':
-        subbed(project)
+        subbed(PROJECT_DIR)
     elif op_menu == '5':
         ywarn("维护中...")
         time.sleep(2)
@@ -495,6 +495,8 @@ def subbed(project):
                 int(op_pro)] + os.sep + "main.sh") and not os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[
                 int(op_pro)] + os.sep + "main.json"):
                 gen = gen_sh_engine(project)
+                print(cat(gen))
+                input()
                 call(
                     f'busybox ash {gen} {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh"}')
                 f_remove(gen)
