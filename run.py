@@ -495,10 +495,8 @@ def subbed(project):
                 int(op_pro)] + os.sep + "main.sh") and not os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[
                 int(op_pro)] + os.sep + "main.json"):
                 gen = gen_sh_engine(project)
-                print(cat(gen))
-                input()
                 call(
-                    f'busybox ash {gen} {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh"}')
+                    f'busybox ash {gen} {(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh").replace(os.sep,"/")}')
                 f_remove(gen)
             else:
                 ywarn(f"{mysubs[int(op_pro)]}为环境插件，不可运行！")
@@ -512,9 +510,9 @@ def gen_sh_engine(project):
     engine = temp + os.sep + utils.v_code()
     with open(engine, 'w', encoding='utf-8', newline='\n') as en:
         en.write(f"export project={project}\n")
-        en.write(f'export tool_bin={ebinner}\n')
-        en.write(f'source $1')
-    return engine
+        en.write(f'export tool_bin={ebinner.replace(os.sep,"/")}\n')
+        en.write(f'source $1\n')
+    return engine.replace(os.sep,'/')
 
 
 class installmpk:
