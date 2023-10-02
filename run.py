@@ -469,7 +469,6 @@ def subbed(project):
             names[subn] = name
     print("----------------------------------------------\n")
     print("\033[33m> [66]-安装 [77]-删除 [88]-在线Plug仓库 [99]-项目菜单\033[0m")
-    print()
     op_pro = input("请输入序号：")
     if op_pro == '66':
         path = input("请输入插件路径或[拖入]:")
@@ -509,7 +508,7 @@ def gen_sh_engine(project):
         os.makedirs(temp)
     engine = temp + os.sep + utils.v_code()
     with open(engine, 'w', encoding='utf-8', newline='\n') as en:
-        en.write(f"export project={project}\n")
+        en.write(f"export project={project.replace(os.sep,'/')}\n")
         en.write(f'export tool_bin={ebinner.replace(os.sep,"/")}\n')
         en.write(f'source $1\n')
     return engine.replace(os.sep,'/')
