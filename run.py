@@ -970,7 +970,7 @@ def dboot(infile, orig):
         print("Ramdisk Not Found.. %s" % e)
         return
     cpio = ebinner + os.sep + "cpio"
-    call("busybox find . | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio" % cpio)
+    os.system(ebinner + os.sep + "busybox find . | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio" % cpio)
     os.chdir(infile + os.sep)
     with open(infile + os.sep + "comp", "r", encoding='utf-8') as compf:
         comp = compf.read()
