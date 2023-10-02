@@ -492,8 +492,8 @@ def subbed(project):
     elif op_pro.isdigit():
         if int(op_pro) in mysubs.keys():
             if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[
-                int(op_pro)] + os.sep + "main.sh") and not binner + os.sep + "subs" + os.sep + mysubs[
-                int(op_pro)] + os.sep + "main.json":
+                int(op_pro)] + os.sep + "main.sh") and not os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[
+                int(op_pro)] + os.sep + "main.json"):
                 gen = gen_sh_engine(project)
                 call(
                     f'busybox ash {gen} {binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh"}')
