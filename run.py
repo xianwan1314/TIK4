@@ -34,7 +34,7 @@ setfile = LOCALDIR + os.sep + "bin" + os.sep + "settings.json"
 platform = plat.machine()
 ostype = plat.system()
 ebinner = binner + os.sep + ostype + os.sep + platform + os.sep
-temp = LOCALDIR + os.sep + 'temp'
+temp = binner + os.sep + 'temp'
 
 
 def yecho(info): print(f"\033[36m[{time.strftime('%H:%M:%S')}]{info}\033[0m")
