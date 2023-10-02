@@ -495,11 +495,11 @@ def subbed(project):
                 int(op_pro)] + os.sep + "main.json"):
                 gen = gen_sh_engine(project)
                 call(
-                    f'busybox ash {gen} {(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh").replace(os.sep,"/")}')
+                    f'busybox ash {gen} {(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh").replace(os.sep, "/")}')
                 f_remove(gen)
             else:
                 ywarn(f"{mysubs[int(op_pro)]}为环境插件，不可运行！")
-            time.sleep(2)
+            input("任意按钮返回")
     subbed(project)
 
 
@@ -508,10 +508,10 @@ def gen_sh_engine(project):
         os.makedirs(temp)
     engine = temp + os.sep + utils.v_code()
     with open(engine, 'w', encoding='utf-8', newline='\n') as en:
-        en.write(f"export project={project.replace(os.sep,'/')}\n")
-        en.write(f'export tool_bin={ebinner.replace(os.sep,"/")}\n')
+        en.write(f"export project={project.replace(os.sep, '/')}\n")
+        en.write(f'export tool_bin={ebinner.replace(os.sep, "/")}\n')
         en.write(f'source $1\n')
-    return engine.replace(os.sep,'/')
+    return engine.replace(os.sep, '/')
 
 
 class installmpk:
@@ -1439,12 +1439,12 @@ def unpack(file, info, project):
     elif info == 'super':
         lpunpack.unpack(os.path.abspath(file), project)
         for v in os.listdir(project):
-            if os.path.isfile(project+os.sep+v):
-                if os.path.getsize(project+os.sep+v) == 0:
-                    os.remove(project+os.sep+v)
+            if os.path.isfile(project + os.sep + v):
+                if os.path.getsize(project + os.sep + v) == 0:
+                    os.remove(project + os.sep + v)
                 else:
                     if v.endswith('_a.img'):
-                        shutil.move(project+os.sep+v,project+os.sep+v.replace('_a',''))
+                        shutil.move(project + os.sep + v, project + os.sep + v.replace('_a', ''))
                     elif v.endswith('_b.img'):
                         shutil.move(project + os.sep + v, project + os.sep + v.replace('_b', ''))
     elif info in ['boot', 'vendor_boot']:
