@@ -1524,7 +1524,7 @@ def autounpack(project):
     os.chdir(project)
     if os.path.exists(project + os.sep + "payload.bin"):
         yecho('读取机型为:动态VAB设备\n解包 payload.bin...')
-        call(f"payload-dumper-go {project + os.sep + 'payload.bin'} -o {project}")
+        call(f"payload-dumper-go -o {project} {project + os.sep + 'payload.bin'}")
         yecho("payload.bin解包完成！")
         for waste in ['payload.bin', 'care_map.pb', 'apex_info.pb']:
             if os.path.exists(project + os.sep + waste):
@@ -1536,12 +1536,7 @@ def autounpack(project):
         shutil.move(project + os.sep + "payload_properties.txt", project + os.sep + "config")
         shutil.move(project + os.sep + "META-INF" + os.sep + "com" + os.sep + "android" + os.sep + "metadata",
                     project + os.sep + "config")
-        for infile in os.listdir(project):
-            if os.path.isdir(os.path.abspath(infile)):
-                filetype = gettype(os.path.abspath(infile))
-                unpack(os.path.abspath(infile), filetype, project)
-                os.remove(os.path.abspath(infile))
-    else:
+    if True:
         ask_ = input("解包所有文件？[1/0]")
         for infile in os.listdir(project):
             os.chdir(project)
