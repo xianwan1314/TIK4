@@ -1537,9 +1537,10 @@ def autounpack(project):
         shutil.move(project + os.sep + "META-INF" + os.sep + "com" + os.sep + "android" + os.sep + "metadata",
                     project + os.sep + "config")
         for infile in os.listdir(project):
-            filetype = gettype(os.path.abspath(infile))
-            unpack(os.path.abspath(infile), filetype, project)
-            os.remove(os.path.abspath(infile))
+            if os.path.isdir(os.path.abspath(infile)):
+                filetype = gettype(os.path.abspath(infile))
+                unpack(os.path.abspath(infile), filetype, project)
+                os.remove(os.path.abspath(infile))
     else:
         ask_ = input("解包所有文件？[1/0]")
         for infile in os.listdir(project):
