@@ -1524,7 +1524,7 @@ def autounpack(project):
     os.chdir(project)
     if os.path.exists(project + os.sep + "payload.bin"):
         yecho('读取机型为:动态VAB设备\n解包 payload.bin...')
-        call(f"payload-dumper-go -o {project} {project + os.sep + 'payload.bin'}")
+        os.system(f"{ebinner+os.sep}payload-dumper-go -o {project} {project + os.sep + 'payload.bin'}")
         yecho("payload.bin解包完成！")
         for waste in ['payload.bin', 'care_map.pb', 'apex_info.pb']:
             if os.path.exists(project + os.sep + waste):
