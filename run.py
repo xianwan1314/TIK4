@@ -1139,10 +1139,10 @@ def inpacker(name, project, form, ftype):
     else:
         img_size0 = 0
     img_size1 = dirsize(in_files, 1, 1).rsize_v
-    if settings.diysize == '1' and img_size0 < img_size1:
+    if settings.diysize == '' and img_size0 < img_size1:
         ywarn("您设置的size过小,将动态调整size!")
         img_size0 = dirsize(in_files, 1, 3, project + os.sep + "dynamic_partitions_op_list").rsize_v
-    elif settings.diysize == '1':
+    elif settings.diysize == '':
         img_size0 = dirsize(in_files, 1, 3, project + os.sep + "dynamic_partitions_op_list").rsize_v
     else:
         img_size0 = dirsize(in_files, 1, 1, project + os.sep + "dynamic_partitions_op_list").rsize_v
