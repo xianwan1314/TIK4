@@ -1057,7 +1057,8 @@ def undtb(project, infile):
         if i.endswith('.dtb'):
             name = i.split('.')[0]
             call(
-                f'dtc -@ -I dtb -O dts {dtbdir + os.sep + "dtb_files" + os.sep + name + ".dtb"} -o {dtbdir + os.sep + "dtb_files" + os.sep + name + ".dts"}')
+                f'dtc -@ -I dtb -O dts {dtbdir + os.sep + "dtb_files" + os.sep + name + ".dtb"} -o {dtbdir + os.sep + "dtb_files" + os.sep + name + ".dts"}',
+                out=1)
     open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile).split(".")[0]).close()
     ysuc("反编译完成!")
     time.sleep(1)
@@ -1070,7 +1071,7 @@ def makedtb(sf, project):
     for dts_files in os.listdir(dtbdir + os.sep + "dts_files"):
         new_dtb_files = dts_files.split('.')[0]
         yecho(f"正在回编译{dts_files}为{new_dtb_files}.dtb")
-        if call(f'dtc -@ -I "dts" -O "dtb" "{dtbdir + os.sep + "dts_files" + os.sep + dts_files}" -o "$dtbdir/new_dtb_files/$new_dtb_files.dtb"') != 0:
+        if call(f'dtc -@ -I "dts" -O "dtb" "{dtbdir + os.sep + "dts_files" + os.sep + dts_files}" -o "$dtbdir/new_dtb_files/$new_dtb_files.dtb"',out=1) != 0:
             ywarn("回编译dtb失败")
     with open(project + os.sep + "TI_out" + os.sep + sf, 'wb') as sff:
         for dtb in os.listdir(dtbdir + os.sep + "new_dtb_files"):
@@ -1524,7 +1525,7 @@ def autounpack(project):
     os.chdir(project)
     if os.path.exists(project + os.sep + "payload.bin"):
         yecho('读取机型为:动态VAB设备\n解包 payload.bin...')
-        os.system(f"{ebinner+os.sep}payload-dumper-go -o {project} {project + os.sep + 'payload.bin'}")
+        os.system(f"{ebinner + os.sep}payload-dumper-go -o {project} {project + os.sep + 'payload.bin'}")
         yecho("payload.bin解包完成！")
         for waste in ['payload.bin', 'care_map.pb', 'apex_info.pb']:
             if os.path.exists(project + os.sep + waste):
