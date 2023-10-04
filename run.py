@@ -26,7 +26,7 @@ import ofp_qc_decrypt
 import ozipdecrypt
 import utils
 from api import cls, dir_has, cat, dirsize, re_folder, f_remove
-from log import LOGS, LOGE, LOGW
+from log import LOGS, LOGE
 from utils import gettype, simg2img
 
 LOCALDIR = os.getcwd()

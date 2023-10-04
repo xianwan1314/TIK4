@@ -61,6 +61,7 @@ class dirsize(object):
             self.rsize(self.size, self.num)
 
     def rsize(self, size: int, num: int):
+        print(size)
         if size <= 1048576:
             size_ = 2097152
             bs = 1
