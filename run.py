@@ -956,6 +956,7 @@ def packChoo(project):
         else:
             ywarn("Input error!")
             input("任意按钮继续")
+        input("任意按钮继续")
         packChoo(project)
 
 
@@ -1071,7 +1072,8 @@ def makedtb(sf, project):
     for dts_files in os.listdir(dtbdir + os.sep + "dts_files"):
         new_dtb_files = dts_files.split('.')[0]
         yecho(f"正在回编译{dts_files}为{new_dtb_files}.dtb")
-        if call(f'dtc -@ -I "dts" -O "dtb" "{dtbdir + os.sep + "dts_files" + os.sep + dts_files}" -o "$dtbdir/new_dtb_files/$new_dtb_files.dtb"',out=1) != 0:
+        if call(f'dtc -@ -I "dts" -O "dtb" "{dtbdir + os.sep + "dts_files" + os.sep + dts_files}" -o "$dtbdir/new_dtb_files/$new_dtb_files.dtb"',
+                out=1) != 0:
             ywarn("回编译dtb失败")
     with open(project + os.sep + "TI_out" + os.sep + sf, 'wb') as sff:
         for dtb in os.listdir(dtbdir + os.sep + "new_dtb_files"):
@@ -1114,13 +1116,14 @@ def makedtbo(sf, project):
         new_dtbo_files = dts_files.replace('dts', 'dtbo')
         yecho(f"正在回编译{dts_files}为{new_dtbo_files}")
         call(
-            f'dtc -@ -I "dts" -O "dtb" {dtbodir + os.sep + "dts_files" + os.sep + dts_files} -o {dtbodir + os.sep + "new_dtbo_files" + os.sep + new_dtbo_files}')
+            f'dtc -@ -I "dts" -O "dtb" {dtbodir + os.sep + "dts_files" + os.sep + dts_files} -o {dtbodir + os.sep + "new_dtbo_files" + os.sep + new_dtbo_files}',
+            out=1)
     yecho("正在生成dtbo.img...")
     list_ = []
     for b in os.listdir(dtbodir + os.sep + "new_dtbo_files"):
         if b.startswith('dtbo.'):
             list_.append(dtbodir + os.sep + "new_dtbo_files" + os.sep + b)
-    list_ = sorted(list_, key=lambda x: int(x.rsplit('.')[1]))
+    list_ = sorted(list_, key=lambda x: int(float(x.rsplit('.',1)[1])))
     try:
         mkdtboimg.create_dtbo(project + os.sep + os.path.basename(sf).split('.')[0] + '.img', list_, 4096)
     except:
