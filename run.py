@@ -1247,12 +1247,10 @@ def packsuper(project):
 
 
 def insuper(Imgdir, outputimg, ssize, stype, sparse, minsize):
-    group_size = 0
     group_size_a = 0
     group_size_b = 0
     groupaab = None
     supermsize = 0
-    supersize = None
     for root, dirs, files in os.walk(Imgdir):
         for file in files:
             file_path = os.path.join(root, file)
@@ -1267,7 +1265,8 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse, minsize):
     for imag in os.listdir(Imgdir):
         if imag.endswith('.img'):
             image = imag.split('.')[0].replace('_a', '').replace('_b', '')
-            if not f'partition {image}:readonly' in superpa and not f'partition {image}_a:readonly' in superpa:
+            if f'partition {image}:readonly' not in superpa and f'partition {image}_a:readonly' not in superpa:
+                print(f"待打包分区:{image}")
                 if stype in ['VAB', 'AB']:
                     if os.path.isfile(Imgdir + os.sep + image + "_a.img") and os.path.isfile(
                             Imgdir + os.sep + image + "_b.img"):
