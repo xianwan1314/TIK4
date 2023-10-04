@@ -128,7 +128,6 @@ class setting:
            4>[EXT4]打包RO/RW\n
            5>[Erofs]压缩方式\n
            6>[EXT4]UTC时间戳\n
-           7>[EXT4]InodeSize\n
            8>[Img]创建sparse\n
            9>[~4]Img文件系统\n
            12>返回上一级菜单
@@ -272,11 +271,6 @@ class setting:
             settings.change('pack_sparse', '1')
         elif ifpsparse == '0':
             settings.change('pack_sparse', '0')
-
-    def packset7(self):
-        inodesize = input("  设置EXT分区inode-size: ")
-        if inodesize:
-            settings.change('inodesize', inodesize)
 
     def packset9(self):
         typediy = input("  打包镜像格式[1]同解包格式 [2]可选择: ")
@@ -1123,7 +1117,7 @@ def makedtbo(sf, project):
     for b in os.listdir(dtbodir + os.sep + "new_dtbo_files"):
         if b.startswith('dtbo.'):
             list_.append(dtbodir + os.sep + "new_dtbo_files" + os.sep + b)
-    list_ = sorted(list_, key=lambda x: int(float(x.rsplit('.',1)[1])))
+    list_ = sorted(list_, key=lambda x: int(float(x.rsplit('.', 1)[1])))
     try:
         mkdtboimg.create_dtbo(project + os.sep + os.path.basename(sf).split('.')[0] + '.img', list_, 4096)
     except:
@@ -1142,7 +1136,7 @@ def inpacker(name, project, form, ftype):
     else:
         UTC = settings.utcstamp
     out_img = project + os.sep + "TI_out" + os.sep + name + ".img"
-    in_files = project + os.sep + name
+    in_files = project + os.sep + name + os.sep
     if os.path.exists(project + os.sep + "config" + os.sep + name + "_size.txt"):
         img_size0 = int(cat(project + os.sep + "config" + os.sep + name + "_size.txt"))
     else:
@@ -1170,9 +1164,9 @@ def inpacker(name, project, form, ftype):
                 f'make_ext4fs -J -T {UTC} -S {file_contexts} -l {img_size0} -C {fs_config} -L {name} -a {name} {out_img} {in_files}')
         else:
             call(
-                f'mke2fs -O ^has_journal -L {name} -I 256 -i {settings.inodesize} -M {mount_path} -m 0 -t ext4 -b {settings.BLOCKSIZE} {out_img} {size}')
+                f'mke2fs -O ^has_journal -L {name} -I 256 -M {mount_path} -m 0 -t ext4 -b {settings.BLOCKSIZE} {out_img} {size}')
             call(
-                f'e2fsdroid -e -T {UTC} {settings.extrw} -C {fs_config} -S {file_contexts} -f {in_files} -a {mount_path} {out_img}')
+                f"e2fsdroid -e -T {UTC} -S {file_contexts} -C {fs_config} {settings.extrw} -a /{name} -f {in_files} {out_img}")
     if settings.pack_sparse == '1' or form == 'dat':
         call(f"img2simg {out_img} {out_img}.s")
         os.remove(out_img)

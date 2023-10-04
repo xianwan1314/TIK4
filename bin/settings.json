@@ -14,7 +14,6 @@
     "BLOCKSIZE": "4096",
     "SBLOCKSIZE": "4096",
     "metadatasize": "65536",
-    "inodesize": "102400",
     "super_group": "qti_dynamic_partitions",
     "superpart_list": "system odm vendor system_ext product",
     "erofslim": "lz4hc,8",
