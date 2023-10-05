@@ -32,7 +32,6 @@ progress = Progress(
     TimeRemainingColumn(),
 )
 
-
 done_event = Event()
 
 
