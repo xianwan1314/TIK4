@@ -17,6 +17,7 @@ import requests
 from rich.progress import track
 from rich.console import Console
 import contextpatch
+import downloader
 import fspatch
 import imgextractor
 import lpunpack
@@ -355,7 +356,7 @@ class setting:
             self.__init__()
 
 
-def promenu():
+def main_menu():
     gs = 1
     projects = {}
     cls()
@@ -384,14 +385,20 @@ def promenu():
                 print(f"   [{pro}]  {pros}\n")
                 projects['%s' % pro] = pros
     print("  --------------------------------------")
-    print("\033[33m  [55] 解压  [66] 退出  [77] 设置  [88] TIK实验室\033[0m")
+    print("\033[33m  [55] 解压  [66] 退出  [77] 设置  [88] 下载ROM\033[0m")
     print("")
     print(" \n")
     op_pro = input("  请输入序号：")
     if op_pro == '55':
         unpackrom()
     elif op_pro == '88':
-        print('\n"维护中..."\n')
+        url = input("输入下载链接:")
+        if url:
+            try:
+                downloader.download([url], LOCALDIR)
+            except:
+                pass
+            unpackrom()
     elif op_pro == '00':
         op_pro = input("  请输入你要删除的项目序号：")
         if op_pro in projects.keys():
@@ -427,7 +434,7 @@ def promenu():
     else:
         ywarn("  Input error!")
         input("任意按钮继续")
-    promenu()
+    main_menu()
 
 
 def menu(project):
@@ -1559,4 +1566,4 @@ def autounpack(project):
 
 
 if __name__ == '__main__':
-    promenu()
+    main_menu()
