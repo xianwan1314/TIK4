@@ -29,6 +29,7 @@ import utils
 from api import cls, dir_has, cat, dirsize, re_folder, f_remove
 from log import LOGS, LOGE
 from utils import gettype, simg2img
+import opscrypto
 
 LOCALDIR = os.getcwd()
 binner = LOCALDIR + os.sep + "bin"
@@ -792,10 +793,10 @@ def unpackChoo(project):
     elif filed == '88':
         print()
         imgcheck = 0
-        upacall = input("  是否解包所有文件？ [1/0]	")
+        upacall = input("  是否解包所有文件？ [1/0]")
         for v in files.keys():
             if upacall != '1':
-                imgcheck = input(f"  是否解包{files[v]}?[1/0]	")
+                imgcheck = input(f"  是否解包{files[v]}?[1/0]")
             if upacall == "1" or imgcheck != "0":
                 unpack(files[v], infos[v], project)
     elif filed == '77':
@@ -1411,7 +1412,8 @@ def unpack(file, info, project):
             print(f"错误！{e}")
         zipfile.ZipFile(file.replace('.ozip', '.zip')).extractall(project)
     elif info == 'ops':
-        call(f'python3 opscrypto.py decrypt {file}')
+        args = {"decrypt": file}
+        opscrypto.main(args)
     elif info == 'payload':
         yecho(f"{os.path.basename(file)}所含分区列表：")
         call(f'payload-dumper-go -l {file}')
