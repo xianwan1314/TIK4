@@ -452,7 +452,7 @@ def hczip(project):
                 if f.endswith('.br') or f.endswith('.dat') or f.endswith('.list'):
                     if not os.path.isfile(os.path.join(project, 'TI_out' + os.sep + f)):
                         shutil.copy(os.path.join(project, f), os.path.join(project, 'TI_out'))
-        zip_file(os.path.basename(project)+".zip", project+os.sep+'TI_out', project+os.sep)
+        zip_file(os.path.basename(project) + ".zip", project + os.sep + 'TI_out', project + os.sep)
 
 
 def get_all_file_paths(directory) -> Ellipsis:
@@ -935,6 +935,14 @@ def packChoo(project):
         elif filed.isdigit():
             if int(filed) in parts.keys():
                 if settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
+                    syscheck = input("  手动打包所有分区格式为：[1]ext4 [2]erofs")
+                    if syscheck == '2':
+                        imgtype = "erofs"
+                    else:
+                        imgtype = "ext"
+                else:
+                    imgtype = 'ext'
+                if settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
                     op_menu = input("  输出所有文件格式[1]br [2]dat [3]img:")
                     if op_menu == '1':
                         form = 'br'
@@ -944,14 +952,6 @@ def packChoo(project):
                         form = 'img'
                 else:
                     form = 'img'
-                if settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
-                    syscheck = input("手动打包所有分区格式为：[1]ext4 [2]erofs")
-                    if syscheck == '2':
-                        imgtype = "erofs"
-                    else:
-                        imgtype = "ext"
-                else:
-                    imgtype = 'ext'
                 yecho(f"打包{parts[int(filed)]}")
                 if types[int(filed)] == 'bootimg':
                     dboot(project + os.sep + parts[int(filed)], project + os.sep + parts[int(filed)] + ".img")
@@ -1185,7 +1185,7 @@ def inpacker(name, project, form, ftype):
                 f'mke2fs -O ^has_journal -L {name} -I 256 -M {mount_path} -m 0 -t ext4 -b {settings.BLOCKSIZE} {out_img} {size}')
             call(
                 f"e2fsdroid -e -T {UTC} -S {file_contexts} -C {fs_config} {settings.extrw} -a /{name} -f {in_files} {out_img}")
-    if settings.pack_sparse == '1' or form == 'dat':
+    if settings.pack_sparse == '1' or form == 'dat' or form == 'br':
         call(f"img2simg {out_img} {out_img}.s")
         os.remove(out_img)
         os.rename(out_img + ".s", out_img)
@@ -1203,12 +1203,8 @@ def inpacker(name, project, form, ftype):
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".transfer.list")
         except:
             pass
-    else:
-        try:
-            os.rename(out_img, project + os.sep + "TI_out" + os.sep + name + ".img")
-        except:
-            pass
-    if form == 'dat':
+    if form in ['dat', 'br']:
+        print(f"[DAT]:{name}")
         try:
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat")
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat.br")
@@ -1222,6 +1218,7 @@ def inpacker(name, project, form, ftype):
         except:
             pass
     if form == 'br':
+        print(f"[BR]：{name}")
         call(
             f'brotli -q {settings.brcom} -j -w 24 {project + os.sep + "TI_out" + os.sep + name + ".new.dat"} -o {project + os.sep + "TI_out" + os.sep + name + ".new.dat.br"}')
 
