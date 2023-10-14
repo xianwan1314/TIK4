@@ -815,7 +815,7 @@ def unpackChoo(project):
         print()
         for v in files.keys():
             unpack(files[v], infos[v], project)
-    elif filed == '88':
+    elif filed == '11':
         print()
         imgcheck = 0
         upacall = input("  是否解包所有文件？ [1/0]")
@@ -824,7 +824,7 @@ def unpackChoo(project):
                 imgcheck = input(f"  是否解包{files[v]}?[1/0]")
             if upacall == "1" or imgcheck != "0":
                 unpack(files[v], infos[v], project)
-    elif filed == '77':
+    elif filed == '00':
         return
     elif filed.isdigit():
         if int(filed) in files.keys():
