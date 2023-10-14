@@ -21,7 +21,7 @@ def dir_has(path, endswith):
 
 def cat(file):
     with open(file, 'r') as f:
-        return f.read()
+        return f.read().strip()
 
 
 def f_remove(file):

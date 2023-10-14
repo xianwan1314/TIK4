@@ -29,7 +29,7 @@ from api import cls, dir_has, cat, dirsize, re_folder, f_remove
 from log import LOGS, LOGE
 from utils import gettype, simg2img, call
 import opscrypto
-
+import zip2mpk
 LOCALDIR = os.getcwd()
 binner = LOCALDIR + os.sep + "bin"
 setfile = LOCALDIR + os.sep + "bin" + os.sep + "settings.json"
@@ -393,8 +393,7 @@ def main_menu():
 
 
 def menu(project):
-    PROJECT_DIR0 = LOCALDIR + os.sep + project
-    PROJECT_DIR = PROJECT_DIR0
+    PROJECT_DIR = LOCALDIR + os.sep + project
     cls()
     os.chdir(PROJECT_DIR)
     if not os.path.exists(os.path.abspath('config')):
@@ -513,8 +512,10 @@ def subbed(project):
     op_pro = input("请输入序号：")
     if op_pro == '66':
         path = input("请输入插件路径或[拖入]:")
-        if os.path.exists(path):
+        if os.path.exists(path) and not path.endswith('.zip2'):
             installmpk(path)
+        elif path.endswith('.zip2'):
+            installmpk(zip2mpk.main(path, os.getcwd()))
         else:
             ywarn(f"{path}不存在！")
         input("任意按钮继续")
