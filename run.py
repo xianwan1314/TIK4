@@ -454,7 +454,7 @@ def hczip(project):
                         shutil.copy(os.path.join(project, f), os.path.join(project, 'TI_out'))
     elif chose == '2':
         code = input("打包卡线一体限制机型代号:")
-        utils.dbkxyt(os.path.join(project, 'TI_out'), code, ebinner+'extra_flash.zip')
+        utils.dbkxyt(os.path.join(project, 'TI_out'), code, binner+os.sep'extra_flash.zip')
     else:
         return
     zip_file(os.path.basename(project) + ".zip", project + os.sep + 'TI_out', project + os.sep)
