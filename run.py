@@ -1430,13 +1430,13 @@ def unpack(file, info, project):
         opscrypto.main(args)
     elif info == 'payload':
         yecho(f"{os.path.basename(file)}所含分区列表：")
-        call(f'payload-dumper-go -l {file}')
+        os.system(f'{ebinner}payload-dumper-go -l {file}')
         extp = input("请输入需要解压的分区名(空格隔开)/all[全部]	")
         if extp == 'all':
-            call(f"payload-dumper-go -o {project} {file}")
+            os.system(f"{ebinner}payload-dumper-go -o {project} {file}")
         else:
             for p in extp.split():
-                call(f'payload-dumper-go -p {p} -o {project} {file}')
+                os.system(f'{ebinner}payload-dumper-go -p {p} -o {project} {file}')
     elif info == 'win000':
         for fd in [f for f in os.listdir(project) if re.search(r'\.win\d+', f)]:
             with open(project + os.path.basename(fd).rsplit('.', 1)[0], 'ab') as ofd:
