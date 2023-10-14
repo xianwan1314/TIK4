@@ -258,7 +258,7 @@ class setting:
             settings.change('diyimgtype', '')
 
     def dyset1(self):
-        super_group = input(f"  当前动态分区簇名/GROUPNAME：{settings.super_group}\n  请输入（无特殊字符）: ")
+        super_group = input(f"  当前动态分区簇名：{settings.super_group}\n  请输入（无特殊字符）: ")
         if super_group:
             settings.change('super_group', super_group)
 
