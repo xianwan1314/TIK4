@@ -50,7 +50,10 @@ def ysuc(info): print(f"\033[32m[{time.strftime('%H:%M:%S')}]{info}\033[0m")
 
 def rmdire(path):
     if os.path.exists(path):
-        shutil.rmtree(path)
+        try:
+            shutil.rmtree(path)
+        except PermissionError:
+            ywarn("无法删除文件夹，权限不足")
 
 
 def getsize(file):
