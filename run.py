@@ -1412,7 +1412,9 @@ def unpack(file, info, project):
             print(f"错误！{e}")
         zipfile.ZipFile(file.replace('.ozip', '.zip')).extractall(project)
     elif info == 'ops':
-        args = {"decrypt": file}
+        args = {"decrypt": True,
+                '<filename>': file,
+                'outdir': os.path.join(project, os.path.dirname(file).split('.')[0])}
         opscrypto.main(args)
     elif info == 'payload':
         yecho(f"{os.path.basename(file)}所含分区列表：")
