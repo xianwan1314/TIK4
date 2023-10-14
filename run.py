@@ -331,7 +331,7 @@ def main_menu():
         gs = 0
     with open(binner + os.sep + 'banners' + os.sep + settings.banner, 'r') as banner:
         print(f'\033[31m {banner.read()} \033[0m')
-    print("\033[92;44m Beta Edition \033[0m")
+    print("\033[92;44m Delta Edition \033[0m")
     if gs == 1:
         print(f"\033[36m “{shiju}”")
         print(f"\033[36m---{another}《{fr}》\033[0m\n")
