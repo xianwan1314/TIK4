@@ -176,8 +176,23 @@ class setting:
 
     @staticmethod
     def settings6():
-        print("")
-        input("米欧科技")
+        cls()
+        with open(binner + os.sep + 'banners' + os.sep + '1', 'r') as banner:
+            print(f'\033[31m {banner.read()} \033[0m')
+        print('\033[96m 永久开源的安卓全版本镜像处理工具\033[0m')
+        print('\033[31m---------------------------------\033[0m')
+        print(f"\033[93m作者:\033[0m \033[92mColdWindScholar\033[0m")
+        print(f"\033[93m开源地址:\033[0m \033[91mhttps://github.com/ColdWindScholar/TIK\033[0m")
+        print(f"\033[93m软件版本:\033[0m \033[44mDelta Edition\033[0m")
+        print(f"\033[93m开源协议:\033[0m \033[68mGNU General Public License v3.0 \033[0m")
+        print('\033[31m---------------------------------\033[0m')
+        print(f"\033[93m特别鸣谢:\033[0m")
+        print('\033[94mAffggh')
+        print("Yeliqin666")
+        print('YukongA')
+        print("\033[0m")
+        print('\033[31m---------------------------------\033[0m')
+        input('\033[97m Powered By MIO-KITCHEN-ENVS\033[0m')
 
     @staticmethod
     def packset1():
@@ -302,7 +317,7 @@ class setting:
        3>[动态分区]相关设置\n
        4>自定义 首页Banner\n
        5>修改Plug/ROM限大小\n
-       6>关于我们
+       6>关于工具\n
        0>返回主页
        --------------------------
     ''')
