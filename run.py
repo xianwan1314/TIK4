@@ -1223,7 +1223,7 @@ def inpacker(name, project, form, ftype):
         except:
             pass
     if form == 'br':
-        print(f"打包[BR]:{name}")
+        yecho(f"打包[BR]:{name}")
         call(
             f'brotli -q {settings.brcom} -j -w 24 {project + os.sep + "TI_out" + os.sep + name + ".new.dat"} -o {project + os.sep + "TI_out" + os.sep + name + ".new.dat.br"}')
 
@@ -1255,7 +1255,6 @@ def packsuper(project):
         minssize = 1
         supersize = 0
         ywarn("您已设置压缩镜像至最小,对齐不规范的镜像将造成打包失败；Size超出物理分区大小会造成刷入失败！")
-        time.sleep(2)
     else:
         supersize = input("请输入super分区大小（字节数）	")
     yecho("打包到TI_out/super.img...")
