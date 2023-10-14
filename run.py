@@ -152,8 +152,6 @@ class setting:
         if mydir:
             settings.change('mydir', mydir)
 
-
-
     @staticmethod
     def settings6():
         print(f"  打包时ROM作者为：{settings.Romer}")
@@ -440,6 +438,15 @@ def hczip(project):
     print(f"  项目：{os.path.basename(project)}\n")
     print('\033[33m    1> 直接打包     2> 卡线一体\033[0m\n')
     chose = input("    请输入编号: ")
+    if chose == '1':
+        print("正在准备打包...")
+        for v in ['firmware-update', 'META-INF', 'exaid.img', 'dynamic_partitions_op_list']:
+            if os.path.exists(os.path.join(project, v)):
+                shutil.copy(os.path.join(project, v), os.path.join(project, 'TI_out'))
+        for root, dirs, files in os.walk(project):
+            for f in files:
+                if f.endswith('.br') or f.endswith('.dat') or f.endswith('.list'):
+                    shutil.copy(os.path.join(project, f), os.path.join(project, 'TI_out'))
 
 
 def subbed(project):
