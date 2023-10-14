@@ -442,16 +442,48 @@ def hczip(project):
         print("正在准备打包...")
         for v in ['firmware-update', 'META-INF', 'exaid.img', 'dynamic_partitions_op_list']:
             if os.path.isdir(os.path.join(project, v)):
-                if not os.path.isdir(os.path.join(project, 'TI_out'+os.sep+v)):
-                    shutil.copytree(os.path.join(project, v), os.path.join(project, 'TI_out'+os.sep+v))
+                if not os.path.isdir(os.path.join(project, 'TI_out' + os.sep + v)):
+                    shutil.copytree(os.path.join(project, v), os.path.join(project, 'TI_out' + os.sep + v))
             elif os.path.isfile(os.path.join(project, v)):
-                if not os.path.isfile(os.path.join(project, 'TI_out'+os.sep+v)):
+                if not os.path.isfile(os.path.join(project, 'TI_out' + os.sep + v)):
                     shutil.copy(os.path.join(project, v), os.path.join(project, 'TI_out'))
         for root, dirs, files in os.walk(project):
             for f in files:
                 if f.endswith('.br') or f.endswith('.dat') or f.endswith('.list'):
                     if not os.path.isfile(os.path.join(project, 'TI_out' + os.sep + f)):
                         shutil.copy(os.path.join(project, f), os.path.join(project, 'TI_out'))
+        zip_file(os.path.basename(project)+".zip", project+os.sep+'TI_out', project+os.sep)
+
+
+def get_all_file_paths(directory) -> Ellipsis:
+    # 初始化文件路径列表
+    file_paths = []
+    for root, directories, files in os.walk(directory):
+        for filename in files:
+            # 连接字符串形成完整的路径
+            file_paths.append(os.path.join(root, filename))
+
+    # 返回所有文件路径
+    return file_paths
+
+
+class zip_file(object):
+    def __init__(self, file, dst_dir, path=None):
+        if not path:
+            path = LOCALDIR + os.sep
+        os.chdir(dst_dir)
+        with zipfile.ZipFile(relpath := path + file, 'w', compression=zipfile.ZIP_DEFLATED,
+                             allowZip64=True) as zip_:
+            # 遍历写入文件
+            for file in get_all_file_paths('.'):
+                print(f"正在写入:%s" % file)
+                try:
+                    zip_.write(file)
+                except Exception as e:
+                    print("写入{}时错误{}".format(file, e))
+        if os.path.exists(relpath):
+            print(f'打包完成:{relpath}')
+        os.chdir(path)
 
 
 def subbed(project):
