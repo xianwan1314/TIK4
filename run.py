@@ -97,7 +97,7 @@ settings.load_set()
 
 
 class setting:
-    def settings4(self):
+    def settings2(self):
         cls()
         print('''
         \033[33m  > 打包设置 \033[0m
@@ -117,12 +117,12 @@ class setting:
             return 1
         try:
             getattr(self, 'packset%s' % op_pro)()
-            self.settings5()
+            self.settings3()
         except AttributeError:
             print("Input error!")
-            self.settings4()
+            self.settings2()
 
-    def settings5(self):
+    def settings3(self):
         cls()
         print('''
         \033[33m  > 动态分区设置 \033[0m
@@ -143,13 +143,13 @@ class setting:
             return 1
         try:
             getattr(self, 'dyset%s' % op_pro)()
-            self.settings5()
+            self.settings3()
         except AttributeError:
             print("Input error!")
-            self.settings5()
+            self.settings3()
 
     @staticmethod
-    def settings2():
+    def settings1():
         print(f"修改安卓端在内置存储识别ROM的路径。当前为/sdcard/{settings.mydir}")
         mydir = input('   请输入文件夹名称(英文):')
         if mydir:
@@ -298,9 +298,9 @@ class setting:
         cls()
         print('''
     \033[33m  > 设置 \033[0m
-       2>[Droid]存储ROM目录
-       4>[打包]相关细则设置
-       5>[动态分区]相关设置
+       1>[Droid]存储ROM目录
+       2>[打包]相关细则设置
+       3>[动态分区]相关设置
        6>自定义 ROM作者信息
        7>自定义 首页Banner
        8>修改Plug/ROM限Size
@@ -1347,7 +1347,7 @@ def packpayload(project):
     re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
     f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
     ywarn(f"请将所有分区镜像放置于{project}/payload中（非super）！")
-    yecho("请MIUI14用户注意！mi_ext分区也属于super，请及时到主页输入77、5、7来修改动态分区内逻辑分区表")
+    yecho("mi_ext分区也属于super，请及时到主页输入77、5、7来修改动态分区内逻辑分区表")
     yecho("很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
     checkssize = input("请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [5]自定义")
     if checkssize == '1':
