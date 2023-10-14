@@ -439,7 +439,7 @@ def hczip(project):
     cls()
     print(" \033[31m>打包ROM \033[0m\n")
     print(f"  项目：{os.path.basename(project)}\n")
-    print('\033[33m    1> 直接打包     2> 卡线一体\033[0m\n')
+    print('\033[33m    1> 直接打包     2> 卡线一体 3> 返回\033[0m\n')
     chose = input("    请输入编号: ")
     if chose == '1':
         print("正在准备打包...")
@@ -516,7 +516,7 @@ def subbed(project):
             mysubs[subn] = sub
             names[subn] = name
     print("----------------------------------------------\n")
-    print("\033[33m> [66]-安装 [77]-删除 [88]-在线Plug仓库 [99]-项目菜单\033[0m")
+    print("\033[33m> [66]-安装 [77]-删除 [88]-在线Plug仓库 [99]-返回\033[0m")
     op_pro = input("请输入序号：")
     if op_pro == '66':
         path = input("请输入插件路径或[拖入]:")
@@ -808,7 +808,7 @@ def unpackChoo(project):
                     files[filen] = dtb0
                     infos[filen] = 'dtb'
     print()
-    print("\033[33m  [77] 菜单  [88] 循环解包  \033[0m")
+    print("\033[33m  [00] 返回  [11] 循环解包  \033[0m")
     print("  --------------------------------------")
     filed = input("  请输入对应序号：")
     if filed == '0':
@@ -875,7 +875,7 @@ def packChoo(project):
                     types[partn] = 'dtbo'
                     print(f"   [{partn}]- {packs} <dtbo>\n")
         print()
-        print("\033[33m [55] 循环打包 [66] 打包Super [77] 打包Payload [88]菜单\033[0m")
+        print("\033[33m [55] 循环打包 [66] 打包Super [77] 打包Payload [88]返回\033[0m")
         print("  --------------------------------------")
         filed = input("  请输入对应序号：")
         if filed == '0':
