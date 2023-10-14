@@ -425,7 +425,7 @@ def menu(project):
     print(" \033[31m>ROM菜单 \033[0m\n")
     print(f"  项目：{project}")
     print('')
-    print('\033[33m    1> 项目主页     2> 解包菜单\033[0m\n')
+    print('\033[33m    1> 回到主页     2> 解包菜单\033[0m\n')
     print('\033[36m    3> 打包菜单     4> 插件菜单\033[0m\n')
     print('\033[32m    5> 一键封装\033[0m\n')
     print()
