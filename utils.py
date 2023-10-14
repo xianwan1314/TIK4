@@ -393,7 +393,6 @@ def img2sdat(input_image, out_dir='.', version=None, prefix='system'):
 
     blockimgdiff.BlockImageDiff(sparse_img.SparseImage(input_image, tempfile.mkstemp()[1], '0'), None, version).Compute(
         out_dir + '/' + prefix)
-    print('Done!')
 
 
 def findfile(file, dir_) -> str:

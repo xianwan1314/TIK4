@@ -1209,7 +1209,7 @@ def inpacker(name, project, form, ftype):
         except:
             pass
     if form in ['dat', 'br']:
-        print(f"[DAT]:{name}")
+        yecho(f"打包[DAT]:{name}")
         try:
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat")
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat.br")
@@ -1223,7 +1223,7 @@ def inpacker(name, project, form, ftype):
         except:
             pass
     if form == 'br':
-        print(f"[BR]：{name}")
+        print(f"打包[BR]:{name}")
         call(
             f'brotli -q {settings.brcom} -j -w 24 {project + os.sep + "TI_out" + os.sep + name + ".new.dat"} -o {project + os.sep + "TI_out" + os.sep + name + ".new.dat.br"}')
 
