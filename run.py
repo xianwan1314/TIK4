@@ -441,7 +441,9 @@ def hczip(project):
     if chose == '1':
         print("正在准备打包...")
         for v in ['firmware-update', 'META-INF', 'exaid.img', 'dynamic_partitions_op_list']:
-            if os.path.exists(os.path.join(project, v)):
+            if os.path.isdir(os.path.join(project, v)):
+                shutil.copytree(os.path.join(project, v), os.path.join(project, 'TI_out'))
+            elif os.path.isfile(os.path.join(project, v)):
                 shutil.copy(os.path.join(project, v), os.path.join(project, 'TI_out'))
         for root, dirs, files in os.walk(project):
             for f in files:
