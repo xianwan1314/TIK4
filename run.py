@@ -892,7 +892,6 @@ def packChoo(project):
                 else:
                     inpacker(parts[f], project, form, imgtype)
         elif filed == '55':
-            print()
             pacall = input("  是否打包所有镜像？ [1/0]	")
             op_menu = input("  输出所有文件格式[1]br [2]dat [3]img:")
             if op_menu == '1':
@@ -935,7 +934,7 @@ def packChoo(project):
             return
         elif filed.isdigit():
             if int(filed) in parts.keys():
-                if not settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
+                if settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
                     op_menu = input("  输出所有文件格式[1]br [2]dat [3]img:")
                     if op_menu == '1':
                         form = 'br'
