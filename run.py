@@ -155,15 +155,9 @@ class setting:
         if mydir:
             settings.change('mydir', mydir)
 
-    @staticmethod
-    def settings6():
-        print(f"  打包时ROM作者为：{settings.Romer}")
-        Romer = input("  请输入（无特殊字符）: ")
-        if Romer:
-            settings.change('Romer', Romer)
 
     @staticmethod
-    def settings7():
+    def settings4():
         print("  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧 ")
         banner = input("  请输入序号: ")
         if banner.isdigit():
@@ -171,7 +165,7 @@ class setting:
                 settings.change('banner', banner)
 
     @staticmethod
-    def settings8():
+    def settings5():
         plugromlit = input("  设置区分ROM/Plug的Size界限[1]125829120 [2]自定义: ")
         if plugromlit == '2':
             plugromlit = input("  请输入：")
@@ -301,14 +295,13 @@ class setting:
        1>[Droid]存储ROM目录
        2>[打包]相关细则设置
        3>[动态分区]相关设置
-       6>自定义 ROM作者信息
-       7>自定义 首页Banner
-       8>修改Plug/ROM限Size
-       9>返回主页
+       4>自定义 首页Banner
+       5>修改Plug/ROM限大小
+       0>返回主页
        --------------------------
     ''')
         op_pro = input("   请输入编号: ")
-        if op_pro == "9":
+        if op_pro == "0":
             return
         try:
             getattr(self, 'settings%s' % op_pro)()
