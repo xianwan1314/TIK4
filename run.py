@@ -442,13 +442,16 @@ def hczip(project):
         print("正在准备打包...")
         for v in ['firmware-update', 'META-INF', 'exaid.img', 'dynamic_partitions_op_list']:
             if os.path.isdir(os.path.join(project, v)):
-                shutil.copytree(os.path.join(project, v), os.path.join(project, 'TI_out'))
+                if not os.path.isdir(os.path.join(project, 'TI_out'+os.sep+v)):
+                    shutil.copytree(os.path.join(project, v), os.path.join(project, 'TI_out'+os.sep+v))
             elif os.path.isfile(os.path.join(project, v)):
-                shutil.copy(os.path.join(project, v), os.path.join(project, 'TI_out'))
+                if not os.path.isfile(os.path.join(project, 'TI_out'+os.sep+v)):
+                    shutil.copy(os.path.join(project, v), os.path.join(project, 'TI_out'))
         for root, dirs, files in os.walk(project):
             for f in files:
                 if f.endswith('.br') or f.endswith('.dat') or f.endswith('.list'):
-                    shutil.copy(os.path.join(project, f), os.path.join(project, 'TI_out'))
+                    if not os.path.isfile(os.path.join(project, 'TI_out' + os.sep + f)):
+                        shutil.copy(os.path.join(project, f), os.path.join(project, 'TI_out'))
 
 
 def subbed(project):
