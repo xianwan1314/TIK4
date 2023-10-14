@@ -1178,8 +1178,6 @@ def inpacker(name, project, form, ftype):
         img_size0 = dirsize(in_files, 1, 3, project + os.sep + "dynamic_partitions_op_list").rsize_v
     elif settings.diysize == '':
         img_size0 = dirsize(in_files, 1, 3, project + os.sep + "dynamic_partitions_op_list").rsize_v
-    else:
-        img_size0 = dirsize(in_files, 1, 1, project + os.sep + "dynamic_partitions_op_list").rsize_v
     fspatch.main(in_files, fs_config)
     contextpatch.main(in_files, file_contexts)
     utils.qc(fs_config)
