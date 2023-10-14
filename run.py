@@ -452,7 +452,12 @@ def hczip(project):
                 if f.endswith('.br') or f.endswith('.dat') or f.endswith('.list'):
                     if not os.path.isfile(os.path.join(project, 'TI_out' + os.sep + f)):
                         shutil.copy(os.path.join(project, f), os.path.join(project, 'TI_out'))
-        zip_file(os.path.basename(project) + ".zip", project + os.sep + 'TI_out', project + os.sep)
+    elif chose == '2':
+        code = input("打包卡线一体限制机型代号:")
+        utils.dbkxyt(os.path.join(project, 'TI_out'), code, ebinner+'extra_flash.zip')
+    else:
+        return
+    zip_file(os.path.basename(project) + ".zip", project + os.sep + 'TI_out', project + os.sep)
 
 
 def get_all_file_paths(directory) -> Ellipsis:
