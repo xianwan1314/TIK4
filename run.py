@@ -450,14 +450,15 @@ def hczip(project):
         for root, dirs, files in os.walk(project):
             for f in files:
                 if f.endswith('.br') or f.endswith('.dat') or f.endswith('.list'):
-                    if not os.path.isfile(os.path.join(project, 'TI_out' + os.sep + f)):
+                    if not os.path.isfile(os.path.join(project, 'TI_out' + os.sep + f)) and os.access(
+                            os.path.join(project, f), os.F_OK):
                         shutil.copy(os.path.join(project, f), os.path.join(project, 'TI_out'))
     elif chose == '2':
         code = input("打包卡线一体限制机型代号:")
-        utils.dbkxyt(os.path.join(project, 'TI_out')+os.sep, code, binner+os.sep+'extra_flash.zip')
+        utils.dbkxyt(os.path.join(project, 'TI_out') + os.sep, code, binner + os.sep + 'extra_flash.zip')
     else:
         return
-    zip_file(os.path.basename(project) + ".zip", project + os.sep + 'TI_out', project + os.sep)
+    zip_file(os.path.basename(project) + ".zip", project + os.sep + 'TI_out', project + os.sep, LOCALDIR + os.sep)
 
 
 def get_all_file_paths(directory) -> Ellipsis:
@@ -473,11 +474,15 @@ def get_all_file_paths(directory) -> Ellipsis:
 
 
 class zip_file(object):
-    def __init__(self, file, dst_dir, path=None):
+    def __init__(self, file, dst_dir, local, path=None):
         if not path:
             path = LOCALDIR + os.sep
         os.chdir(dst_dir)
-        with zipfile.ZipFile(relpath := path + file, 'w', compression=zipfile.ZIP_DEFLATED,
+        relpath = str(path + file)
+        if os.path.exists(relpath):
+            ywarn(f"存在同名文件：{file}，已自动重命名！")
+            relpath = path + utils.v_code() + file
+        with zipfile.ZipFile(relpath, 'w', compression=zipfile.ZIP_DEFLATED,
                              allowZip64=True) as zip_:
             # 遍历写入文件
             for file in get_all_file_paths('.'):
@@ -488,7 +493,7 @@ class zip_file(object):
                     print("写入{}时错误{}".format(file, e))
         if os.path.exists(relpath):
             print(f'打包完成:{relpath}')
-        os.chdir(path)
+        os.chdir(local)
 
 
 def subbed(project):
