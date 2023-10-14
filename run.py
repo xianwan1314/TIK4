@@ -30,6 +30,7 @@ from log import LOGS, LOGE
 from utils import gettype, simg2img, call
 import opscrypto
 import zip2mpk
+
 LOCALDIR = os.getcwd()
 binner = LOCALDIR + os.sep + "bin"
 setfile = LOCALDIR + os.sep + "bin" + os.sep + "settings.json"
@@ -155,7 +156,6 @@ class setting:
         if mydir:
             settings.change('mydir', mydir)
 
-
     @staticmethod
     def settings4():
         print("  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧 ")
@@ -173,6 +173,11 @@ class setting:
                 settings.change('plugromlit', plugromlit)
         else:
             settings.change('plugromlit', '125829120')
+
+    @staticmethod
+    def settings6():
+        print("")
+        input("米欧科技")
 
     @staticmethod
     def packset1():
@@ -297,6 +302,7 @@ class setting:
        3>[动态分区]相关设置\n
        4>自定义 首页Banner\n
        5>修改Plug/ROM限大小\n
+       6>关于我们
        0>返回主页
        --------------------------
     ''')
