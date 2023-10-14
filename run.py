@@ -152,17 +152,7 @@ class setting:
         if mydir:
             settings.change('mydir', mydir)
 
-    @staticmethod
-    def settings3():
-        if os.name == "posix":
-            for age in ['python3', 'simg2img', 'img2simg', 'cpio', 'sed', 'libnss3-tools', 'python3-pip', 'brotli',
-                        'curl', 'bc', 'cpio', 'default-jre', 'android-sdk-libsparse-utils', 'openjdk-11-jre', 'aria2',
-                        'p7zip-full']:
-                print(f"\033[31m  修复安装{age}\033[0m")
-                os.system(f"apt-get install {age} -y")
-                print(f"\033[36m  {age}已安装\033[0m")
-        else:
-            print("非LINUX，无法修复")
+
 
     @staticmethod
     def settings6():
@@ -308,7 +298,6 @@ class setting:
         print('''
     \033[33m  > 设置 \033[0m
        2>[Droid]存储ROM目录
-       3>[修复]工具部分依赖
        4>[打包]相关细则设置
        5>[动态分区]相关设置
        6>自定义 ROM作者信息
@@ -1221,7 +1210,7 @@ def packsuper(project):
         minssize = 1
         supersize = 0
         ywarn("您已设置压缩镜像至最小,对齐不规范的镜像将造成打包失败；Size超出物理分区大小会造成刷入失败！")
-        time.sleep(4)
+        time.sleep(2)
     else:
         supersize = input("请输入super分区大小（字节数）	")
     yecho("打包到TI_out/super.img...")
@@ -1330,7 +1319,7 @@ def inpayload(supersize, project):
         if sf.endswith('.img'):
             partname += sf.replace('.img', '') + ":"
             pimages += f"{pimages}{project}{os.sep}payload{os.sep}{sf.replace('.img', '')}.img:"
-            yecho(f"预打包{sf}")
+            yecho(f"预打包:{sf}")
     inparts = f"--partition_names={partname[:-1]} --new_partitions={pimages[:-1]}"
     yecho(f"当前Super逻辑分区表：{settings.superpart_list}，可在<设置>中调整.")
     with open(project + os.sep + "payload" + os.sep + "dynamic_partitions_info.txt", 'w', encoding='utf-8',
