@@ -1,8 +1,12 @@
 from __future__ import print_function
 
 import struct
+import subprocess
+import zipfile
 from os.path import exists
 import os, errno, tempfile
+from shutil import move, rmtree
+
 import common
 import blockimgdiff
 import sparse_img
@@ -19,10 +23,41 @@ from Crypto.Util.Padding import pad
 # -----
 # ----VALUES
 from os import getcwd
-
+import platform as plat
 from lpunpack import SparseImage
 
 elocal = getcwd()
+platform = plat.machine()
+ostype = plat.system()
+binner = elocal + os.sep + "bin"
+ebinner = binner + os.sep + ostype + os.sep + platform + os.sep
+
+
+def call(exe, kz='Y', out=0, shstate=False, sp=0):
+    if kz == "Y":
+        cmd = f'{ebinner}{exe}'
+    else:
+        cmd = exe
+    if os.name != 'posix':
+        conf = subprocess.CREATE_NO_WINDOW
+    else:
+        if sp == 0:
+            cmd = cmd.split()
+        conf = 0
+    try:
+        ret = subprocess.Popen(cmd, shell=shstate, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                               stderr=subprocess.STDOUT, creationflags=conf)
+        for i in iter(ret.stdout.readline, b""):
+            if out == 0:
+                print(i.decode("utf-8", "ignore").strip())
+    except subprocess.CalledProcessError as e:
+        for i in iter(e.stdout.readline, b""):
+            if out == 0:
+                print(e.decode("utf-8", "ignore").strip())
+    ret.wait()
+    return ret.returncode
+
+
 dn = None
 formats = ([b'PK', "zip"], [b'OPPOENCRYPT!', "ozip"], [b'7z', "7z"], [b'\x53\xef', 'ext', 1080],
            [b'\x3a\xff\x26\xed', "sparse"], [b'\xe2\xe1\xf5\xe0', "erofs", 1024], [b"CrAU", "payload"],
@@ -54,6 +89,62 @@ class aesencrypt:
         data = data[:-data[-1]]
         with open(outfile, "wb") as f:
             f.write(data)
+
+
+class dbkxyt:
+    def __init__(self, work, code, extra):
+        if not work:
+            print('文件夹不存在')
+            return
+        if os.path.exists((dir_ := work) + "firmware-update"):
+            os.rename(dir_ + "firmware-update", dir_ + "images")
+        if not os.path.exists(dir_ + "images"):
+            os.makedirs(dir_ + 'images')
+        if os.path.exists(dir_ + 'META-INF'):
+            rmtree(dir_ + 'META-INF')
+        zipfile.ZipFile(extra).extractall(dir_)
+        right_device = code
+        with open(dir_ + "bin" + os.sep + "right_device", 'w', encoding='gbk') as rd:
+            rd.write(right_device + "\n")
+        with open(
+                dir_ + 'META-INF' + os.sep + "com" + os.sep + "google" + os.sep + "android" + os.sep + "update-binary",
+                'r+', encoding='utf-8', newline='\n') as script:
+            lines = script.readlines()
+            lines.insert(45, f'right_device="{right_device}"\n')
+            for t in os.listdir(dir_ + "images"):
+                if t.endswith('.img') and not os.path.isdir(dir_ + t):
+                    print("Add Flash method {} to update-binary".format(t))
+                    if os.path.getsize(dir_ + t) > 209715200:
+                        self.zstd_compress(dir_ + "images" + t)
+                        lines.insert(70,
+                                     'package_extract_zstd "images/{}.zst" "/dev/block/by-name/{}"\n'.format(t, t[:-4]))
+                    else:
+                        lines.insert(70, 'package_extract_file "images/{}" "/dev/block/by-name/{}"\n'.format(t, t[:-4]))
+            for t in os.listdir(dir_):
+                if not t.startswith("preloader_") and not os.path.isdir(dir_ + t) and t.endswith('.img'):
+                    print("Add Flash method {} to update-binary".format(t))
+                    if os.path.getsize(dir_ + t) > 209715200:
+                        self.zstd_compress(dir_ + t)
+                        move(os.path.join(dir_, t + ".zst"), os.path.join(dir_ + "images", t + ".zst"))
+                        lines.insert(70,
+                                     'package_extract_zstd "images/{}.zst" "/dev/block/by-name/{}"\n'.format(t, t[:-4]))
+                    else:
+                        lines.insert(70, 'package_extract_file "images/{}" "/dev/block/by-name/{}"\n'.format(t, t[:-4]))
+                        move(os.path.join(dir_, t), os.path.join(dir_ + "images", t))
+            script.seek(0)
+            script.truncate()
+            script.writelines(lines)
+
+    def zstd_compress(self, path):
+        if os.path.exists(path):
+            if gettype(path) == "sparse":
+                print(f"[INFO] {os.path.basename(path)} is (sparse), converting to (raw)")
+                simg2img(path)
+            try:
+                print(f"[Compress] {os.path.basename(path)}...")
+                call("zstd -5 --rm {} -o {}".format(path, path + ".zst"))
+            except Exception as e:
+                print(f"[Fail] Compress {os.path.basename(path)} Fail:{e}")
 
 
 def sdat2img(TRANSFER_LIST_FILE, NEW_DATA_FILE, OUTPUT_IMAGE_FILE):

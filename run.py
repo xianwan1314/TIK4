@@ -4,7 +4,6 @@ import os
 import platform as plat
 import re
 import shutil
-import subprocess
 import sys
 import time
 import zipfile
@@ -28,7 +27,7 @@ import ozipdecrypt
 import utils
 from api import cls, dir_has, cat, dirsize, re_folder, f_remove
 from log import LOGS, LOGE
-from utils import gettype, simg2img
+from utils import gettype, simg2img, call
 import opscrypto
 
 LOCALDIR = os.getcwd()
@@ -52,31 +51,6 @@ def ysuc(info): print(f"\033[32m[{time.strftime('%H:%M:%S')}]{info}\033[0m")
 def rmdire(path):
     if os.path.exists(path):
         shutil.rmtree(path)
-
-
-def call(exe, kz='Y', out=0, shstate=False, sp=0):
-    if kz == "Y":
-        cmd = f'{ebinner}{exe}'
-    else:
-        cmd = exe
-    if os.name != 'posix':
-        conf = subprocess.CREATE_NO_WINDOW
-    else:
-        if sp == 0:
-            cmd = cmd.split()
-        conf = 0
-    try:
-        ret = subprocess.Popen(cmd, shell=shstate, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                               stderr=subprocess.STDOUT, creationflags=conf)
-        for i in iter(ret.stdout.readline, b""):
-            if out == 0:
-                print(i.decode("utf-8", "ignore").strip())
-    except subprocess.CalledProcessError as e:
-        for i in iter(e.stdout.readline, b""):
-            if out == 0:
-                print(e.decode("utf-8", "ignore").strip())
-    ret.wait()
-    return ret.returncode
 
 
 def getsize(file):
@@ -158,15 +132,12 @@ class setting:
            7> [Super] 更改逻辑分区表\n
            8> [Super]强制烧写完整Img\n
            9> [Super] 标记分区槽后缀\n
-           10>[Payload]靶定HeaderVer\n
            11>返回上一级菜单
            --------------------------
         ''')
         op_pro = input("   请输入编号: ")
         if op_pro == "11":
             return 1
-        elif op_pro == '10':
-            input('维护中。。。')
         try:
             getattr(self, 'dyset%s' % op_pro)()
             self.settings5()
@@ -466,12 +437,20 @@ def menu(project):
     elif op_menu == '4':
         subbed(PROJECT_DIR)
     elif op_menu == '5':
-        ywarn("维护中...")
+        hczip(PROJECT_DIR)
         input("任意按钮继续")
     else:
         ywarn('   Input error!"')
         input("任意按钮继续")
     menu(project)
+
+
+def hczip(project):
+    cls()
+    print(" \033[31m>打包ROM \033[0m\n")
+    print(f"  项目：{os.path.basename(project)}\n")
+    print('\033[33m    1> 直接打包     2> 卡线一体\033[0m\n')
+    chose = input("    请输入编号: ")
 
 
 def subbed(project):
@@ -1531,15 +1510,19 @@ def autounpack(project):
     os.chdir(project)
     if os.path.exists(project + os.sep + "payload.bin"):
         yecho('读取机型为:动态VAB设备\n解包 payload.bin...')
-        os.system(f"{ebinner + os.sep}payload-dumper-go -o {project} {project + os.sep + 'payload.bin'}")
+        unpack(project + os.sep + 'payload.bin', 'payload', project)
         yecho("payload.bin解包完成！")
-        for waste in ['payload.bin', 'care_map.pb', 'apex_info.pb']:
+        wastes = ['care_map.pb', 'apex_info.pb']
+        if input("你要删除payload吗[1/0]") == '1':
+            wastes.append('payload.bin')
+        for waste in wastes:
             if os.path.exists(project + os.sep + waste):
                 try:
                     os.remove(project + os.sep + waste)
                 except:
                     pass
-        os.makedirs(project + os.sep + "config")
+        if not os.path.isdir(project + os.sep + "config"):
+            os.makedirs(project + os.sep + "config")
         shutil.move(project + os.sep + "payload_properties.txt", project + os.sep + "config")
         shutil.move(project + os.sep + "META-INF" + os.sep + "com" + os.sep + "android" + os.sep + "metadata",
                     project + os.sep + "config")
