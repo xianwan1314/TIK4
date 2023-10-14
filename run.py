@@ -102,11 +102,11 @@ class setting:
         print('''
         \033[33m  > 打包设置 \033[0m
            1>Brotli 压缩等级\n
-           2>[EXT4] Size处理\n
-           3>[EXT4] 打包工具\n
-           4>[EXT4]打包RO/RW\n
+           2>[EXT4] 大小处理\n
+           3>[EXT4] 打包方式\n
+           4>[EXT4] 读写状态\n
            5>[Erofs]压缩方式\n
-           6>[EXT4]UTC时间戳\n
+           6>[EXT4] UTC时间戳\n
            8>[Img]创建sparse\n
            9>[~4]Img文件系统\n
            12>返回上一级菜单
@@ -133,7 +133,7 @@ class setting:
            5> [Super] 指定/block大小\n
            6> [Super] 更改物理分区名\n
            7> [Super] 更改逻辑分区表\n
-           8> [Super]强制烧写完整Img\n
+           8> [Super] 强制烧写完整Img\n
            9> [Super] 标记分区槽后缀\n
            11>返回上一级菜单
            --------------------------
@@ -292,11 +292,11 @@ class setting:
         cls()
         print('''
     \033[33m  > 设置 \033[0m
-       1>[Droid]存储ROM目录
-       2>[打包]相关细则设置
-       3>[动态分区]相关设置
-       4>自定义 首页Banner
-       5>修改Plug/ROM限大小
+       1>[Droid]存储ROM目录\n
+       2>[打包]相关细则设置\n
+       3>[动态分区]相关设置\n
+       4>自定义 首页Banner\n
+       5>修改Plug/ROM限大小\n
        0>返回主页
        --------------------------
     ''')
