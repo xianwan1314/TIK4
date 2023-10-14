@@ -164,7 +164,7 @@ class setting:
 
     @staticmethod
     def settings7():
-        print("  首页banner: [1]TIK3 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧 ")
+        print("  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧 ")
         banner = input("  请输入序号: ")
         if banner.isdigit():
             if 0 < int(banner) < 7:
