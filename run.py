@@ -1196,8 +1196,8 @@ def inpacker(name, project, form, ftype):
 
 def packsuper(project):
     minssize = 0
-    if os.path.exists(project + os.sep + "super" + os.sep + "super.img"):
-        os.remove(project + os.sep + "super" + os.sep + "super.img")
+    if os.path.exists(project + os.sep + "TI_out" + os.sep + "super.img"):
+        os.remove(project + os.sep + "TI_out" + os.sep + "super.img")
     if not os.path.exists(project + os.sep + "super"):
         os.makedirs(project + os.sep + "super")
     cls()
@@ -1224,8 +1224,8 @@ def packsuper(project):
         time.sleep(4)
     else:
         supersize = input("请输入super分区大小（字节数）	")
-    yecho("打包到super/super.img...")
-    insuper(project + os.sep + 'super', project + os.sep + 'super' + os.sep + "super.img", supersize, supertype,
+    yecho("打包到TI_out/super.img...")
+    insuper(project + os.sep + 'super', project + os.sep + 'TI_out' + os.sep + "super.img", supersize, supertype,
             ifsparse, minssize)
 
 
