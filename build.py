@@ -1,6 +1,6 @@
 import os
 import shutil
-
+import platform
 local = os.getcwd()
 print("Building...")
 os.system("pyinstaller -F run.py --exclude-module=numpy -i icon.ico")
@@ -14,6 +14,10 @@ elif os.name == 'posix':
         shutil.move(local + os.sep + "dist" + os.sep + "run", local)
     if os.path.exists(local + os.sep + "bin" + os.sep + "Windows"):
         shutil.rmtree(local + os.sep + "bin" + os.sep + "Windows")
+    for i in os.listdir(local + os.sep + "bin" + os.sep + "Linux"):
+        if i == platform.machine():
+            continue
+        shutil.rmtree(local + os.sep + "bin" + os.sep + "Linux"+os.sep+i)
 for i in os.listdir(local):
     if i not in ['run', 'run.exe', 'bin', 'LICENSE']:
         print(f"Removing {i}")
