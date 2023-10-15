@@ -110,11 +110,11 @@ class setting:
            6>[EXT4] UTC时间戳\n
            8>[Img]创建sparse\n
            9>[~4]Img文件系统\n
-           12>返回上一级菜单
+           0>返回上一级菜单
            --------------------------
         ''')
         op_pro = input("   请输入编号: ")
-        if op_pro == "12":
+        if op_pro == "0":
             return 1
         try:
             getattr(self, 'packset%s' % op_pro)()
@@ -136,11 +136,11 @@ class setting:
            7> [Super] 更改逻辑分区表\n
            8> [Super] 强制烧写完整Img\n
            9> [Super] 标记分区槽后缀\n
-           11>返回上一级菜单
+           0>返回上一级菜单
            --------------------------
         ''')
         op_pro = input("   请输入编号: ")
-        if op_pro == "11":
+        if op_pro == "0":
             return 1
         try:
             getattr(self, 'dyset%s' % op_pro)()
@@ -315,8 +315,8 @@ class setting:
        1>[Droid]存储ROM目录\n
        2>[打包]相关细则设置\n
        3>[动态分区]相关设置\n
-       4>自定义 首页Banner\n
-       5>修改Plug/ROM限大小\n
+       4>自定义首页Banner\n
+       5>修改插件/ROM识别大小\n
        6>关于工具\n
        0>返回主页
        --------------------------
@@ -496,8 +496,7 @@ class zip_file(object):
         os.chdir(dst_dir)
         relpath = str(path + file)
         if os.path.exists(relpath):
-            ywarn(f"存在同名文件：{file}，已自动重命名！")
-            relpath = path + utils.v_code() + file
+            ywarn(f"存在同名文件：{file}，已自动重命名为{(relpath := path + utils.v_code() + file)}")
         with zipfile.ZipFile(relpath, 'w', compression=zipfile.ZIP_DEFLATED,
                              allowZip64=True) as zip_:
             # 遍历写入文件
@@ -529,7 +528,7 @@ def subbed(project):
             mysubs[subn] = sub
             names[subn] = name
     print("----------------------------------------------\n")
-    print("\033[33m> [66]-安装 [77]-删除 [88]-在线Plug仓库 [99]-返回\033[0m")
+    print("\033[33m> [66]-安装 [77]-删除 [0]-返回\033[0m")
     op_pro = input("请输入序号：")
     if op_pro == '66':
         path = input("请输入插件路径或[拖入]:")
@@ -546,10 +545,7 @@ def subbed(project):
             unmpk(mysubs[int(chose)], names[int(chose)], binner + os.sep + "subs")
         else:
             print("序号错误")
-    elif op_pro == '88':
-        print("开发中。。。")
-        input("任意按钮继续")
-    elif op_pro == '99':
+    elif op_pro == '0':
         return
     elif op_pro.isdigit():
         if int(op_pro) in mysubs.keys():
@@ -1257,15 +1253,15 @@ def packsuper(project):
         os.makedirs(project + os.sep + "super")
     cls()
     ywarn(f"请将需要打包的分区镜像放置于{project}/super中！")
-    supertype = input("请输入打包模式：[1]A_only [2]AB [3]V-AB	")
+    supertype = input("请输入Super类型：[1]A_only [2]AB [3]V-AB-->")
     if supertype == '3':
         supertype = 'VAB'
     elif supertype == '2':
         supertype = 'AB'
     else:
         supertype = 'A_only'
-    ifsparse = input("是否打包为sparse镜像？[1/0]	")
-    checkssize = input("请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [4]压缩到最小 [5]自定义")
+    ifsparse = input("是否打包为sparse镜像？[1/0]")
+    checkssize = input("请设置Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [4]压缩到最小 [5]自定义")
     if checkssize == '1':
         supersize = 9126805504
     elif checkssize == '2':
@@ -1277,7 +1273,7 @@ def packsuper(project):
         supersize = 0
         ywarn("您已设置压缩镜像至最小,对齐不规范的镜像将造成打包失败；Size超出物理分区大小会造成刷入失败！")
     else:
-        supersize = input("请输入super分区大小（字节数）	")
+        supersize = input("请输入super分区大小（字节数）:")
     yecho("打包到TI_out/super.img...")
     insuper(project + os.sep + 'super', project + os.sep + 'TI_out' + os.sep + "super.img", supersize, supertype,
             ifsparse, minssize)
@@ -1361,8 +1357,7 @@ def packpayload(project):
     re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
     f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
     ywarn(f"请将所有分区镜像放置于{project}/payload中（非super）！")
-    yecho("mi_ext分区也属于super，请及时到主页输入77、5、7来修改动态分区内逻辑分区表")
-    yecho("很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
+    yecho("mi_ext分区也属于super，请及时到主页输入77、5、7来修改动态分区内逻辑分区表\n很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
     checkssize = input("请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [5]自定义")
     if checkssize == '1':
         supersize = 9126805504
