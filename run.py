@@ -166,16 +166,6 @@ class setting:
 
     @staticmethod
     def settings5():
-        plugromlit = input("  设置区分ROM/Plug的Size界限[1]125829120 [2]自定义: ")
-        if plugromlit == '2':
-            plugromlit = input("  请输入：")
-            if plugromlit.isdigit():
-                settings.change('plugromlit', plugromlit)
-        else:
-            settings.change('plugromlit', '125829120')
-
-    @staticmethod
-    def settings6():
         cls()
         with open(binner + os.sep + 'banners' + os.sep + '1', 'r') as banner:
             print(f'\033[31m {banner.read()} \033[0m')
@@ -332,8 +322,7 @@ class setting:
        2>[打包]相关细则设置\n
        3>[动态分区]相关设置\n
        4>自定义首页Banner\n
-       5>修改插件/ROM识别大小\n
-       6>关于工具\n
+       5>关于工具\n
        0>返回主页
        --------------------------
     ''')
@@ -1537,7 +1526,7 @@ def unpackrom():
         for zip0 in os.listdir(LOCALDIR):
             if zip0.endswith('.zip'):
                 if os.path.isfile(os.path.abspath(zip0)):
-                    if getsize(os.path.abspath(zip0)) >= int(settings.plugromlit):
+                    if getsize(os.path.abspath(zip0)):
                         zipn += 1
                         print(f"   [{zipn}]- {zip0}\n")
                         zips[zipn] = zip0
