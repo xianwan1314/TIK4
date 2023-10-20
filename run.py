@@ -289,21 +289,25 @@ class setting:
         BLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.BLOCKSIZE}\n  请输入: ")
         if BLOCKSIZE:
             settings.change('BLOCKSIZE', BLOCKSIZE)
+
     @staticmethod
     def dyset5():
         SBLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.SBLOCKSIZE}\n  请输入: ")
         if SBLOCKSIZE:
             settings.change('SBLOCKSIZE', SBLOCKSIZE)
+
     @staticmethod
     def dyset6():
         supername = input(f'  当前动态分区物理分区名(默认super)：{settings.supername}\n  请输入（无特殊字符）: ')
         if supername:
             settings.change('supername', supername)
+
     @staticmethod
     def dyset7():
         superpart_list = input(f'  当前动态分区内逻辑分区表：{settings.superpart_list}\n  请输入（无特殊字符）: ')
         if superpart_list:
             settings.change('superpart_list', superpart_list)
+
     @staticmethod
     def dyset8():
         iffullsuper = input("  是否创建强制刷入的Full镜像？[1/0]")
@@ -311,6 +315,7 @@ class setting:
             settings.change('fullsuper', '')
         else:
             settings.change('fullsuper', '-F')
+
     @staticmethod
     def dyset9():
         autoslotsuffix = input("  是否标记需要Slot后缀的分区？[1/0]")
