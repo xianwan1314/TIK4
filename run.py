@@ -118,7 +118,7 @@ class setting:
             return 1
         try:
             getattr(self, 'packset%s' % op_pro)()
-            self.settings3()
+            self.settings2()
         except AttributeError:
             print("Input error!")
             self.settings2()
@@ -191,6 +191,8 @@ class setting:
         if brcom.isdigit():
             if 0 < int(brcom) < 10:
                 settings.change('brcom', brcom)
+        else:
+            return
 
     @staticmethod
     def packset2():
