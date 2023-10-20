@@ -169,7 +169,7 @@ class setting:
         cls()
         with open(binner + os.sep + 'banners' + os.sep + '1', 'r') as banner:
             print(f'\033[31m {banner.read()} \033[0m')
-        print('\033[96m 永久开源的安卓全版本镜像处理工具\033[0m')
+        print('\033[96m 开源的安卓全版本ROM处理工具\033[0m')
         print('\033[31m---------------------------------\033[0m')
         print(f"\033[93m作者:\033[0m \033[92mColdWindScholar\033[0m")
         print(f"\033[93m开源地址:\033[0m \033[91mhttps://github.com/ColdWindScholar/TIK\033[0m")
