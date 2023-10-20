@@ -202,14 +202,16 @@ class setting:
             if 0 < int(brcom) < 10:
                 settings.change('brcom', brcom)
 
-    def packset2(self):
+    @staticmethod
+    def packset2():
         sizediy = input("  打包Ext镜像大小[1]动态最小 [2]手动改: ")
         if sizediy == '2':
             settings.change('diysize', '1')
         else:
             settings.change('diysize', '')
 
-    def packset3(self):
+    @staticmethod
+    def packset3():
         print("  ext4打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid ")
         pack_op = input("  请输入序号: ")
         if pack_op == '1':
@@ -217,14 +219,16 @@ class setting:
         else:
             settings.change('pack_e2', '1')
 
-    def packset4(self):
+    @staticmethod
+    def packset4():
         extrw = input("  打包EXT是否可读[1]RW [2]RO: ")
         if extrw == '2':
             settings.change('ext4rw', '')
         else:
             settings.change('ext4rw', '-s')
 
-    def packset5(self):
+    @staticmethod
+    def packset5():
         erofslim = input("  选择erofs压缩方式[1]是 [2]否: ")
         if erofslim == '1':
             erofslim = input("  选择erofs压缩方式：lz4/lz4hc和压缩等级[1-9](数字越大耗时更长体积更小) 例如 lz4hc,8: ")
@@ -233,7 +237,8 @@ class setting:
         else:
             settings.change("erofslim", '')
 
-    def packset6(self):
+    @staticmethod
+    def packset6():
         utcstamp = input("  设置打包UTC时间戳[1]live [2]自定义: ")
         if utcstamp == "2":
             utcstamp = input("  请输入: ")
@@ -242,7 +247,8 @@ class setting:
         else:
             settings.change('utcstamp', '')
 
-    def packset8(self):
+    @staticmethod
+    def packset8():
         print("  Img是否打包为sparse(压缩体积)[1/0]")
         ifpsparse = input("  请输入序号: ")
         if ifpsparse == '1':
@@ -250,58 +256,63 @@ class setting:
         elif ifpsparse == '0':
             settings.change('pack_sparse', '0')
 
-    def packset9(self):
+    @staticmethod
+    def packset9():
         typediy = input("  打包镜像格式[1]同解包格式 [2]可选择: ")
         if typediy == '2':
             settings.change('diyimgtype', '1')
         else:
             settings.change('diyimgtype', '')
 
-    def dyset1(self):
+    @staticmethod
+    def dyset1():
         super_group = input(f"  当前动态分区簇名：{settings.super_group}\n  请输入（无特殊字符）: ")
         if super_group:
             settings.change('super_group', super_group)
 
-    def dyset2(self):
+    @staticmethod
+    def dyset2():
         slotnumber = input("  强制Metadata插槽数：[2] [3]: ")
         if slotnumber == '3':
             settings.change('slotnumber', '3')
         else:
             settings.change('slotnumber', '2')
 
-    def dyset3(self):
+    @staticmethod
+    def dyset3():
         metadatasize = input("  设置metadata最大保留size(默认为65536，至少512) ")
         if metadatasize:
             settings.change('metadatasize', metadatasize)
 
-    def dyset4(self):
+    @staticmethod
+    def dyset4():
         BLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.BLOCKSIZE}\n  请输入: ")
         if BLOCKSIZE:
             settings.change('BLOCKSIZE', BLOCKSIZE)
-
-    def dyset5(self):
+    @staticmethod
+    def dyset5():
         SBLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.SBLOCKSIZE}\n  请输入: ")
         if SBLOCKSIZE:
             settings.change('SBLOCKSIZE', SBLOCKSIZE)
-
-    def dyset6(self):
+    @staticmethod
+    def dyset6():
         supername = input(f'  当前动态分区物理分区名(默认super)：{settings.supername}\n  请输入（无特殊字符）: ')
         if supername:
             settings.change('supername', supername)
-
-    def dyset7(self):
+    @staticmethod
+    def dyset7():
         superpart_list = input(f'  当前动态分区内逻辑分区表：{settings.superpart_list}\n  请输入（无特殊字符）: ')
         if superpart_list:
             settings.change('superpart_list', superpart_list)
-
-    def dyset8(self):
+    @staticmethod
+    def dyset8():
         iffullsuper = input("  是否创建强制刷入的Full镜像？[1/0]")
         if not iffullsuper == '1':
             settings.change('fullsuper', '')
         else:
             settings.change('fullsuper', '-F')
-
-    def dyset9(self):
+    @staticmethod
+    def dyset9():
         autoslotsuffix = input("  是否标记需要Slot后缀的分区？[1/0]")
         if not autoslotsuffix == '1':
             settings.change('autoslotsuffixing', '')
@@ -1357,7 +1368,8 @@ def packpayload(project):
     re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
     f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
     ywarn(f"请将所有分区镜像放置于{project}/payload中（非super）！")
-    yecho("mi_ext分区也属于super，请及时到主页输入77、5、7来修改动态分区内逻辑分区表\n很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
+    yecho(
+        "mi_ext分区也属于super，请及时到主页输入77、5、7来修改动态分区内逻辑分区表\n很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
     checkssize = input("请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [5]自定义")
     if checkssize == '1':
         supersize = 9126805504
@@ -1548,17 +1560,17 @@ def unpackrom():
             menu(project)
         else:
             ywarn("Input Error")
-            time.sleep(0.5)
+            time.sleep(0.3)
     else:
         ywarn("Input error!")
-        time.sleep(0.5)
+        time.sleep(0.3)
 
 
 def autounpack(project):
     yecho("自动解包开始！")
     os.chdir(project)
     if os.path.exists(project + os.sep + "payload.bin"):
-        yecho('读取机型为:动态VAB设备\n解包 payload.bin...')
+        yecho('解包 payload.bin...')
         unpack(project + os.sep + 'payload.bin', 'payload', project)
         yecho("payload.bin解包完成！")
         wastes = ['care_map.pb', 'apex_info.pb']

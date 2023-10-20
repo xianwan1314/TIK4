@@ -1,6 +1,6 @@
 import os
-import shutil
 import platform
+import shutil
 local = os.getcwd()
 print("Building...")
 os.system("pyinstaller -F run.py --exclude-module=numpy -i icon.ico")
