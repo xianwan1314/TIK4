@@ -109,7 +109,7 @@ class setting:
            5>[Erofs]压缩方式\n
            6>[EXT4] UTC时间戳\n
            8>[Img]创建sparse\n
-           9>[~4]Img文件系统\n
+           9>[Img]Img文件系统\n
            0>返回上一级菜单
            --------------------------
         ''')
@@ -158,7 +158,7 @@ class setting:
 
     @staticmethod
     def settings4():
-        print("  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧 ")
+        print(f"  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧 \n  当前:[{settings.banner}]")
         banner = input("  请输入序号: ")
         if banner.isdigit():
             if 0 < int(banner) < 7:
@@ -196,7 +196,7 @@ class setting:
 
     @staticmethod
     def packset2():
-        sizediy = input("  打包Ext镜像大小[1]动态最小 [2]手动改: ")
+        sizediy = input(f"  打包Ext镜像大小[1]动态最小 [2]手动改: ")
         if sizediy == '2':
             settings.change('diysize', '1')
         else:
@@ -204,7 +204,7 @@ class setting:
 
     @staticmethod
     def packset3():
-        print("  ext4打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid ")
+        print(f"  当前：[{settings.pack_e2}]\n  打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid:")
         pack_op = input("  请输入序号: ")
         if pack_op == '1':
             settings.change('pack_e2', '0')
