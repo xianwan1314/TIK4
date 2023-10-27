@@ -465,7 +465,7 @@ def hczip(project):
     cls()
     print(" \033[31m>打包ROM \033[0m\n")
     print(f"  项目：{os.path.basename(project)}\n")
-    print('\033[33m    1> 直接打包     2> 卡线一体 3> 返回\033[0m\n')
+    print('\033[33m    1> 直接打包     2> 卡线一体 \n    3> 返回\033[0m\n')
     chose = input("    请输入编号: ")
     if chose == '1':
         print("正在准备打包...")
