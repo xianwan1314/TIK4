@@ -1364,10 +1364,11 @@ def packpayload(project):
         print(f"不支持当前系统:{ostype},目前只支持:Linux")
         input("任意按钮继续")
         return
-    re_folder(project + os.sep + 'super')
-    re_folder(project + os.sep + 'payload')
-    re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
-    f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
+    if os.path.exists(project + os.sep + 'payload'):
+        if input('发现之前打包Payload残留，清空吗[1/0]') == '1':
+            re_folder(project + os.sep + 'payload')
+            re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
+            f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
     ywarn(f"请将所有分区镜像放置于{project}/payload中（非super）！")
     yecho(
         "mi_ext分区也属于super，请及时到设置修改动态分区内逻辑分区表\n很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
