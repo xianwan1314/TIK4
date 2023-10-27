@@ -1371,7 +1371,7 @@ def packpayload(project):
     f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
     ywarn(f"请将所有分区镜像放置于{project}/payload中（非super）！")
     yecho(
-        "mi_ext分区也属于super，请及时到主页输入77、5、7来修改动态分区内逻辑分区表\n很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
+        "mi_ext分区也属于super，请及时到设置修改动态分区内逻辑分区表\n很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
     checkssize = input("请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [5]自定义")
     if checkssize == '1':
         supersize = 9126805504
