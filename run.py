@@ -456,7 +456,7 @@ def menu(project):
         hczip(PROJECT_DIR)
         input("任意按钮继续")
     else:
-        ywarn('   Input error!"')
+        ywarn('   Input error!')
         input("任意按钮继续")
     menu(project)
 
