@@ -41,6 +41,7 @@ class ext4_chunk_header(object):
 
 class Extractor(object):
     def __init__(self):
+        self.DIR = None
         self.FileName = ""
         self.BASE_DIR = ""
         self.OUTPUT_IMAGE_FILE = ""
@@ -223,6 +224,8 @@ class Extractor(object):
                                                                                                        '_').replace('"',
                                                                                                                     '')
                     elif os.name == "posix":
+                        file_target = self.EXTRACT_DIR + entry_inode_path.replace(' ', '_').replace('"', '')
+                    else:
                         file_target = self.EXTRACT_DIR + entry_inode_path.replace(' ', '_').replace('"', '')
                     try:
                         with open(file_target, 'wb') as out:
