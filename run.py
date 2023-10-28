@@ -12,7 +12,7 @@ from configparser import ConfigParser
 from io import BytesIO
 if os.name == 'nt':
     import ctypes
-    ctypes.windll.kernel32.SetConsoleTitlew("TIK4")
+    ctypes.windll.kernel32.SetConsoleTitleW("TIK4")
 else:
     sys.stdout.write("\x1b]2;TIK4\x07")
     sys.stdout.flush()
