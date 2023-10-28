@@ -14,7 +14,8 @@ if os.name == 'nt':
     import ctypes
     ctypes.windll.kernel32.SetConsoleTitlew("TIK4")
 else:
-    pass
+    sys.stdout.write("\x1b]2;TIK4\x07")
+    sys.stdout.flush()
 import extract_dtb
 import requests
 from rich.progress import track
