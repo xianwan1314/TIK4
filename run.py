@@ -1267,7 +1267,7 @@ def packsuper(project):
     if not os.path.exists(project + os.sep + "super"):
         os.makedirs(project + os.sep + "super")
     cls()
-    ywarn(f"请将需要打包的分区镜像放置于{project}/super中！")
+    ywarn(f"请将需要打包的分区镜像放置于{project}{os.sep}super中！")
     supertype = input("请输入Super类型：[1]A_only [2]AB [3]V-AB-->")
     if supertype == '3':
         supertype = 'VAB'
