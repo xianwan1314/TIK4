@@ -309,7 +309,7 @@ class setting:
     @staticmethod
     def dyset8():
         iffullsuper = input("  是否创建强制刷入的Full镜像？[1/0]")
-        if not iffullsuper == '1':
+        if iffullsuper != '1':
             settings.change('fullsuper', '')
         else:
             settings.change('fullsuper', '-F')
@@ -317,7 +317,7 @@ class setting:
     @staticmethod
     def dyset9():
         autoslotsuffix = input("  是否标记需要Slot后缀的分区？[1/0]")
-        if not autoslotsuffix == '1':
+        if autoslotsuffix != '1':
             settings.change('autoslotsuffixing', '')
         else:
             settings.change('autoslotsuffixing', '-x')
