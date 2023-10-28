@@ -63,13 +63,13 @@ def main(file_arg):
         for key in keys:
             ctx = AES.new(binascii.unhexlify(key), AES.MODE_ECB)
             dat = ctx.decrypt(data)
-            if (dat[0:4] == b'\x50\x4B\x03\x04'):
+            if dat[0:4] == b'\x50\x4B\x03\x04':
                 print("Found correct AES key: " + key)
                 return binascii.unhexlify(key)
-            elif (dat[0:4] == b'\x41\x56\x42\x30'):
+            elif dat[0:4] == b'\x41\x56\x42\x30':
                 print("Found correct AES key: " + key)
                 return binascii.unhexlify(key)
-            elif (dat[0:4] == b'\x41\x4E\x44\x52'):
+            elif dat[0:4] == b'\x41\x4E\x44\x52':
                 print("Found correct AES key: " + key)
                 return binascii.unhexlify(key)
         return -1
@@ -95,7 +95,7 @@ def main(file_arg):
                 flen = os.stat(rfilename).st_size - 0x1050
 
                 ctx = AES.new(key, AES.MODE_ECB)
-                while (dsize > 0):
+                while dsize > 0:
                     if flen > 0x4000:
                         size = 0x4000
                     else:
@@ -118,7 +118,7 @@ def main(file_arg):
                 ctx = AES.new(key, AES.MODE_ECB)
                 bstart = 0
                 goon = True
-                while (goon):
+                while goon:
                     rr.seek(bstart)
                     header = rr.read(12)
                     if len(header) == 0:
@@ -130,7 +130,7 @@ def main(file_arg):
                     if bdsize < 0x40000:
                         goon = False
                     rr.seek(0x50 + bstart)
-                    while (bdsize > 0):
+                    while bdsize > 0:
                         data = rr.read(0x10)
                         if len(data) == 0:
                             break
@@ -222,11 +222,11 @@ def main(file_arg):
             print("ozip has unknown magic, OPPOENCRYPT! expected!")
             return 1
 
-        if pk == False:
+        if not pk:
             fr.seek(0x1050)
             data = fr.read(16)
             key = keytest(data)
-            if (key == -1):
+            if key == -1:
                 print("Unknown AES key, reverse key from recovery first!")
                 return 1
             ctx = AES.new(key, AES.MODE_ECB)
@@ -275,11 +275,11 @@ def main(file_arg):
                                 rt.seek(0x1050)
                                 data = rt.read(16)
                                 key = keytest(data)
-                                if (key == -1):
+                                if key == -1:
                                     print("Unknown AES key, reverse key from recovery first!")
                                     return 1
                             testkey = False
-                    if testkey == True:
+                    if testkey:
                         print("Unknown image, please report an issue with image name!")
                         return 1
 
