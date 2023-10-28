@@ -12,8 +12,9 @@ from configparser import ConfigParser
 from io import BytesIO
 if os.name == 'nt':
     import ctypes
-
-    ctypes.windll.kernel32.SetConsoleTitleW("TIK4")
+    ctypes.windll.kernel32.SetConsoleTitlew("TIK4")
+else:
+    pass
 import extract_dtb
 import requests
 from rich.progress import track
