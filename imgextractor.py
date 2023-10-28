@@ -216,10 +216,7 @@ class Extractor(object):
                                     tmppath = tmppath.replace(fuk_symb, '\\' + fuk_symb)
                                 self.context.append('/%s %s' % (tmppath, con))
                 elif entry_inode.is_file:
-                    wdone = None
                     if os.name == 'nt':
-                        if entry_name.endswith('/'):
-                            entry_name = entry_name[:-1]
                         file_target = self.EXTRACT_DIR + entry_inode_path.replace('/', os.sep).replace(' ',
                                                                                                        '_').replace('"',
                                                                                                                     '')
@@ -511,18 +508,17 @@ class Extractor(object):
             dirr = self.__out_name(os.path.basename(self.OUTPUT_IMAGE_FILE).rsplit('.', 1)[0])  # 11.05.18
             setattr(self, 'DIR', dirr)
             scan_dir(root)
-            for c in self.fsconfig:
-                if dirr == 'vendor':
-                    self.fsconfig.insert(0, '/ 0 2000 0755')
-                    self.fsconfig.insert(1, dirr + ' 0 2000 0755')
-                elif dirr == 'system':
-                    self.fsconfig.insert(0, '/' + ' 0 0 0755')
-                    self.fsconfig.insert(1, '/' + 'lost+found' + ' 0 0 0700')
-                    self.fsconfig.insert(2, dirr + ' 0 0 0755')
-                else:
-                    self.fsconfig.insert(0, '/' + ' 0 0 0755')
-                    self.fsconfig.insert(1, dirr + ' 0 0 0755')
-                break
+            if dirr == 'vendor':
+                self.fsconfig.insert(0, '/ 0 2000 0755')
+                self.fsconfig.insert(1, dirr + ' 0 2000 0755')
+            elif dirr == 'system':
+                self.fsconfig.insert(0, '/' + ' 0 0 0755')
+                self.fsconfig.insert(1, '/' + 'lost+found' + ' 0 0 0700')
+                self.fsconfig.insert(2, dirr + ' 0 0 0755')
+            else:
+                self.fsconfig.insert(0, '/' + ' 0 0 0755')
+                self.fsconfig.insert(1, dirr + ' 0 0 0755')
+
 
             self.__appendf('\n'.join(self.fsconfig), self.CONFING_DIR + os.sep + fs_config_file)
             if self.context:  # 11.05.18
