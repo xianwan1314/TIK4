@@ -10,7 +10,10 @@ import zipfile
 from argparse import Namespace
 from configparser import ConfigParser
 from io import BytesIO
+if os.name == 'nt':
+    import ctypes
 
+    ctypes.windll.kernel32.SetConsoleTitleW("TIK4")
 import extract_dtb
 import requests
 from rich.progress import track
