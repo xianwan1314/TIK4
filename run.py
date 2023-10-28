@@ -365,7 +365,6 @@ def main_menu():
     print("\033[31m   [00]  删除项目\033[0m\n")
     print("   [0]  新建项目\n")
     pro = 0
-    del_ = 0
     if os.listdir(LOCALDIR + os.sep):
         for pros in os.listdir(LOCALDIR + os.sep):
             if pros.startswith('TI_') and os.path.isdir(LOCALDIR + os.sep + pros):
