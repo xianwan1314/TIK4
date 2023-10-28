@@ -105,13 +105,13 @@ class setting:
            ----[EXT4设置]------
            2> 大小处理
            3> 打包方式
-           4> 读写状态
-           6> UTC时间戳\n
+           4> 读写状态\n
            ----[EROFS设置]-----
            5> 压缩方式\n
            ----[IMG设置]-------
-           8> 创建sparse
-           9> 文件系统\n
+           6> UTC时间戳
+           7> 创建sparse
+           8> 文件系统\n
            0>返回上一级菜单
            --------------------------
         ''')
@@ -228,7 +228,7 @@ class setting:
     def packset5():
         erofslim = input("  选择erofs压缩方式[1]是 [2]否: ")
         if erofslim == '1':
-            erofslim = input("  选择erofs压缩方式：lz4/lz4hc和压缩等级[1-9](数字越大耗时更长体积更小) 例如 lz4hc,8: ")
+            erofslim = input("  选择erofs压缩方式：lz4/lz4hc/lzma/和压缩等级[1-9](数字越大耗时更长体积更小) 例如 lz4hc,8: ")
             if erofslim:
                 settings.change("erofslim", erofslim)
         else:
@@ -236,7 +236,7 @@ class setting:
 
     @staticmethod
     def packset6():
-        utcstamp = input("  设置打包UTC时间戳[1]live [2]自定义: ")
+        utcstamp = input("  设置打包UTC时间戳[1]自动 [2]自定义: ")
         if utcstamp == "2":
             utcstamp = input("  请输入: ")
             if utcstamp.isdigit():
@@ -245,7 +245,7 @@ class setting:
             settings.change('utcstamp', '')
 
     @staticmethod
-    def packset8():
+    def packset7():
         print("  Img是否打包为sparse(压缩体积)[1/0]")
         ifpsparse = input("  请输入序号: ")
         if ifpsparse == '1':
@@ -254,7 +254,7 @@ class setting:
             settings.change('pack_sparse', '0')
 
     @staticmethod
-    def packset9():
+    def packset8():
         typediy = input("  打包镜像格式[1]同解包格式 [2]可选择: ")
         if typediy == '2':
             settings.change('diyimgtype', '1')
