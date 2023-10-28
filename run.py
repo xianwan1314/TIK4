@@ -446,7 +446,7 @@ def menu(project):
         os.chdir(LOCALDIR)
         return
     elif op_menu == '2':
-        unpackChoo(PROJECT_DIR)
+        unpack_choo(PROJECT_DIR)
     elif op_menu == '3':
         packChoo(PROJECT_DIR)
     elif op_menu == '4':
@@ -716,7 +716,7 @@ class unmpk:
                 yecho(f"卸载{name}成功！")
 
 
-def unpackChoo(project):
+def unpack_choo(project):
     cls()
     os.chdir(project)
     print(" \033[31m >分解 \033[0m\n")
@@ -857,7 +857,7 @@ def unpackChoo(project):
     else:
         ywarn("Input error!")
         input("任意按钮继续")
-    unpackChoo(project)
+    unpack_choo(project)
 
 
 def packChoo(project):
