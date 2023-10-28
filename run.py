@@ -57,12 +57,11 @@ def rmdire(path):
             ywarn("无法删除文件夹，权限不足")
 
 
-def getsize(file):
-    return os.path.getsize(file)
-
-
 if os.name == 'posix':
-    os.system(f'chmod -R 777 {binner}')
+    try:
+        os.chmod(binner, 777)
+    except:
+        pass
 
 
 def getprop(name, path):
