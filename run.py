@@ -1534,7 +1534,7 @@ def unpackrom():
         for zip0 in os.listdir(LOCALDIR):
             if zip0.endswith('.zip'):
                 if os.path.isfile(os.path.abspath(zip0)):
-                    if getsize(os.path.abspath(zip0)):
+                    if os.path.getsize(os.path.abspath(zip0)):
                         zipn += 1
                         print(f"   [{zipn}]- {zip0}\n")
                         zips[zipn] = zip0
