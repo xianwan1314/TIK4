@@ -7,13 +7,14 @@ from os.path import exists
 import os, errno, tempfile
 from shutil import move, rmtree
 
-import common
+
 import blockimgdiff
 import sparse_img
 from threading import Thread
 from random import randint, choice
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
+DataImage = blockimgdiff.DataImage
 # -----
 # ====================================================
 #          FUNCTION: sdat2img img2sdat
