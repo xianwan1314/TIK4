@@ -10,8 +10,10 @@ import zipfile
 from argparse import Namespace
 from configparser import ConfigParser
 from io import BytesIO
+
 if os.name == 'nt':
     import ctypes
+
     ctypes.windll.kernel32.SetConsoleTitleW("TIK4")
 else:
     sys.stdout.write("\x1b]2;TIK4\x07")
@@ -168,7 +170,8 @@ class setting:
 
     @staticmethod
     def settings4():
-        print(f"  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧 \n  当前:[{settings.banner}]")
+        print(
+            f"  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧 \n  当前:[{settings.banner}]")
         banner = input("  请输入序号: ")
         if banner.isdigit():
             if 0 < int(banner) < 7:
@@ -233,7 +236,8 @@ class setting:
     def packset5():
         erofslim = input("  选择erofs压缩方式[1]是 [2]否: ")
         if erofslim == '1':
-            erofslim = input("  选择erofs压缩方式：lz4/lz4hc/lzma/和压缩等级[1-9](数字越大耗时更长体积更小) 例如 lz4hc,8: ")
+            erofslim = input(
+                "  选择erofs压缩方式：lz4/lz4hc/lzma/和压缩等级[1-9](数字越大耗时更长体积更小) 例如 lz4hc,8: ")
             if erofslim:
                 settings.change("erofslim", erofslim)
         else:
@@ -495,14 +499,9 @@ def hczip(project):
 
 def get_all_file_paths(directory) -> Ellipsis:
     # 初始化文件路径列表
-    file_paths = []
     for root, directories, files in os.walk(directory):
         for filename in files:
-            # 连接字符串形成完整的路径
-            file_paths.append(os.path.join(root, filename))
-
-    # 返回所有文件路径
-    return file_paths
+            yield os.path.join(root, filename)
 
 
 class zip_file(object):
@@ -1372,7 +1371,7 @@ def packpayload(project):
             re_folder(project + os.sep + 'payload')
             re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
             f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
-    ywarn(f"请将所有分区镜像放置于{project+os.sep}payload中（非super）！")
+    ywarn(f"请将所有分区镜像放置于{project + os.sep}payload中（非super）！")
     yecho(
         "mi_ext分区也属于super，请及时到设置修改动态分区内逻辑分区表\n很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
     checkssize = input("请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [5]自定义")
