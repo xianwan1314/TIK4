@@ -49,11 +49,13 @@ def islink(file) -> str and None:
 def fs_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
     new_fs = {}
     new_add = 0
+    r_fs = {}
     for i in scan_dir(os.path.abspath(dir_path)):
         if fs_file.get(i):
             new_fs[i] = fs_file[i]
         else:
-            new_add += 1
+            if r_fs.get(i):
+                continue
             if os.name == 'nt':
                 filepath = os.path.abspath(dir_path + os.sep + ".." + os.sep + i.replace('/', '\\'))
             elif os.name == 'posix':
@@ -104,6 +106,8 @@ def fs_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
                 mode = '0644'
                 config = [uid, gid, mode]
             print(f'Add [{i}{config}]')
+            r_fs[i] = 1
+            new_add += 1
             new_fs[i] = config
     return new_fs, new_add
 
