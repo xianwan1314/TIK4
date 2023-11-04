@@ -46,7 +46,6 @@ def context_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
         if fs_file.get(i):
             new_fs[sub(r'([^-_/a-zA-Z0-9])', r'\\\1', i)] = fs_file[i]
         else:
-            add_new += 1
             permission = permission_d
             if i:
                 if i in fix_permission.keys():
@@ -71,6 +70,7 @@ def context_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
                                     pass
                                 break
             print(f"ADD [{i} {permission}]")
+            add_new += 1
             r_new_fs[i] = permission
             new_fs[sub(r'([^-_/a-zA-Z0-9])', r'\\\1', i)] = permission
     return new_fs, add_new
