@@ -22,11 +22,9 @@ def scan_dir(folder) -> list:  # 读取解包的目录，返回一个字典
     allfiles = ['/', '/lost+found', f'/{part_name}/lost+found', f'/{part_name}', f'/{part_name}/']
     for root, dirs, files in os.walk(folder, topdown=True):
         for dir_ in dirs:
-            if not (rv := os.path.join(root, dir_).replace(folder, '/' + part_name).replace('\\', '/')) in allfiles:
-                yield rv
+            yield os.path.join(root, dir_).replace(folder, '/' + part_name).replace('\\', '/')
         for file in files:
-            if not (rv := os.path.join(root, file).replace(folder, '/' + part_name).replace('\\', '/')) in allfiles:
-                yield rv
+            yield os.path.join(root, file).replace(folder, '/' + part_name).replace('\\', '/')
         for rv in allfiles:
             yield rv
 
