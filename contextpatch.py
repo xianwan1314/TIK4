@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 from re import sub
-
+from difflib import SequenceMatcher
 fix_permission = {"/vendor/bin/hw/android.hardware.wifi@1.0": "u:object_r:hal_wifi_default_exec:s0"}
 
 
@@ -51,24 +51,14 @@ def context_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
                 if i in fix_permission.keys():
                     permission = fix_permission[i]
                 else:
-                    d_arg = True
                     for e in fs_file.keys():
-                        if (path := os.path.dirname(i)) in e:
-                            if e == path and e[-1:] == '/':
+                        if SequenceMatcher(None, (path := os.path.dirname(i)), e).quick_ratio() >= 0.85:
+                            if e == path:
                                 continue
                             permission = fs_file[e]
-                            d_arg = False
                             break
-                    if d_arg:
-                        for i_ in r_new_fs.keys():
-                            if (path := os.path.dirname(i)) in i_:
-                                if i_ == path and i_[-1:] == '/':
-                                    continue
-                                try:
-                                    permission = r_new_fs[i]
-                                except KeyError:
-                                    pass
-                                break
+                        else:
+                            permission = permission_d
             print(f"ADD [{i} {permission}]")
             add_new += 1
             r_new_fs[i] = permission
