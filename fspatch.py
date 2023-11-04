@@ -14,26 +14,18 @@ def scanfs(file) -> dict:
     return filesystem_config
 
 
-def scan_dir(folder) -> bool and list:
-    allfiles = ['/']
-    if os.name == 'nt':
-        allfiles.append(os.path.basename(folder).replace('\\', ''))
-    elif os.name == 'posix':
-        allfiles.append(os.path.basename(folder).replace('/', ''))
-    else:
-        return False
+def scan_dir(folder) -> list:  # 读取解包的目录，返回一个字典
+    part_name = os.path.basename(folder)
+    allfiles = ['/', '/lost+found', f'/{part_name}/lost+found', f'/{part_name}', f'/{part_name}/']
     for root, dirs, files in os.walk(folder, topdown=True):
         for dir_ in dirs:
-            if os.name == 'nt':
-                allfiles.append(os.path.join(root, dir_).replace(folder, os.path.basename(folder)).replace('\\', '/'))
-            elif os.name == 'posix':
-                allfiles.append(os.path.join(root, dir_).replace(folder, os.path.basename(folder)))
+            if not (rv := os.path.join(root, dir_).replace(folder, '/' + part_name).replace('\\', '/')) in allfiles:
+                yield rv
         for file in files:
-            if os.name == 'nt':
-                allfiles.append(os.path.join(root, file).replace(folder, os.path.basename(folder)).replace('\\', '/'))
-            elif os.name == 'posix':
-                allfiles.append(os.path.join(root, file).replace(folder, os.path.basename(folder)))
-    return allfiles
+            if not (rv := os.path.join(root, file).replace(folder, '/' + part_name).replace('\\', '/')) in allfiles:
+                yield rv
+        for rv in allfiles:
+            yield rv
 
 
 def islink(file) -> str and None:
@@ -51,12 +43,14 @@ def islink(file) -> str and None:
             return
 
 
-def fs_patch(fs_file, filename, dir_path) -> dict:  # 接收两个字典对比
+def fs_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
     new_fs = {}
-    for i in filename:
+    new_add = 0
+    for i in scan_dir(os.path.abspath(dir_path)):
         if fs_file.get(i):
             new_fs[i] = fs_file[i]
         else:
+            new_add += 1
             if os.name == 'nt':
                 filepath = os.path.abspath(dir_path + os.sep + ".." + os.sep + i.replace('/', '\\'))
             elif os.name == 'posix':
@@ -108,15 +102,13 @@ def fs_patch(fs_file, filename, dir_path) -> dict:  # 接收两个字典对比
                 config = [uid, gid, mode]
             print(f'Add [{i}{config}]')
             new_fs[i] = config
-    return new_fs
+    return new_fs, new_add
 
 
 def main(dir_path, fs_config) -> None:
     origin_fs = scanfs(os.path.abspath(fs_config))
-    allfiles = scan_dir(os.path.abspath(dir_path))
-    new_fs = fs_patch(origin_fs, allfiles, dir_path)
+    new_fs, new_add = fs_patch(origin_fs, dir_path)
     with open(fs_config, "w", encoding='utf-8', newline='\n') as f:
         f.writelines([i + " " + " ".join(new_fs[i]) + "\n" for i in sorted(new_fs.keys())])
     print("Load origin %d" % (len(origin_fs.keys())) + " entries")
-    print("Detect total %d" % (len(allfiles)) + " entries")
-    print('Add %d' % (len(new_fs.keys()) - len(origin_fs.keys())) + " entries")
+    print('Add %d' % new_add + " entries")
