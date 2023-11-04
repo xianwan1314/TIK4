@@ -14,16 +14,19 @@ def scanfs(file) -> dict:
     return filesystem_config
 
 
-def scan_dir(folder) -> list:  # 读取解包的目录，返回一个字典
-    part_name = os.path.basename(folder)
+def scan_dir(folder) -> list:
     allfiles = ['/']
+    if os.name == 'nt':
+        yield os.path.basename(folder).replace('\\', '')
+    elif os.name == 'posix':
+        yield os.path.basename(folder).replace('/', '')
+    else:
+        return ''
     for root, dirs, files in os.walk(folder, topdown=True):
         for dir_ in dirs:
-            if not (rv := os.path.join(root, dir_).replace(folder, '/' + part_name).replace('\\', '/')) in allfiles:
-                yield rv
+            yield os.path.join(root, dir_).replace(folder, os.path.basename(folder)).replace('\\', '/')
         for file in files:
-            if not (rv := os.path.join(root, file).replace(folder, '/' + part_name).replace('\\', '/')) in allfiles:
-                yield rv
+            yield os.path.join(root, file).replace(folder, os.path.basename(folder)).replace('\\', '/')
         for rv in allfiles:
             yield rv
 
