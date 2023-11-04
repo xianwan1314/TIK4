@@ -27,6 +27,8 @@ def scan_dir(folder) -> list:  # 读取解包的目录，返回一个字典
         for file in files:
             if not (rv := os.path.join(root, file).replace(folder, '/' + part_name).replace('\\', '/')) in allfiles:
                 yield rv
+        for rv in allfiles:
+            yield rv
 
 
 def context_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
