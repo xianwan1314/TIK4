@@ -1,8 +1,10 @@
 import os
 import platform
 import shutil
+
 local = os.getcwd()
-print("Building...")
+with open('bin/banners/1', 'r', encoding='utf-8') as f:
+    print(f'\033[31m {f.read()} \033[0m')
 os.system("pyinstaller -F run.py --exclude-module=numpy -i icon.ico")
 if os.name == 'nt':
     if os.path.exists(local + os.sep + "dist" + os.sep + "run.exe"):
@@ -17,7 +19,7 @@ elif os.name == 'posix':
     for i in os.listdir(local + os.sep + "bin" + os.sep + "Linux"):
         if i == platform.machine():
             continue
-        shutil.rmtree(local + os.sep + "bin" + os.sep + "Linux"+os.sep+i)
+        shutil.rmtree(local + os.sep + "bin" + os.sep + "Linux" + os.sep + i)
 for i in os.listdir(local):
     if i not in ['run', 'run.exe', 'bin', 'LICENSE']:
         print(f"Removing {i}")
@@ -36,5 +38,5 @@ for i in os.listdir(local):
 if os.name == 'posix':
     for root, dirs, files in os.walk(local, topdown=True):
         for i in files:
-            print(f"Chmod {os.path.join(root,i)}")
-            os.system(f"chmod a+x {os.path.join(root,i)}")
+            print(f"Chmod {os.path.join(root, i)}")
+            os.system(f"chmod a+x {os.path.join(root, i)}")
