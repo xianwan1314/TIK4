@@ -354,16 +354,19 @@ class setting:
 
 
 def main_menu():
-    gs = 1
     projects = {}
+    gs = 0
     cls()
-    try:
-        content = json.loads(requests.get('https://v1.jinrishici.com/all.json').content.decode())
-        shiju = content['content']
-        fr = content['origin']
-        another = content['author']
-    except:
-        gs = 0
+    if settings.online == 'true':
+        gs = 1
+    if gs == 1:
+        try:
+            content = json.loads(requests.get('https://v1.jinrishici.com/all.json').content.decode())
+            shiju = content['content']
+            fr = content['origin']
+            another = content['author']
+        except:
+            gs = 0
     with open(binner + os.sep + 'banners' + os.sep + settings.banner, 'r') as banner:
         print(f'\033[31m {banner.read()} \033[0m')
     print("\033[92;44m Delta Edition \033[0m")
