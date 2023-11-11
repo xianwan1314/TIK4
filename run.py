@@ -376,7 +376,9 @@ def main_menu():
     pro = 0
     if os.listdir(LOCALDIR + os.sep):
         for pros in os.listdir(LOCALDIR + os.sep):
-            if pros.startswith('TI_') and os.path.isdir(LOCALDIR + os.sep + pros):
+            if pros == 'bin' or pros.startswith('.'):
+                continue
+            if os.path.isdir(LOCALDIR + os.sep + pros):
                 pro += 1
                 print(f"   [{pro}]  {pros}\n")
                 projects['%s' % pro] = pros
@@ -405,18 +407,17 @@ def main_menu():
             else:
                 print(" 取消删除")
     elif op_pro == '0':
-        projec = input("请输入项目名称(非中文)：TI_")
+        projec = input("请输入项目名称(非中文)：")
         if not projec:
             ywarn("Input Error!")
             input("任意按钮继续")
         else:
-            project = 'TI_%s' % projec
-            if os.path.exists(LOCALDIR + os.sep + project):
-                project = f'{project}_{time.strftime("%m%d%H%M%S")}'
-                ywarn(f"项目已存在！自动命名为：{project}")
+            if os.path.exists(LOCALDIR + os.sep + projec):
+                projec = f'{projec}_{time.strftime("%m%d%H%M%S")}'
+                ywarn(f"项目已存在！自动命名为：{projec}")
                 time.sleep(1)
-            os.makedirs(LOCALDIR + os.sep + project + os.sep + "config")
-            menu(project)
+            os.makedirs(LOCALDIR + os.sep + projec + os.sep + "config")
+            menu(projec)
     elif op_pro == '66':
         cls()
         sys.exit(0)
