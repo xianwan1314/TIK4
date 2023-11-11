@@ -40,7 +40,6 @@ jobs:
             Build times: ${{ github.run_number }}
             Version: 4
             Note:If u cannot run it in linux,you may need do "chmod a+x ./*"
-            Author: ColdWindScholar
             Minimum support: Ubuntu 20.04 (64bit),Windows Vista (32bit)
           artifacts: "*.zip"
 
