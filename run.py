@@ -169,13 +169,31 @@ class setting:
             settings.change('mydir', mydir)
 
     @staticmethod
-    def settings4():
+    def settings4_1():
         print(
             f"  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧 \n  当前:[{settings.banner}]")
         banner = input("  请输入序号: ")
         if banner.isdigit():
             if 0 < int(banner) < 7:
                 settings.change('banner', banner)
+
+    def settings4(self):
+        cls()
+        print(f'''
+    \033[33m  > 工具设置 \033[0m\n
+       1>自定义首页banner\n
+       2>联网模式 \033[93m[{settings.online}]\033[0m\n
+       0>返回上级\n
+       --------------------------
+            ''')
+        op_pro = input("   请输入编号: ")
+        if op_pro == "0":
+            return
+        elif op_pro == '1':
+            self.settings4_1()
+        elif op_pro == '2':
+            settings.change('online', 'false' if settings.online == 'true' else 'true')
+        self.settings4()
 
     @staticmethod
     def settings5():
@@ -337,7 +355,7 @@ class setting:
        1>[Droid]存储ROM目录\n
        2>[打包]相关细则设置\n
        3>[动态分区]相关设置\n
-       4>自定义首页Banner\n
+       4>工具设置\n
        5>关于工具\n
        0>返回主页
        --------------------------
