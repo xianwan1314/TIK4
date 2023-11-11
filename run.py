@@ -1312,7 +1312,7 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse, minsize):
     superpa += f"-block-size={settings.SBLOCKSIZE} "
     for imag in os.listdir(Imgdir):
         if imag.endswith('.img'):
-            image = imag.split('.')[0].replace('_a', '').replace('_b', '')
+            image = imag.split('.')[0]
             if f'partition {image}:readonly' not in superpa and f'partition {image}_a:readonly' not in superpa:
                 print(f"待打包分区:{image}")
                 if stype in ['VAB', 'AB']:
