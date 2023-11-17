@@ -1,10 +1,9 @@
 import os
 import platform
 import shutil
-
+import banner
 local = os.getcwd()
-with open('bin/banners/1', 'r', encoding='utf-8') as f:
-    print(f'\033[31m {f.read()} \033[0m')
+print(f'\033[31m {banner.banner1} \033[0m')
 os.system("pyinstaller -F run.py --exclude-module=numpy -i icon.ico")
 if os.name == 'nt':
     if os.path.exists(local + os.sep + "dist" + os.sep + "run.exe"):
