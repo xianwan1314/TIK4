@@ -190,7 +190,7 @@ class sdat2img:
                 for block in command[1]:
                     begin = block[0]
                     block_count = block[1] - begin
-                    print('Copying {} blocks into position {}...'.format(block_count, begin))
+                    print('\rCopying {} blocks into position {}...'.format(block_count, begin), end="")
 
                     # Position output file
                     output_img.seek(begin * block_size)
@@ -200,7 +200,7 @@ class sdat2img:
                         output_img.write(new_data_file.read(block_size))
                         block_count -= 1
             else:
-                print('Skipping command {}...'.format(command[0]))
+                print('\rSkipping command {}...'.format(command[0]), end="")
 
         # Make file larger if necessary
         if output_img.tell() < max_file_size:
