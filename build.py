@@ -4,6 +4,7 @@ import shutil
 import banner
 local = os.getcwd()
 print(f'\033[31m {banner.banner1} \033[0m')
+print(f'Build for {platform.system()}')
 os.system("pyinstaller -F run.py --exclude-module=numpy -i icon.ico")
 if os.name == 'nt':
     if os.path.exists(local + os.sep + "dist" + os.sep + "run.exe"):
