@@ -22,3 +22,8 @@ def LOGS(info):
 
 
 def ysuc(info): print(f"\033[32m[{strftime('%H:%M:%S')}]{info}\033[0m")
+
+def yecho(info): print(f"\033[36m[{strftime('%H:%M:%S')}]{info}\033[0m")
+
+
+def ywarn(info): print(f"\033[31m{info}\033[0m")
