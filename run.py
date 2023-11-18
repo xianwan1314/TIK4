@@ -34,7 +34,7 @@ import ofp_qc_decrypt
 import ozipdecrypt
 import utils
 from api import cls, dir_has, cat, dirsize, re_folder, f_remove
-from log import LOGS, LOGE
+from log import LOGS, LOGE, ysuc
 from utils import gettype, simg2img, call
 import opscrypto
 import zip2mpk
@@ -52,9 +52,6 @@ def yecho(info): print(f"\033[36m[{time.strftime('%H:%M:%S')}]{info}\033[0m")
 
 
 def ywarn(info): print(f"\033[31m{info}\033[0m")
-
-
-def ysuc(info): print(f"\033[32m[{time.strftime('%H:%M:%S')}]{info}\033[0m")
 
 
 def rmdire(path):
