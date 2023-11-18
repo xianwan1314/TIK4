@@ -922,7 +922,7 @@ def packChoo(project):
                     types[partn] = 'dtbo'
                     print(f"   [{partn}]- {packs} <dtbo>\n")
         print()
-        print("\033[33m [55] 循环打包 [66] 打包Super [77] 打包Payload [88]返回\033[0m")
+        print("\033[33m [55] 循环打包 [66] 打包Super [77] 打包Payload [00]返回\033[0m")
         print("  --------------------------------------")
         filed = input("  请输入对应序号：")
         if filed == '0':
@@ -990,7 +990,7 @@ def packChoo(project):
             packsuper(project)
         elif filed == '77':
             packpayload(project)
-        elif filed == '88':
+        elif filed == '00':
             return
         elif filed.isdigit():
             if int(filed) in parts.keys():
