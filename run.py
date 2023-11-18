@@ -11,6 +11,7 @@ from argparse import Namespace
 from configparser import ConfigParser
 from io import BytesIO
 import banner
+
 if os.name == 'nt':
     import ctypes
 
@@ -1309,6 +1310,19 @@ def packsuper(project):
         ywarn("您已设置压缩镜像至最小,对齐不规范的镜像将造成打包失败；Size超出物理分区大小会造成刷入失败！")
     else:
         supersize = input("请输入super分区大小（字节数）:")
+    if not os.listdir(project + os.sep + 'super'):
+        print("您似乎没有要打包的分区，要移动下列分区打包吗：")
+        move_list = []
+        for i in os.listdir(project + os.sep + 'TI_out'):
+            if os.path.isfile(os.path.join(project + os.sep + 'TI_out', i)):
+                if gettype(os.path.join(project + os.sep + 'TI_out', i)) in ['ext', 'erofs']:
+                    if i.startswith('dsp'):
+                        continue
+                    move_list.append(i)
+        print("\n".join(move_list))
+        if input('确定操作吗[Y/N]') in ['Y', 'y', '1']:
+            for i in move_list:
+                shutil.move(os.path.join(project + os.sep + 'TI_out', i), os.path.join(project + os.sep + 'super', i))
     yecho("打包到TI_out/super.img...")
     insuper(project + os.sep + 'super', project + os.sep + 'TI_out' + os.sep + "super.img", supersize, supertype,
             ifsparse, minssize)
