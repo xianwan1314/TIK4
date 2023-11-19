@@ -14,6 +14,7 @@ import banner
 
 if os.name == 'nt':
     import ctypes
+
     kernel32 = ctypes.windll.kernel32
     kernel32.SetConsoleTitleW("TIK4")
 else:
@@ -38,6 +39,8 @@ from log import LOGS, LOGE, ysuc, yecho, ywarn
 from utils import gettype, simg2img, call
 import opscrypto
 import zip2mpk
+from rich.table import Table
+from rich.console import Console
 
 LOCALDIR = os.getcwd()
 binner = LOCALDIR + os.sep + "bin"
@@ -61,6 +64,21 @@ if os.name == 'posix':
         os.chmod(binner, 777)
     except:
         pass
+
+
+def error(code, message):
+    table = Table()
+    table.add_column(f'[red]ERROR:{code}', justify="center")
+    table.add_row(f'[yellow]{message}')
+    table.add_section()
+    table.add_row(f'[green]Report:https://github.com/ColdWindScholar/TIK/issues')
+    Console().print(table)
+    input()
+    sys.exit()
+
+
+if not os.path.exists(ebinner):
+    error(1, "Binary not found\nMay Not Support Your Device?")
 
 
 def getprop(name, path):
