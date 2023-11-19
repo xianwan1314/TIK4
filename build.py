@@ -4,7 +4,11 @@ import shutil
 import zipfile
 
 import banner
-
+from pip._internal.cli.main import main as _main
+with open('requirements.txt', 'r', encoding='utf-8') as l:
+    for i in l.read().split("\n"):
+        print(f"Installing {i}")
+        _main(['install', i])
 local = os.getcwd()
 print(f'\033[31m {banner.banner1} \033[0m')
 print(f'Build for {platform.system()}')
@@ -71,4 +75,4 @@ if os.name == 'posix':
             print(f"Chmod {os.path.join(root, i)}")
             os.system(f"chmod a+x {os.path.join(root, i)}")
 
-zip_folder(os.path.join(local))
+zip_folder(".")
