@@ -43,9 +43,10 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
 ####  **安装教程** 
 
     git clone https://github.com/ColdWindScholar/TIK
-    pip install -r requirements.txt
-    sudo chmod 777 ./TIK/run.py
-    ./TIK/run.py
+    cd TIK
+    chmod a+x ./*
+    python build.py
+    sudo ./run
 
 ####  **使用说明** 
 
