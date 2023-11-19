@@ -18,16 +18,12 @@ jobs:
       - name: Rename Tool
         run: |
           cd TIK-win
-          Remove-Item .git -Recurse
-          ls
-          Compress-Archive -Path ./* -DestinationPath ../TIK-win.zip
+          move ./TIK-win.zip ../TIK-4-${{ github.run_number }}-win.zip
           cd ..
           cd TIK-linux
           ls
-          Compress-Archive -Path ./* -DestinationPath ../TIK-linux.zip
+          move ./TIK-linux.zip ../TIK-4-${{ github.run_number }}-linux.zip
           cd ..
-          move TIK-win.zip TIK-4-${{ github.run_number }}-win.zip
-          move TIK-linux.zip TIK-4-${{ github.run_number }}-linux.zip
       - name: Upload release
         uses: ncipollo/release-action@v1
         with:
@@ -67,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: TIK-win
-          path: './*'
+          path: './TIK-win.zip'
   build-linux:
     runs-on: ubuntu-20.04
     steps:
@@ -91,4 +87,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: TIK-linux
-          path: './*'
+          path: './TIK-linux.zip'
