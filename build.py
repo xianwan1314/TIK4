@@ -34,6 +34,8 @@ def zip_folder(folder_path):
             if file == name:
                 continue
             file_path = os.path.join(root, file)
+            if ".git" in file_path:
+                continue
             print(f"Adding: {file_path}")
             # 将文件添加到zip文件中
             archive.write(file_path, os.path.relpath(file_path, abs_folder_path))
