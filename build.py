@@ -45,7 +45,10 @@ def zip_folder(folder_path):
     print(f"Done!")
 
 
-os.system("pyinstaller -F run.py --exclude-module=numpy -i icon.ico")
+import PyInstaller.__main__
+
+PyInstaller.__main__.run(['-F', 'run.py', '--exclude-module=numpy', '-i', 'icon.ico'])
+
 if os.name == 'nt':
     if os.path.exists(local + os.sep + "dist" + os.sep + "run.exe"):
         shutil.move(local + os.sep + "dist" + os.sep + "run.exe", local)
