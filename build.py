@@ -4,14 +4,16 @@ import shutil
 import zipfile
 
 import banner
+
+print(f'\033[31m {banner.banner1} \033[0m')
+print(f'Build for {platform.system()}')
 from pip._internal.cli.main import main as _main
+
 with open('requirements.txt', 'r', encoding='utf-8') as l:
     for i in l.read().split("\n"):
         print(f"Installing {i}")
         _main(['install', i])
 local = os.getcwd()
-print(f'\033[31m {banner.banner1} \033[0m')
-print(f'Build for {platform.system()}')
 if platform.system() == 'Linux':
     name = 'TIK-linux.zip'
 else:
@@ -29,6 +31,8 @@ def zip_folder(folder_path):
     # 遍历文件夹中的所有文件和子文件夹
     for root, dirs, files in os.walk(abs_folder_path):
         for file in files:
+            if file == name:
+                continue
             file_path = os.path.join(root, file)
             print(f"Adding: {file_path}")
             # 将文件添加到zip文件中
