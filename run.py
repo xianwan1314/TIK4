@@ -182,10 +182,10 @@ class setting:
     def settings4_1():
         print(
             f"  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧 \n  当前:[{settings.banner}]")
-        banner = input("  请输入序号: ")
-        if banner.isdigit():
-            if 0 < int(banner) < 7:
-                settings.change('banner', banner)
+        banner_i = input("  请输入序号: ")
+        if banner_i.isdigit():
+            if 0 < int(banner_i) < 7:
+                settings.change('banner', banner_i)
 
     def settings4(self):
         cls()
