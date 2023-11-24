@@ -171,12 +171,6 @@ class setting:
             print("Input error!")
             self.settings3()
 
-    @staticmethod
-    def settings1():
-        print(f"修改安卓端在内置存储识别ROM的路径。当前为/sdcard/{settings.mydir}")
-        mydir = input('   请输入文件夹名称(英文):')
-        if mydir:
-            settings.change('mydir', mydir)
 
     @staticmethod
     def settings4_1():
@@ -361,7 +355,7 @@ class setting:
         cls()
         print('''
     \033[33m  > 设置 \033[0m
-       1>[Droid]存储ROM目录\n
+       1>[返回]上级菜单\n
        2>[打包]相关细则设置\n
        3>[动态分区]相关设置\n
        4>工具设置\n
@@ -370,7 +364,7 @@ class setting:
        --------------------------
     ''')
         op_pro = input("   请输入编号: ")
-        if op_pro == "0":
+        if op_pro == "0" or op_pro == "1":
             return
         try:
             getattr(self, 'settings%s' % op_pro)()
