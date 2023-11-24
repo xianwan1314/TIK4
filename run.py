@@ -121,8 +121,7 @@ class setting:
            1> Brotli 压缩等级 \033[93m[{settings.brcom}]\033[0m\n
            ----[EXT4设置]------
            2> 大小处理 \033[93m[{settings.diysize}]\033[0m
-           3> 打包方式 \033[93m[{settings.pack_e2}]\033[0m
-           4> 读写状态 \033[93m[{settings.ext4rw}]\033[0m\n
+           3> 打包方式 \033[93m[{settings.pack_e2}]\033[0m\n
            ----[EROFS设置]-----
            5> 压缩方式 \033[93m[{settings.erofslim}]\033[0m\n
            ----[IMG设置]-------
@@ -244,13 +243,6 @@ class setting:
         else:
             settings.change('pack_e2', '1')
 
-    @staticmethod
-    def packset4():
-        extrw = input("  打包EXT是否可读[1]RW [2]RO: ")
-        if extrw == '2':
-            settings.change('ext4rw', '')
-        else:
-            settings.change('ext4rw', '-s')
 
     @staticmethod
     def packset5():
