@@ -10,6 +10,7 @@ import zipfile
 from argparse import Namespace
 from configparser import ConfigParser
 from io import BytesIO
+
 import banner
 
 if os.name == 'nt':
@@ -23,7 +24,6 @@ else:
 import extract_dtb
 import requests
 from rich.progress import track
-from rich.console import Console
 import contextpatch
 import downloader
 import fspatch
