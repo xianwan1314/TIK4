@@ -243,7 +243,6 @@ class setting:
         else:
             settings.change('pack_e2', '1')
 
-
     @staticmethod
     def packset5():
         erofslim = input("  选择erofs压缩方式[1]是 [2]否: ")
