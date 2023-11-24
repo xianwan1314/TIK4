@@ -337,7 +337,7 @@ class setting:
 
     @staticmethod
     def dyset8():
-        iffullsuper = input("  是否创建强制刷入的Full镜像？[1/0]")
+        iffullsuper = input("  是否强制创建Super镜像？[1/0]")
         if iffullsuper != '1':
             settings.change('fullsuper', '')
         else:
