@@ -116,19 +116,19 @@ settings.load_set()
 class setting:
     def settings2(self):
         cls()
-        print('''
+        print(f'''
         \033[33m  > 打包设置 \033[0m
-           1> Brotli 压缩等级\n
+           1> Brotli 压缩等级 \033[93m[{settings.brcom}]\033[0m\n
            ----[EXT4设置]------
-           2> 大小处理
-           3> 打包方式
-           4> 读写状态\n
+           2> 大小处理 \033[93m[{settings.diysize}]\033[0m
+           3> 打包方式 \033[93m[{settings.pack_e2}]\033[0m
+           4> 读写状态 \033[93m[{settings.ext4rw}]\033[0m\n
            ----[EROFS设置]-----
-           5> 压缩方式\n
+           5> 压缩方式 \033[93m[{settings.erofslim}]\033[0m\n
            ----[IMG设置]-------
-           6> UTC时间戳
-           7> 创建sparse
-           8> 文件系统\n
+           6> UTC时间戳 \033[93m[{settings.utcstamp}]\033[0m
+           7> 创建sparse \033[93m[{settings.pack_sparse}]\033[0m
+           8> 文件系统 \033[93m[{settings.diyimgtype}]\033[0m\n
            0>返回上一级菜单
            --------------------------
         ''')
@@ -184,7 +184,7 @@ class setting:
         cls()
         print(f'''
     \033[33m  > 工具设置 \033[0m\n
-       1>自定义首页banner\n
+       1>自定义首页banner \033[93m[{settings.banner}]\033[0m\n
        2>联网模式 \033[93m[{settings.online}]\033[0m\n
        0>返回上级\n
        --------------------------
@@ -284,7 +284,7 @@ class setting:
 
     @staticmethod
     def packset8():
-        typediy = input(f"目前:[{settings.diyimgtype}]\n  打包镜像格式[1]同解包格式 [2]可选择: ")
+        typediy = input(f"  打包镜像格式[1]同解包格式 [2]可选择: ")
         if typediy == '2':
             settings.change('diyimgtype', '1')
         else:
