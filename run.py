@@ -864,14 +864,14 @@ def unpack_choo(project):
                     files[filen] = dtb0
                     infos[filen] = 'dtb'
     print()
-    print("\033[33m  [00] 返回  [11] 循环解包  \033[0m")
+    print("\033[33m  [00] 返回  [77] 循环解包  \033[0m")
     print("  --------------------------------------")
     filed = input("  请输入对应序号：")
     if filed == '0':
         print()
         for v in files.keys():
             unpack(files[v], infos[v], project)
-    elif filed == '11':
+    elif filed == '77':
         print()
         imgcheck = 0
         upacall = input("  是否解包所有文件？ [1/0]")
