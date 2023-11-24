@@ -144,20 +144,20 @@ class setting:
 
     def settings3(self):
         cls()
-        print('''
+        print(f'''
         \033[33m  > 动态分区设置 \033[0m
-           1> dynamic_partitions簇名\n
+           1> Super簇名 \033[93m[{settings.super_group}]\033[0m\n
            ----[Metadata设置]--
-           2> 元数据插槽数
-           3> 最大保留Size\n
+           2> 元数据插槽数 \033[93m[{settings.slotnumber}]\033[0m
+           3> 最大保留Size \033[93m[{settings.metadatasize}]\033[0m\n
            ----[分区设置]------
-           4> 默认扇区/块大小\n
+           4> 默认扇区/块大小 \033[93m[{settings.BLOCKSIZE}]\033[0m\n
            ----[Super设置]-----
-           5> 指定block大小
-           6> 更改物理分区名
-           7> 更改逻辑分区表
-           8> 强制烧写完整Img
-           9> 标记分区槽后缀\n
+           5> 指定block大小 \033[93m[{settings.SBLOCKSIZE}]\033[0m
+           6> 更改物理分区名 \033[93m[{settings.supername}]\033[0m
+           7> 更改逻辑分区表 \033[93m[{settings.superpart_list}]\033[0m
+           8> 强制烧写完整Img \033[93m[{settings.fullsuper}]\033[0m
+           9> 标记分区槽后缀 \033[93m[{settings.autoslotsuffixing}]\033[0m\n
            0>返回上一级菜单
            --------------------------
         ''')
@@ -170,7 +170,6 @@ class setting:
         except AttributeError:
             print("Input error!")
             self.settings3()
-
 
     @staticmethod
     def settings4_1():
@@ -238,7 +237,7 @@ class setting:
 
     @staticmethod
     def packset3():
-        print(f"  当前：[{settings.pack_e2}]\n  打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid:")
+        print(f"  打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid:")
         pack_op = input("  请输入序号: ")
         if pack_op == '1':
             settings.change('pack_e2', '0')
@@ -293,7 +292,7 @@ class setting:
 
     @staticmethod
     def dyset1():
-        super_group = input(f"  当前动态分区簇名：{settings.super_group}\n  请输入（无特殊字符）: ")
+        super_group = input(f"  请输入（无特殊字符）: ")
         if super_group:
             settings.change('super_group', super_group)
 
