@@ -285,7 +285,7 @@ class setting:
 
     @staticmethod
     def packset8():
-        typediy = input("  打包镜像格式[1]同解包格式 [2]可选择: ")
+        typediy = input(f"目前:[{settings.diyimgtype}]\n  打包镜像格式[1]同解包格式 [2]可选择: ")
         if typediy == '2':
             settings.change('diyimgtype', '1')
         else:
