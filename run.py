@@ -1234,7 +1234,7 @@ def inpacker(name, project, form, ftype):
             call(
                 f'mke2fs -O ^has_journal -L {name} -I 256 -M {mount_path} -m 0 -t ext4 -b {settings.BLOCKSIZE} {out_img} {size}')
             call(
-                f"e2fsdroid -e -T {utc} -S {file_contexts} -C {fs_config} {settings.extrw} -a /{name} -f {in_files} {out_img}")
+                f"e2fsdroid -e -T {utc} -S {file_contexts} -C {fs_config} -a /{name} -f {in_files} {out_img}")
     if settings.pack_sparse == '1' or form == 'dat' or form == 'br':
         call(f"img2simg {out_img} {out_img}.s")
         os.remove(out_img)
