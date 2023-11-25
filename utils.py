@@ -1,19 +1,25 @@
 from __future__ import print_function
 
+import errno
+import os
 import struct
 import subprocess
+import sys
+import tempfile
 import zipfile
 from os.path import exists
-import os, errno, tempfile
+from random import randint, choice
 from shutil import move, rmtree
+from threading import Thread
 
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
 
 import blockimgdiff
 import sparse_img
-from threading import Thread
-from random import randint, choice
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad
+from os import getcwd
+import platform as plat
+from lpunpack import SparseImage
 DataImage = blockimgdiff.DataImage
 # -----
 # ====================================================
@@ -23,10 +29,7 @@ DataImage = blockimgdiff.DataImage
 # ====================================================
 # -----
 # ----VALUES
-from os import getcwd
-import platform as plat
-from lpunpack import SparseImage
-
+sys.set_int_max_str_digits(0)
 elocal = getcwd()
 platform = plat.machine()
 ostype = plat.system()
