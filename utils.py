@@ -29,7 +29,10 @@ DataImage = blockimgdiff.DataImage
 # ====================================================
 # -----
 # ----VALUES
-sys.set_int_max_str_digits(0)
+try:
+    sys.set_int_max_str_digits(0)
+except AttributeError:
+    pass
 elocal = getcwd()
 platform = plat.machine()
 ostype = plat.system()
