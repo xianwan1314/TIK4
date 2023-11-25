@@ -1275,13 +1275,15 @@ def inpacker(name, project, form, ftype):
 
 def packsuper(project):
     def versize(size):
-        size = size + 409600
-        diff_size = size
+        size_ = size + 409600
+        diff_size = size_
         for i_ in range(20):
             if not i_:
                 continue
             i_ = i_ - 0.5
-            t = 1024 * 1024 * 1024 * i_ - size
+            t = 1024 * 1024 * 1024 * i_ - size_
+            if t < 0:
+                continue
             if t < diff_size:
                 diff_size = t
             else:
