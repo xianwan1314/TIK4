@@ -211,7 +211,7 @@ class sdat2img:
 
         output_img.close()
         new_data_file.close()
-        print('Done! Output image: {}'.format(os.path.realpath(output_img.name)))
+        print('\nDone! Output image: {}'.format(os.path.realpath(output_img.name)))
 
     @staticmethod
     def rangeset(src):
