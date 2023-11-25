@@ -852,7 +852,7 @@ def unpack_choo(project):
     filed = input("  请输入对应序号：")
     if filed == '0':
         print()
-        for v in track(files.keys()):
+        for v in files.keys():
             unpack(files[v], infos[v], project)
     elif filed == '77':
         print()
