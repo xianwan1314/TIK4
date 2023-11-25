@@ -718,7 +718,7 @@ class unmpk:
                 self.arr2 = sorted(set(self.arr2), key=self.arr2.index)
 
     def unloop(self):
-        for i in self.arr:
+        for i in track(self.arr):
             self.umpk(i)
         self.umpk(self.value)
 
@@ -852,7 +852,7 @@ def unpack_choo(project):
     filed = input("  请输入对应序号：")
     if filed == '0':
         print()
-        for v in files.keys():
+        for v in track(files.keys()):
             unpack(files[v], infos[v], project)
     elif filed == '77':
         print()
@@ -933,7 +933,7 @@ def packChoo(project):
                     imgtype = "ext"
             else:
                 imgtype = 'ext'
-            for f in parts.keys():
+            for f in track(parts.keys()):
                 yecho(f"打包{parts[f]}...")
                 if types[f] == 'bootimg':
                     dboot(project + os.sep + parts[f], project + os.sep + parts[f] + ".img")
@@ -1118,7 +1118,7 @@ def undtb(project, infile):
         os.makedirs(dtbdir)
     extract_dtb.extract_dtb.split(Namespace(filename=infile, output_dir=dtbdir + os.sep + "dtb_files"))
     yecho("正在反编译dtb...")
-    for i in os.listdir(dtbdir + os.sep + "dtb_files"):
+    for i in track(os.listdir(dtbdir + os.sep + "dtb_files")):
         if i.endswith('.dtb'):
             name = i.split('.')[0]
             call(
