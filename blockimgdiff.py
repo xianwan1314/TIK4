@@ -16,8 +16,8 @@ from __future__ import print_function
 
 from array import array
 from functools import total_ordering
-import heapq
-import itertools
+from heapq import heappop, heappush, heapify
+from itertools import chain
 from multiprocessing import cpu_count
 import os
 import re
@@ -385,7 +385,7 @@ class BlockImageDiff(object):
             for s, sr in xf.stash_before:
                 assert s not in stashes
                 if free_stash_ids:
-                    sid = heapq.heappop(free_stash_ids)
+                    sid = heappop(free_stash_ids)
                 else:
                     sid = next_stash_id
                     next_stash_id += 1
@@ -447,7 +447,7 @@ class BlockImageDiff(object):
                             free_size += sr.size()
                             free_string.append("free %s\n" % sh)
                             stashes.pop(sh)
-                    heapq.heappush(free_stash_ids, sid)
+                    heappush(free_stash_ids, sid)
 
                 if unstashed_src_ranges.size() > 0:
                     src_str.insert(1, unstashed_src_ranges.to_string_raw())
@@ -864,15 +864,15 @@ class BlockImageDiff(object):
         # executed.
         S = [(u.NetStashChange(), u.order, u) for u in self.transfers
              if not u.incoming]
-        heapq.heapify(S)
+        heapify(S)
 
         while S:
-            _, _, xf = heapq.heappop(S)
+            _, _, xf = heappop(S)
             L.append(xf)
             for u in xf.outgoing:
                 del u.incoming[xf]
                 if not u.incoming:
-                    heapq.heappush(S, (u.NetStashChange(), u.order, u))
+                    heappush(S, (u.NetStashChange(), u.order, u))
 
         # if this fails then our graph had a cycle.
         assert len(L) == len(self.transfers)
@@ -990,7 +990,7 @@ class BlockImageDiff(object):
         for xf in self.transfers:
             xf.heap_item = HeapItem(xf)
             heap.append(xf.heap_item)
-        heapq.heapify(heap)
+        heapify(heap)
 
         sinks = set(u for u in G if not u.outgoing)
         sources = set(u for u in G if not u.incoming)
@@ -999,7 +999,7 @@ class BlockImageDiff(object):
             iu.score += delta
             iu.heap_item.clear()
             iu.heap_item = HeapItem(iu)
-            heapq.heappush(heap, iu.heap_item)
+            heappush(heap, iu.heap_item)
 
         while G:
             # Put all sinks at the end of the sequence.
@@ -1033,7 +1033,7 @@ class BlockImageDiff(object):
             # pretending it's a source rather than a sink.
 
             while True:
-                u = heapq.heappop(heap)
+                u = heappop(heap)
                 if u and u.item in G:
                     u = u.item
                     break
@@ -1052,7 +1052,7 @@ class BlockImageDiff(object):
         # and by rearranging self.transfers to be in the chosen sequence.
 
         new_transfers = []
-        for x in itertools.chain(s1, s2):
+        for x in chain(s1, s2):
             x.order = len(new_transfers)
             new_transfers.append(x)
             del x.incoming
