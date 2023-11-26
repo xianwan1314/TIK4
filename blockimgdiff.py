@@ -14,7 +14,7 @@
 
 from __future__ import print_function
 
-import array
+from array import array
 import functools
 import heapq
 import itertools
@@ -809,7 +809,7 @@ class BlockImageDiff(object):
         # - we write every block we care about exactly once.
 
         # Start with no blocks having been touched yet.
-        touched = array.array("B", (0,) * self.tgt.total_blocks)
+        touched = array("B", (0,) * self.tgt.total_blocks)
 
         # Imagine processing the transfers in order.
         for xf in self.transfers:
