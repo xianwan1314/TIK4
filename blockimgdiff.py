@@ -21,7 +21,7 @@ import itertools
 from multiprocessing import cpu_count
 import os
 import re
-import subprocess
+from subprocess import call, STDOUT
 from tempfile import mkstemp
 import threading
 from collections import deque, OrderedDict
@@ -56,11 +56,11 @@ def compute_patch(src, tgt, imgdiff=False):
         except OSError:
             pass
         if imgdiff:
-            p = subprocess.call(["imgdiff", "-z", srcfile, tgtfile, patchfile],
+            p = call(["imgdiff", "-z", srcfile, tgtfile, patchfile],
                                 stdout=open("/dev/null", "a"),
-                                stderr=subprocess.STDOUT)
+                                stderr=STDOUT)
         else:
-            p = subprocess.call(["bsdiff", srcfile, tgtfile, patchfile])
+            p = call(["bsdiff", srcfile, tgtfile, patchfile])
 
         if p:
             raise ValueError("diff failed: " + str(p))
