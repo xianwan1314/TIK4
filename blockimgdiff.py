@@ -20,7 +20,7 @@ from heapq import heappop, heappush, heapify
 from itertools import chain
 from multiprocessing import cpu_count
 import os
-import re
+from re import sub
 from subprocess import call, STDOUT
 from tempfile import mkstemp
 from threading import Lock,Thread
@@ -1198,7 +1198,7 @@ class BlockImageDiff(object):
                             "diff", self.transfers, self.version >= 3)
                 continue
 
-            b = re.sub("[0-9]+", "#", b)
+            b = sub("[0-9]+", "#", b)
             if b in self.src_numpatterns:
                 # Look for a 'number pattern' match (a basename match after
                 # all runs of digits are replaced by "#").  (This is useful
@@ -1215,7 +1215,7 @@ class BlockImageDiff(object):
         for k in self.src.file_map.keys():
             b = os.path.basename(k)
             self.src_basenames[b] = k
-            b = re.sub("[0-9]+", "#", b)
+            b = sub("[0-9]+", "#", b)
             self.src_numpatterns[b] = k
 
     @staticmethod
