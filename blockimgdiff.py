@@ -15,10 +15,10 @@
 from __future__ import print_function
 
 from array import array
-import functools
+from functools import total_ordering
 import heapq
 import itertools
-import multiprocessing
+from multiprocessing import cpu_count
 import os
 import re
 import subprocess
@@ -211,7 +211,7 @@ class Transfer(object):
                 " to " + str(self.tgt_ranges) + ">")
 
 
-@functools.total_ordering
+@total_ordering
 class HeapItem(object):
     def __init__(self, item):
         self.item = item
@@ -272,7 +272,7 @@ class BlockImageDiff(object):
     def __init__(self, tgt, src=None, version=4, threads=None,
                  disable_imgdiff=False):
         if threads is None:
-            threads = multiprocessing.cpu_count() // 2
+            threads = cpu_count() // 2
             if threads == 0:
                 threads = 1
         self.threads = threads
