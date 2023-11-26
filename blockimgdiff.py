@@ -23,7 +23,7 @@ import os
 import re
 from subprocess import call, STDOUT
 from tempfile import mkstemp
-import threading
+from threading import Lock,Thread
 from collections import deque, OrderedDict
 from hashlib import sha1
 from rangelib import RangeSet
@@ -769,7 +769,7 @@ class BlockImageDiff(object):
             patches = [None] * patch_num
 
             # TODO: Rewrite with multiprocessing.ThreadPool?
-            lock = threading.Lock()
+            lock = Lock()
 
             def diff_worker():
                 while True:
@@ -786,7 +786,7 @@ class BlockImageDiff(object):
                             xf.tgt_name if xf.tgt_name == xf.src_name else (
                                     xf.tgt_name + " (from " + xf.src_name + ")")))
 
-            threads = [threading.Thread(target=diff_worker)
+            threads = [Thread(target=diff_worker)
                        for _ in range(self.threads)]
             for th in threads:
                 th.start()
