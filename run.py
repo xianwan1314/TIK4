@@ -1396,8 +1396,7 @@ def packpayload(project):
     else:
         os.makedirs(project + os.sep + 'payload')
     ywarn(f"请将所有分区镜像放置于{project + os.sep}payload中（非super）！")
-    yecho(
-        "mi_ext分区也属于super，请及时到设置修改动态分区内逻辑分区表\n很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
+    yecho("很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
     if not os.listdir(project + os.sep + 'payload'):
         print("您似乎没有要打包的分区，要移动下列分区打包吗：")
         move_list = []
