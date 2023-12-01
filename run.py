@@ -1263,22 +1263,23 @@ def inpacker(name, project, form, ftype):
             f'brotli -q {settings.brcom} -j -w 24 {project + os.sep + "TI_out" + os.sep + name + ".new.dat"} -o {project + os.sep + "TI_out" + os.sep + name + ".new.dat.br"}')
 
 
-def packsuper(project):
-    def versize(size):
-        size_ = size + 409600
-        diff_size = size_
-        for i_ in range(20):
-            if not i_:
-                continue
-            i_ = i_ - 0.5
-            t = 1024 * 1024 * 1024 * i_ - size_
-            if t < 0:
-                continue
-            if t < diff_size:
-                diff_size = t
-            else:
-                return int(i_ * 1024 * 1024 * 1024)
+def versize(size):
+    size_ = size + 409600
+    diff_size = size_
+    for i_ in range(20):
+        if not i_:
+            continue
+        i_ = i_ - 0.5
+        t = 1024 * 1024 * 1024 * i_ - size_
+        if t < 0:
+            continue
+        if t < diff_size:
+            diff_size = t
+        else:
+            return int(i_ * 1024 * 1024 * 1024)
 
+
+def packsuper(project):
     if os.path.exists(project + os.sep + "TI_out" + os.sep + "super.img"):
         os.remove(project + os.sep + "TI_out" + os.sep + "super.img")
     if not os.path.exists(project + os.sep + "super"):
@@ -1330,7 +1331,6 @@ def packsuper(project):
 def insuper(Imgdir, outputimg, ssize, stype, sparse):
     group_size_a = 0
     group_size_b = 0
-    groupaab = None
     for root, dirs, files in os.walk(Imgdir):
         for file in files:
             file_path = os.path.join(root, file)
@@ -1350,7 +1350,6 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse):
                 if stype in ['VAB', 'AB']:
                     if os.path.isfile(Imgdir + os.sep + image + "_a.img") and os.path.isfile(
                             Imgdir + os.sep + image + "_b.img"):
-                        groupaab = 1
                         img_sizea = os.path.getsize(Imgdir + os.sep + image + "_a.img")
                         img_sizeb = os.path.getsize(Imgdir + os.sep + image + "_b.img")
                         group_size_a += img_sizea
@@ -1365,10 +1364,6 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse):
                     img_size = os.path.getsize(Imgdir + os.sep + image + ".img")
                     superpa += f"--partition {image}:readonly:{img_size}:{settings.super_group} --image {image}={Imgdir}{os.sep}{image}.img "
                     group_size_a += img_size
-    if not groupaab:
-        supermsize = group_size_a + int(settings.SBLOCKSIZE) * 1000
-    elif groupaab == 1:
-        supermsize = group_size_a + group_size_b + int(settings.SBLOCKSIZE) * 1000
     supersize = ssize
     if not supersize:
         supersize += group_size_a + 4096000
@@ -1398,16 +1393,35 @@ def packpayload(project):
             re_folder(project + os.sep + 'payload')
             re_folder(project + os.sep + 'TI_out' + os.sep + "payload")
             f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
+    else:
+        os.makedirs(project + os.sep + 'payload')
     ywarn(f"请将所有分区镜像放置于{project + os.sep}payload中（非super）！")
     yecho(
         "mi_ext分区也属于super，请及时到设置修改动态分区内逻辑分区表\n很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
-    checkssize = input("请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [5]自定义")
+    if not os.listdir(project + os.sep + 'payload'):
+        print("您似乎没有要打包的分区，要移动下列分区打包吗：")
+        move_list = []
+        for i in os.listdir(project + os.sep + 'TI_out'):
+            if os.path.isfile(os.path.join(project + os.sep + 'TI_out', i)):
+                if gettype(os.path.join(project + os.sep + 'TI_out', i)) in ['ext', 'erofs']:
+                    if i.startswith('dsp'):
+                        continue
+                    move_list.append(i)
+        print("\n".join(move_list))
+        if input('确定操作吗[Y/N]') in ['Y', 'y', '1']:
+            for i in move_list:
+                shutil.move(os.path.join(project + os.sep + 'TI_out', i), os.path.join(project + os.sep + 'payload', i))
+    tool_auto_size = sum(
+        [os.path.getsize(os.path.join(project + os.sep + 'payload', p)) for p in os.listdir(project + os.sep + 'payload') if
+         os.path.isfile(os.path.join(project + os.sep + 'payload', p))]) + 409600
+    tool_auto_size = versize(tool_auto_size)
+    checkssize = input(f"请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]工具推荐：{tool_auto_size} [5]自定义")
     if checkssize == '1':
         supersize = 9126805504
     elif checkssize == '2':
         supersize = 10200547328
     elif checkssize == '3':
-        supersize = 16106127360
+        supersize = tool_auto_size
     else:
         supersize = input("请输入super分区大小（字节数）	")
     yecho(f"打包到{project}/TI_out/payload...")
