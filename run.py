@@ -1421,19 +1421,22 @@ def packpayload(project):
 def inpayload(supersize, project):
     yecho("将打包至：TI_out/payload，payload.bin & payload_properties.txt")
     partname = ''
+    super_list = []
     pimages = ''
     for sf in os.listdir(project + os.sep + 'payload'):
         if sf.endswith('.img'):
             partname += sf.replace('.img', '') + ":"
+            super_list.append(sf.replace('.img', ''))
             pimages += f"{pimages}{project}{os.sep}payload{os.sep}{sf.replace('.img', '')}.img:"
             yecho(f"预打包:{sf}")
     inparts = f"--partition_names={partname[:-1]} --new_partitions={pimages[:-1]}"
-    yecho(f"当前Super逻辑分区表：{settings.superpart_list}，可在<设置>中调整.")
+    yecho("当前Super逻辑分区表：\n")
+    yecho('\n'.join(super_list))
     with open(project + os.sep + "payload" + os.sep + "dynamic_partitions_info.txt", 'w', encoding='utf-8',
               newline='\n') as txt:
         txt.write(f"super_partition_groups={settings.super_group}\n")
         txt.write(f"qti_dynamic_partitions_size={supersize}\n")
-        txt.write(f"qti_dynamic_partitions_partition_list={settings.superpart_list}")
+        txt.write(f"qti_dynamic_partitions_partition_list={' '.join(super_list)}")
     call(
         f"delta_generator --out_file={project + os.sep + 'TI_out' + os.sep + 'payload' + os.sep + 'payload.bin'} {inparts} --dynamic_partition_info_file={project + os.sep + 'payload' + os.sep + 'dynamic_partitions_info.txt'}")
     if call(f"delta_generator --in_file={project + os.sep + 'TI_out' + os.sep + 'payload' + os.sep + 'payload.bin'} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0:
