@@ -371,18 +371,18 @@ def main_menu():
     print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
     print("\033[92;44m Delta Edition \033[0m")
     if settings.online == 'true':
-        gs = 1
-    if gs == 1:
         try:
             content = json.loads(requests.get('https://v1.jinrishici.com/all.json').content.decode())
             shiju = content['content']
             fr = content['origin']
             another = content['author']
         except:
-            gs = 0
-    if gs == 1:
-        print(f"\033[36m “{shiju}”")
-        print(f"\033[36m---{another}《{fr}》\033[0m\n")
+            pass
+        else:
+            print(f"\033[36m “{shiju}”")
+            print(f"\033[36m---{another}《{fr}》\033[0m\n")
+    else:
+        pass
     print(" >\033[33m 项目列表 \033[0m\n")
     print("\033[31m   [00]  删除项目\033[0m\n")
     print("   [0]  新建项目\n")
