@@ -366,7 +366,6 @@ class setting:
 
 def main_menu():
     projects = {}
-    gs = 0
     cls()
     print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
     print("\033[92;44m Delta Edition \033[0m")
