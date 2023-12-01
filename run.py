@@ -395,7 +395,6 @@ def main_menu():
                 projects['%s' % pro] = pros
     print("  --------------------------------------")
     print("\033[33m  [55] 解压  [66] 退出  [77] 设置  [88] 下载ROM\033[0m")
-    print("")
     print(" \n")
     op_pro = input("  请输入序号：")
     if op_pro == '55':
