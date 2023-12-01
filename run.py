@@ -1403,7 +1403,8 @@ def packpayload(project):
         move_list = []
         for i in os.listdir(project + os.sep + 'TI_out'):
             if os.path.isfile(os.path.join(project + os.sep + 'TI_out', i)):
-                move_list.append(i)
+                if i.endswith('.img'):
+                    move_list.append(i)
         print("\n".join(move_list))
         if input('确定操作吗[Y/N]') in ['Y', 'y', '1']:
             for i in move_list:
