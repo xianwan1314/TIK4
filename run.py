@@ -382,7 +382,7 @@ def main_menu():
             print(f"\033[36m “{shiju}”")
             print(f"\033[36m---{another}《{fr}》\033[0m\n")
     else:
-        pass
+        print(f"\033[36m “开源，是一场无问西东的前行”")
     print(" >\033[33m 项目列表 \033[0m\n")
     print("\033[31m   [00]  删除项目\033[0m\n")
     print("   [0]  新建项目\n")
