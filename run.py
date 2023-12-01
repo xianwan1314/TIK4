@@ -1562,7 +1562,7 @@ def unpackrom():
     zipn = 0
     zips = {}
     print(" \033[31m >ROM列表 \033[0m\n")
-    ywarn(f"   请将ROM置于{LOCALDIR}下！")
+    ywarn(f"   请将ROM置于{LOCALDIR}下！\n")
     if dir_has(LOCALDIR, '.zip'):
         for zip0 in os.listdir(LOCALDIR):
             if zip0.endswith('.zip'):
