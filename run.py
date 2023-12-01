@@ -154,7 +154,6 @@ class setting:
            ----[Super设置]-----
            5> 指定block大小 \033[93m[{settings.SBLOCKSIZE}]\033[0m
            6> 更改物理分区名 \033[93m[{settings.supername}]\033[0m
-           7> 更改逻辑分区表 \033[93m[{settings.superpart_list}]\033[0m
            8> 强制烧写完整Img \033[93m[{settings.fullsuper}]\033[0m
            9> 标记分区槽后缀 \033[93m[{settings.autoslotsuffixing}]\033[0m\n
            0>返回上一级菜单
@@ -317,12 +316,6 @@ class setting:
         supername = input(f'  当前动态分区物理分区名(默认super)：{settings.supername}\n  请输入（无特殊字符）: ')
         if supername:
             settings.change('supername', supername)
-
-    @staticmethod
-    def dyset7():
-        superpart_list = input(f'  当前动态分区内逻辑分区表：{settings.superpart_list}\n  请输入（无特殊字符）: ')
-        if superpart_list:
-            settings.change('superpart_list', superpart_list)
 
     @staticmethod
     def dyset8():
@@ -1313,9 +1306,12 @@ def packsuper(project):
         if input('确定操作吗[Y/N]') in ['Y', 'y', '1']:
             for i in move_list:
                 shutil.move(os.path.join(project + os.sep + 'TI_out', i), os.path.join(project + os.sep + 'super', i))
-    tool_auto_size = sum([os.path.getsize(os.path.join(project + os.sep + 'super', p)) for p in os.listdir(project + os.sep + 'super') if os.path.isfile(os.path.join(project + os.sep + 'super', p))]) + 409600
+    tool_auto_size = sum(
+        [os.path.getsize(os.path.join(project + os.sep + 'super', p)) for p in os.listdir(project + os.sep + 'super') if
+         os.path.isfile(os.path.join(project + os.sep + 'super', p))]) + 409600
     tool_auto_size = versize(tool_auto_size)
-    checkssize = input(f"请设置Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [4]工具推荐：{tool_auto_size} [5]自定义")
+    checkssize = input(
+        f"请设置Super.img大小:[1]9126805504 [2]10200547328 [3]16106127360 [4]工具推荐：{tool_auto_size} [5]自定义")
     if checkssize == '1':
         supersize = 9126805504
     elif checkssize == '2':
