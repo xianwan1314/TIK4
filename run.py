@@ -1433,12 +1433,12 @@ def inpayload(supersize, project):
     for sf in os.listdir(project + os.sep + 'payload'):
         if sf.endswith('.img'):
             partname += sf.replace('.img', '') + ":"
-            super_list.append(sf.replace('.img', ''))
+            if gettype(project + os.sep + 'payload'+os.sep+sf) in ['ext', 'erofs']:
+                super_list.append(sf.replace('.img', ''))
             pimages += f"{pimages}{project}{os.sep}payload{os.sep}{sf.replace('.img', '')}.img:"
             yecho(f"预打包:{sf}")
     inparts = f"--partition_names={partname[:-1]} --new_partitions={pimages[:-1]}"
-    yecho("当前Super逻辑分区表：\n")
-    yecho('\n'.join(super_list))
+    yecho(f"当前Super逻辑分区表：[{super_list}]")
     with open(project + os.sep + "payload" + os.sep + "dynamic_partitions_info.txt", 'w', encoding='utf-8',
               newline='\n') as txt:
         txt.write(f"super_partition_groups={settings.super_group}\n")
