@@ -365,6 +365,7 @@ class setting:
 
 def main_menu():
     projects = {}
+    pro = 0
     cls()
     print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
     print("\033[92;44m Delta Edition \033[0m")
@@ -384,7 +385,6 @@ def main_menu():
     print(" >\033[33m 项目列表 \033[0m\n")
     print("\033[31m   [00]  删除项目\033[0m\n")
     print("   [0]  新建项目\n")
-    pro = 0
     if os.listdir(LOCALDIR + os.sep):
         for pros in os.listdir(LOCALDIR + os.sep):
             if pros == 'bin' or pros.startswith('.'):
