@@ -368,6 +368,8 @@ def main_menu():
     projects = {}
     gs = 0
     cls()
+    print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
+    print("\033[92;44m Delta Edition \033[0m")
     if settings.online == 'true':
         gs = 1
     if gs == 1:
@@ -378,8 +380,6 @@ def main_menu():
             another = content['author']
         except:
             gs = 0
-    print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
-    print("\033[92;44m Delta Edition \033[0m")
     if gs == 1:
         print(f"\033[36m “{shiju}”")
         print(f"\033[36m---{another}《{fr}》\033[0m\n")
