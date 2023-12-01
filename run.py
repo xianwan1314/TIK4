@@ -376,7 +376,7 @@ def main_menu():
             fr = content['origin']
             another = content['author']
         except:
-            pass
+            print(f"\033[36m “开源，是一场无问西东的前行”")
         else:
             print(f"\033[36m “{shiju}”")
             print(f"\033[36m---{another}《{fr}》\033[0m\n")
