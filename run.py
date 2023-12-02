@@ -88,8 +88,7 @@ class set_utils:
     def load_set(self):
         with open(self.path, 'r') as ss:
             data = json.load(ss)
-            for v in data:
-                setattr(self, v, data[v])
+            [setattr(self, v, data[v]) for v in data]
 
     def change(self, name, value):
         with open(self.path, 'r') as ss:
@@ -781,7 +780,8 @@ def packChoo(project):
                 if os.path.exists(project + os.sep + "config" + os.sep + packs + "_fs_config"):
                     partn += 1
                     parts[partn] = packs
-                    typeo = 'erofs' if os.path.exists(project + os.sep + "config" + os.sep + packs + "_erofs") else 'ext'
+                    typeo = 'erofs' if os.path.exists(
+                        project + os.sep + "config" + os.sep + packs + "_erofs") else 'ext'
                     types[partn] = typeo
                     print(f"   [{partn}]- {packs} <{typeo}>\n")
                 elif os.path.exists(project + os.sep + packs + os.sep + "comp"):
@@ -837,7 +837,8 @@ def packChoo(project):
             else:
                 imgtype = 'ext'
             for f in parts.keys():
-                imgcheck = input(f"  是否打包{parts[f]}?[1/0]	") if input("  是否打包所有镜像？ [1/0]	") != '1' else '1'
+                imgcheck = input(f"  是否打包{parts[f]}?[1/0]	") if input(
+                    "  是否打包所有镜像？ [1/0]	") != '1' else '1'
                 if not imgcheck == '1':
                     continue
                 yecho(f"打包{parts[f]}...")
