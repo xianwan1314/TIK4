@@ -748,7 +748,3 @@ def main(args):
     else:
         print("Usage:./opsdecrypt.py decrypt [filename.ops]")
         exit(0)
-
-
-if __name__ == "__main__":
-    main()
