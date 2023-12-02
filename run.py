@@ -273,14 +273,16 @@ def plug_parse(js_on):
                 except Exception as e:
                     ywarn("解析错误", e.__str__())
                     return
-                print("----------"+data_['main']['info']['title']+"----------")
+                plugin_title = data_['main']['info']['title']
+                print("----------"+plugin_title+"----------")
                 for group_name, group_data in data_['main'].items():
                     if group_name != "info":
                         for con in group_data['controls']:
                             if 'set' in con:
                                 self.value.append(con['set'])
                             if con["type"] == "text":
-                                print("----------"+con['text']+"----------")
+                                if con['text'] != plugin_title:
+                                    print("----------"+con['text']+"----------")
                             elif con["type"] == "filechose":
                                 file_var_name = con['set']
                                 ysuc("请在下方拖入文件或输入路径")
