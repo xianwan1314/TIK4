@@ -74,7 +74,7 @@ def error(code, message):
     table.add_row(f'[green]Report:https://github.com/ColdWindScholar/TIK/issues')
     Console().print(table)
     input()
-    sys.exit()
+    sys.exit(1)
 
 
 if not os.path.exists(ebinner):
@@ -124,9 +124,9 @@ class setting:
         ''')
         op_pro = input("   请输入编号:")
         if op_pro == "0":
-            return 1
+            return
         elif op_pro == '1':
-            print(f"  调整brotli压缩等级（整数1-9，级别越高，压缩率越大，耗时越长），当前为：{settings.brcom}级")
+            print(f"  调整brotli压缩等级(整数1-9，级别越高，压缩率越大，耗时越长):")
             brcom = input("  请输入（1-9）:")
             if brcom.isdigit():
                 if 0 < int(brcom) < 10:
@@ -848,11 +848,9 @@ def packChoo(project):
                     dboot(project + os.sep + parts[f], project + os.sep + parts[f] + ".img")
                 elif types[f] == 'dtb':
                     makedtb(project + os.sep + parts[f], project)
-                    pass
                 elif types[f] == 'dtbo':
                     makedtbo(parts[f], project)
                 else:
-                    pass
                     inpacker(parts[f], project, form, imgtype)
         elif filed == '66':
             packsuper(project)
@@ -882,7 +880,6 @@ def packChoo(project):
                     dboot(project + os.sep + parts[int(filed)], project + os.sep + parts[int(filed)] + ".img")
                 elif types[int(filed)] == 'dtb':
                     makedtb(project + os.sep + parts[int(filed)], project)
-                    pass
                 elif types[int(filed)] == 'dtbo':
                     makedtbo(parts[int(filed)], project)
                 else:
