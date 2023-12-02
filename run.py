@@ -1162,10 +1162,7 @@ def inpacker(name, project, form, ftype):
             pass
     file_contexts = project + os.sep + "config" + os.sep + name + "_file_contexts"
     fs_config = project + os.sep + "config" + os.sep + name + "_fs_config"
-    if not settings.utcstamp:
-        utc = int(time.time())
-    else:
-        utc = settings.utcstamp
+    utc = int(time.time()) if not settings.utcstamp else settings.utcstamp
     out_img = project + os.sep + "TI_out" + os.sep + name + ".img"
     in_files = project + os.sep + name + os.sep
     if os.path.exists(project + os.sep + "config" + os.sep + name + "_size.txt"):
