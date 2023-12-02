@@ -1253,10 +1253,7 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse):
         superpa += "--metadata-slots 2 "
         superpa += f" --group {settings.super_group}:{supersize} "
     superpa += f"{settings.fullsuper} {settings.autoslotsuffixing} --output {outputimg}"
-    if call(f'lpmake {superpa}') != 0:
-        ywarn("创建super.img失败！")
-    else:
-        ysuc("成功创建super.img!")
+    ywarn("创建super.img失败！") if call(f'lpmake {superpa}') != 0 else ysuc("成功创建super.img!")
     input("任意按钮继续")
 
 
