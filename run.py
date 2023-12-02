@@ -273,7 +273,7 @@ def plug_parse(js_on):
                 except Exception as e:
                     ywarn("解析错误", e.__str__())
                     return
-                yecho(data_['main']['info']['title'])
+                print("----------"+data_['main']['info']['title']+"----------")
                 for group_name, group_data in data_['main'].items():
                     if group_name != "info":
                         for con in group_data['controls']:
