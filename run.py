@@ -1522,8 +1522,7 @@ def autounpack(project):
         elif os.path.abspath(infile).endswith('.list') or os.path.abspath(infile).endswith('.patch.dat'):
             continue
         if ask_ != '1':
-            ask = input(f"要分解{infile}吗 [1/0]")
-            if not ask == '1':
+            if not input(f"要分解{infile}吗 [1/0]") == '1':
                 continue
         if infile.endswith('.new.dat.br'):
             unpack(os.path.abspath(infile), 'br', project)
