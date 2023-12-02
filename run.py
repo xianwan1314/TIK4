@@ -687,10 +687,7 @@ class unmpk:
             print(f"正在卸载:{name}")
             if os.path.exists(self.moddir + os.sep + name):
                 shutil.rmtree(self.moddir + os.sep + name)
-            if os.path.exists(self.moddir + os.sep + name):
-                ywarn(f"卸载{name}失败！")
-            else:
-                yecho(f"卸载{name}成功！")
+            ywarn(f"卸载{name}失败！") if os.path.exists(self.moddir + os.sep + name) else yecho(f"卸载{name}成功！")
 
 
 def unpack_choo(project):
