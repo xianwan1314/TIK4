@@ -320,9 +320,9 @@ def main_menu():
             if op in projects.keys():
                 if input(f"  确认删除{projects[op]}？[1/0]") == '1':
                     rmdire(LOCALDIR + os.sep + projects[op])
-                    ysuc("  删除成功！")
+                    ysuc("删除成功！")
                 else:
-                    print(" 取消删除")
+                    ywarn("取消删除")
     elif op_pro == '0':
         projec = input("请输入项目名称(非中文)：")
         if projec:
