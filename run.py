@@ -943,10 +943,7 @@ def packChoo(project):
             if int(filed) in parts.keys():
                 if settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
                     syscheck = input("  手动打包所有分区格式为：[1]ext4 [2]erofs")
-                    if syscheck == '2':
-                        imgtype = "erofs"
-                    else:
-                        imgtype = "ext"
+                    imgtype = "erofs" if syscheck == "2" else "ext"
                 else:
                     imgtype = 'ext'
                 if settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
