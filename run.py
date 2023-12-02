@@ -261,6 +261,65 @@ class setting:
             self.__init__()
 
 
+def plug_parse(js_on):
+    class parse:
+        gavs = {}
+
+        def __init__(self, jsons):
+            self.value = []
+            with open(jsons, 'r', encoding='UTF-8') as f:
+                try:
+                    data_ = json.load(f)
+                except Exception as e:
+                    ywarn("解析错误", e.__str__())
+                    return
+                print(data_['main']['info']['title'])
+                for group_name, group_data in data_['main'].items():
+                    if group_name != "info":
+                        print(group_data['title'])
+                        for con in group_data['controls']:
+                            if 'set' in con:
+                                self.value.append(con['set'])
+                            if con["type"] == "text":
+                                print(con['text'], int(con['fontsize']))
+                            elif con["type"] == "filechose":
+                                file_var_name = con['set']
+                                ysuc("请在下方拖入文件或输入路径")
+                                self.gavs[file_var_name] = input(con['text'])
+                            elif con["type"] == "radio":
+                                gavs = {}
+                                radio_var_name = con['set']
+                                options = con['opins'].split()
+                                cs = 0
+                                print("---------------------------")
+                                for option in options:
+                                    cs += 1
+                                    text, value = option.split('|')
+                                    self.gavs[radio_var_name].set(value)
+                                    print(f"[{cs}] {text}")
+                                    gavs["%s" % cs] = value
+                                print("---------------------------")
+                                op_in = input("请输入您的选择:")
+                                if op_in in gavs.keys():
+                                    self.gavs[radio_var_name] = gavs[op_in]
+                                else:
+                                    self.gavs[radio_var_name] = gavs["1"]
+                            elif con["type"] == 'input':
+                                input_var_name = con['set']
+                                if 'text' in con:
+                                    print(con['text'])
+                                self.gavs[input_var_name] = input("请输入一个值:")
+                            elif con['type'] == 'checkbutton':
+                                b_var_name = con['set']
+                                text = 'M.K.C' if 'text' not in con else con['text']
+                                self.gavs[b_var_name] = 1 if input(text+"[1/0]:") == '1' else 0
+                            else:
+                                print("不支持的解析:%s" % con['type'])
+
+    data = parse(js_on)
+    return data.gavs, data.value
+
+
 def main_menu():
     projects = {}
     pro = 0
@@ -346,7 +405,8 @@ def menu(project):
     cls()
     os.chdir(project_dir)
     print(" \n\033[31m>项目菜单 \033[0m\n")
-    print(f"  项目：{project}\033[91m(不完整)\033[0m\n") if not os.path.exists(os.path.abspath('config')) else print(f"  项目：{project}\n")
+    print(f"  项目：{project}\033[91m(不完整)\033[0m\n") if not os.path.exists(os.path.abspath('config')) else print(
+        f"  项目：{project}\n")
     if not os.path.exists(project_dir + os.sep + 'TI_out'):
         os.makedirs(project_dir + os.sep + 'TI_out')
     print('\033[33m    0> 回到主页     2> 解包菜单\033[0m\n')
@@ -458,7 +518,8 @@ def subbed(project):
         input("任意按钮继续")
     elif op_pro == '77':
         chose = input("输入插件序号:")
-        unmpk(mysubs[int(chose)], names[int(chose)], binner + os.sep + "subs") if int(chose) in mysubs.keys() else ywarn("序号错误")
+        unmpk(mysubs[int(chose)], names[int(chose)], binner + os.sep + "subs") if int(
+            chose) in mysubs.keys() else ywarn("序号错误")
     elif op_pro == '0':
         return
     elif op_pro.isdigit():
@@ -1059,7 +1120,8 @@ def inpacker(name, project, form, ftype):
     utc = int(time.time()) if not settings.utcstamp else settings.utcstamp
     out_img = project + os.sep + "TI_out" + os.sep + name + ".img"
     in_files = project + os.sep + name + os.sep
-    img_size0 = int(cat(project + os.sep + "config" + os.sep + name + "_size.txt")) if os.path.exists(project + os.sep + "config" + os.sep + name + "_size.txt") else  0
+    img_size0 = int(cat(project + os.sep + "config" + os.sep + name + "_size.txt")) if os.path.exists(
+        project + os.sep + "config" + os.sep + name + "_size.txt") else 0
     img_size1 = dirsize(in_files, 1, 1).rsize_v
     if settings.diysize == '' and img_size0 < img_size1:
         ywarn("您设置的size过小,将动态调整size!")
@@ -1292,7 +1354,9 @@ def inpayload(supersize, project):
         txt.write(f"qti_dynamic_partitions_partition_list={' '.join(super_list)}\n")
     call(
         f"delta_generator --out_file={out} {inparts} --dynamic_partition_info_file={project + os.sep + 'payload' + os.sep + 'dynamic_partitions_info.txt'}")
-    LOGS("成功创建payload!") if call(f"delta_generator --in_file={out} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0 else LOGE("创建payload失败！")
+    LOGS("成功创建payload!") if call(
+        f"delta_generator --in_file={out} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0 else LOGE(
+        "创建payload失败！")
     input("任意按钮继续")
 
 
