@@ -311,13 +311,18 @@ def main_menu():
                 pass
             unpackrom()
     elif op_pro == '00':
-        op_pro = input("  请输入你要删除的项目序号：")
-        if op_pro in projects.keys():
-            if input(f"  确认删除{projects[op_pro]}？[1/0]") == '1':
-                rmdire(LOCALDIR + os.sep + projects[op_pro])
-                ysuc("  删除成功！")
-            else:
-                print(" 取消删除")
+        op_pro = input("  请输入你要删除的项目序号:")
+        if " " in op_pro:
+            op_pro = op_pro.split()
+        else:
+            op_pro = [op_pro]
+        for op in op_pro:
+            if op in projects.keys():
+                if input(f"  确认删除{projects[op]}？[1/0]") == '1':
+                    rmdire(LOCALDIR + os.sep + projects[op])
+                    ysuc("  删除成功！")
+                else:
+                    print(" 取消删除")
     elif op_pro == '0':
         projec = input("请输入项目名称(非中文)：")
         if projec:
