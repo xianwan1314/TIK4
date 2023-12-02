@@ -312,7 +312,7 @@ def plug_parse(js_on):
                             elif con['type'] == 'checkbutton':
                                 b_var_name = con['set']
                                 text = 'M.K.C' if 'text' not in con else con['text']
-                                self.gavs[b_var_name] = 1 if input(text+"[1/0]:") == '1' else 0
+                                self.gavs[b_var_name] = 1 if input(text + "[1/0]:") == '1' else 0
                             else:
                                 print("不支持的解析:%s" % con['type'])
 
@@ -524,9 +524,11 @@ def subbed(project):
         return
     elif op_pro.isdigit():
         if int(op_pro) in mysubs.keys():
-            if (os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh") and
-                    not os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.json")):
-                gen = gen_sh_engine(project)
+            if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh"):
+                if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.json"):
+                    gavs, value = plug_parse(
+                        binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.json")
+                gen = gen_sh_engine(project,gavs,value)
                 call(
                     f'busybox ash {gen} {(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh").replace(os.sep, "/")}')
                 f_remove(gen)
@@ -536,13 +538,16 @@ def subbed(project):
     subbed(project)
 
 
-def gen_sh_engine(project):
+def gen_sh_engine(project, gavs=None, value=None):
     if not os.path.exists(temp):
         os.makedirs(temp)
     engine = temp + os.sep + utils.v_code()
     with open(engine, 'w', encoding='utf-8', newline='\n') as en:
         en.write(f"export project={project.replace(os.sep, '/')}\n")
         en.write(f'export tool_bin={ebinner.replace(os.sep, "/")}\n')
+        if gavs and value:
+            for i in value:
+                en.write(f"export {i}='{gavs[i]}'\n")
         en.write(f'source $1\n')
     return engine.replace(os.sep, '/')
 
