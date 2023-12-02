@@ -396,12 +396,13 @@ def menu(project):
     project_dir = LOCALDIR + os.sep + project
     cls()
     os.chdir(project_dir)
+    print(" \n\033[31m>项目菜单 \033[0m\n")
     if not os.path.exists(os.path.abspath('config')):
-        ywarn("  不完整项目")
+        print(f"  项目：{project}\033[91m(不完整)\033[0m\n")
+    else:
+        print(f"  项目：{project}\n")
     if not os.path.exists(project_dir + os.sep + 'TI_out'):
         os.makedirs(project_dir + os.sep + 'TI_out')
-    print(" \n\033[31m>ROM菜单 \033[0m\n")
-    print(f"  项目：{project}\n")
     print('\033[33m    0> 回到主页     2> 解包菜单\033[0m\n')
     print('\033[36m    3> 打包菜单     4> 插件菜单\033[0m\n')
     print('\033[32m    5> 一键封装\033[0m\n')
