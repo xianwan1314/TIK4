@@ -335,15 +335,12 @@ def main_menu():
             input("任意按钮继续")
     elif op_pro == '66':
         cls()
-        ysuc("感谢使用TI-KITCHEN-4,再见！")
+        ysuc("\n感谢使用TI-KITCHEN4,再见！")
         sys.exit(0)
     elif op_pro == '77':
         setting()
     elif op_pro.isdigit():
-        if op_pro in projects.keys():
-            menu(projects[op_pro])
-        else:
-            ywarn("  Input error!")
+        menu(projects[op_pro]) if op_pro in projects.keys() else ywarn("  Input error!")
     else:
         ywarn("  Input error!")
         input("任意按钮继续")
