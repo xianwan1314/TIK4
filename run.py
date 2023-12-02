@@ -313,8 +313,7 @@ def main_menu():
     elif op_pro == '00':
         op_pro = input("  请输入你要删除的项目序号：")
         if op_pro in projects.keys():
-            delr = input(f"  确认删除{projects[op_pro]}？[1/0]")
-            if delr == '1':
+            if input(f"  确认删除{projects[op_pro]}？[1/0]") == '1':
                 rmdire(LOCALDIR + os.sep + projects[op_pro])
                 ysuc("  删除成功！")
             else:
