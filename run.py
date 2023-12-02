@@ -321,16 +321,16 @@ def main_menu():
                 print(" 取消删除")
     elif op_pro == '0':
         projec = input("请输入项目名称(非中文)：")
-        if not projec:
-            ywarn("Input Error!")
-            input("任意按钮继续")
-        else:
+        if projec:
             if os.path.exists(LOCALDIR + os.sep + projec):
                 projec = f'{projec}_{time.strftime("%m%d%H%M%S")}'
                 ywarn(f"项目已存在！自动命名为：{projec}")
                 time.sleep(1)
             os.makedirs(LOCALDIR + os.sep + projec + os.sep + "config")
             menu(projec)
+        else:
+            ywarn("  Input error!")
+            input("任意按钮继续")
     elif op_pro == '66':
         cls()
         sys.exit(0)
