@@ -59,9 +59,9 @@ def rmdire(path):
             ywarn("无法删除文件夹，权限不足")
 
 
-if os.name == 'posix':
+if os.name == 'posix' and os.geteuid() == 0:
     try:
-        os.chmod(binner, 777)
+        os.chmod(binner, 0o777)
     except:
         pass
 
