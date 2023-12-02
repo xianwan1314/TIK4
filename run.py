@@ -153,9 +153,9 @@ class setting:
                 settings.change('utcstamp', '')
         elif op_pro == '6':
             print("  Img是否打包为sparse(压缩体积)[1/0]")
-            settings.change('pack_sparse', '1' if input("  请输入序号: ") == '1' else "0")
+            settings.change('pack_sparse', '1' if input("  请输入序号:") == '1' else "0")
         elif op_pro == '7':
-            settings.change('diyimgtype', '1' if input(f"  打包镜像格式[1]同解包格式 [2]可选择: ") == '2' else '')
+            settings.change('diyimgtype', '1' if input(f"  打包镜像格式[1]同解包格式 [2]可选择:") == '2' else '')
         else:
             print("Input error!")
         self.settings1()
@@ -179,7 +179,7 @@ class setting:
         ''')
         op_pro = input("   请输入编号: ")
         if op_pro == "0":
-            return 1
+            return
         elif op_pro == '1':
             super_group = input(f"  请输入（无特殊字符）: ")
             if super_group:
