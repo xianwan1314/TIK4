@@ -1467,10 +1467,7 @@ def unpackrom():
     if zipd.isdigit():
         if int(zipd) in zips.keys():
             projec = input("请输入项目名称(可留空)：")
-            if projec:
-                project = "TI_%s" % projec
-            else:
-                project = "TI_%s" % os.path.basename(zips[int(zipd)]).replace('.zip', '')
+            project = "TI_%s" % projec if projec else "TI_%s" % os.path.basename(zips[int(zipd)]).replace('.zip', '')
             if os.path.exists(LOCALDIR + os.sep + project):
                 project = project + time.strftime("%m%d%H%M%S")
                 ywarn(f"项目已存在！自动命名为：{project}")
