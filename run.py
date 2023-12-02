@@ -81,15 +81,6 @@ if not os.path.exists(ebinner):
     error(1, "Binary not found\nMay Not Support Your Device?")
 
 
-def getprop(name, path):
-    with open(path, 'r') as prop:
-        for s in prop.readlines():
-            if s[:1] == '#':
-                continue
-            if name in s:
-                return s.strip().split('=')[1]
-
-
 class set_utils:
     def __init__(self, path):
         self.path = path
@@ -1079,7 +1070,7 @@ def makedtb(sf, project):
     for dts_files in os.listdir(dtbdir + os.sep + "dts_files"):
         new_dtb_files = dts_files.split('.')[0]
         yecho(f"正在回编译{dts_files}为{new_dtb_files}.dtb")
-        if call(f'dtc -@ -I "dts" -O "dtb" "{dtbdir + os.sep + "dts_files" + os.sep + dts_files}" -o "{dtbdir+os.sep}new_dtb_files{os.sep}{new_dtb_files}.dtb"',
+        if call(f'dtc -@ -I "dts" -O "dtb" "{dtbdir + os.sep + "dts_files" + os.sep + dts_files}" -o "{dtbdir + os.sep}new_dtb_files{os.sep}{new_dtb_files}.dtb"',
                 out=1) != 0:
             ywarn("回编译dtb失败")
     with open(project + os.sep + "TI_out" + os.sep + sf, 'wb') as sff:
@@ -1148,6 +1139,7 @@ def inpacker(name, project, form, ftype):
             os.remove(project + os.sep + "TI_out" + os.sep + name_ + ".transfer.list")
         except:
             pass
+
     file_contexts = project + os.sep + "config" + os.sep + name + "_file_contexts"
     fs_config = project + os.sep + "config" + os.sep + name + "_fs_config"
     utc = int(time.time()) if not settings.utcstamp else settings.utcstamp
