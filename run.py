@@ -138,13 +138,13 @@ class setting:
         \033[33m  > 动态分区设置 \033[0m
            1> Super簇名 \033[93m[{settings.super_group}]\033[0m\n
            ----[Metadata设置]--
-           3> 最大保留Size \033[93m[{settings.metadatasize}]\033[0m\n
+           2> 最大保留Size \033[93m[{settings.metadatasize}]\033[0m\n
            ----[分区设置]------
-           4> 默认扇区/块大小 \033[93m[{settings.BLOCKSIZE}]\033[0m\n
+           3> 默认扇区/块大小 \033[93m[{settings.BLOCKSIZE}]\033[0m\n
            ----[Super设置]-----
-           5> 指定block大小 \033[93m[{settings.SBLOCKSIZE}]\033[0m
-           6> 更改物理分区名 \033[93m[{settings.supername}]\033[0m
-           8> 强制烧写完整Img \033[93m[{settings.fullsuper}]\033[0m
+           4> 指定block大小 \033[93m[{settings.SBLOCKSIZE}]\033[0m
+           5> 更改物理分区名 \033[93m[{settings.supername}]\033[0m
+           6> 强制烧写完整Img \033[93m[{settings.fullsuper}]\033[0m
            9> 标记分区槽后缀 \033[93m[{settings.autoslotsuffixing}]\033[0m\n
            0>返回上一级菜单
            --------------------------
@@ -152,12 +152,33 @@ class setting:
         op_pro = input("   请输入编号: ")
         if op_pro == "0":
             return 1
-        try:
-            getattr(self, 'dyset%s' % op_pro)()
-            self.settings3()
-        except AttributeError:
+        elif op_pro == '1':
+            super_group = input(f"  请输入（无特殊字符）: ")
+            if super_group:
+                settings.change('super_group', super_group)
+        elif op_pro == '2':
+            metadatasize = input("  设置metadata最大保留size(默认为65536，至少512) ")
+            if metadatasize:
+                settings.change('metadatasize', metadatasize)
+        elif op_pro == '3':
+            BLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.BLOCKSIZE}\n  请输入: ")
+            if BLOCKSIZE:
+                settings.change('BLOCKSIZE', BLOCKSIZE)
+        elif op_pro == '4':
+            SBLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.SBLOCKSIZE}\n  请输入: ")
+            if SBLOCKSIZE:
+                settings.change('SBLOCKSIZE', SBLOCKSIZE)
+        elif op_pro == '5':
+            supername = input(f'  当前动态分区物理分区名(默认super)：{settings.supername}\n  请输入（无特殊字符）: ')
+            if supername:
+                settings.change('supername', supername)
+        elif op_pro == '6':
+            settings.change('fullsuper', '' if input("  是否强制创建Super镜像？[1/0]") != '1' else '-F')
+        elif op_pro == '7':
+            settings.change('autoslotsuffixing', '' if input("  是否标记需要Slot后缀的分区？[1/0]") != '1' else '-x')
+        else:
             print("Input error!")
-            self.settings3()
+        self.settings3()
 
     @staticmethod
     def settings4_1():
@@ -250,44 +271,6 @@ class setting:
     @staticmethod
     def packset8():
         settings.change('diyimgtype', '1' if input(f"  打包镜像格式[1]同解包格式 [2]可选择: ") == '2' else '')
-
-    @staticmethod
-    def dyset1():
-        super_group = input(f"  请输入（无特殊字符）: ")
-        if super_group:
-            settings.change('super_group', super_group)
-
-    @staticmethod
-    def dyset3():
-        metadatasize = input("  设置metadata最大保留size(默认为65536，至少512) ")
-        if metadatasize:
-            settings.change('metadatasize', metadatasize)
-
-    @staticmethod
-    def dyset4():
-        BLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.BLOCKSIZE}\n  请输入: ")
-        if BLOCKSIZE:
-            settings.change('BLOCKSIZE', BLOCKSIZE)
-
-    @staticmethod
-    def dyset5():
-        SBLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.SBLOCKSIZE}\n  请输入: ")
-        if SBLOCKSIZE:
-            settings.change('SBLOCKSIZE', SBLOCKSIZE)
-
-    @staticmethod
-    def dyset6():
-        supername = input(f'  当前动态分区物理分区名(默认super)：{settings.supername}\n  请输入（无特殊字符）: ')
-        if supername:
-            settings.change('supername', supername)
-
-    @staticmethod
-    def dyset8():
-        settings.change('fullsuper', '' if input("  是否强制创建Super镜像？[1/0]") != '1' else '-F')
-
-    @staticmethod
-    def dyset9():
-        settings.change('autoslotsuffixing', '' if input("  是否标记需要Slot后缀的分区？[1/0]") != '1' else '-x')
 
     def __init__(self):
         cls()
