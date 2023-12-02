@@ -811,8 +811,7 @@ def packChoo(project):
             else:
                 form = 'img'
             if settings.diyimgtype == '1':
-                syscheck = input("手动打包所有分区格式为：[1]ext4 [2]erofs")
-                imgtype = "erofs" if syscheck == "2" else "ext"
+                imgtype = "erofs" if input("手动打包所有分区格式为：[1]ext4 [2]erofs:") == "2" else "ext"
             else:
                 imgtype = 'ext'
             for f in track(parts.keys()):
@@ -826,7 +825,6 @@ def packChoo(project):
                 else:
                     inpacker(parts[f], project, form, imgtype)
         elif filed == '55':
-            pacall = input("  是否打包所有镜像？ [1/0]	")
             op_menu = input("  输出所有文件格式[1]br [2]dat [3]img:")
             if op_menu == '1':
                 form = 'br'
@@ -835,12 +833,11 @@ def packChoo(project):
             else:
                 form = 'img'
             if settings.diyimgtype == '1':
-                syscheck = input("手动打包所有分区格式为：[1]ext4 [2]erofs")
-                imgtype = "erofs" if syscheck == "2" else "ext"
+                imgtype = "erofs" if input("手动打包所有分区格式为：[1]ext4 [2]erofs") == "2" else "ext"
             else:
                 imgtype = 'ext'
             for f in parts.keys():
-                imgcheck = input(f"  是否打包{parts[f]}?[1/0]	") if pacall != '1' else '1'
+                imgcheck = input(f"  是否打包{parts[f]}?[1/0]	") if input("  是否打包所有镜像？ [1/0]	") != '1' else '1'
                 if not imgcheck == '1':
                     continue
                 yecho(f"打包{parts[f]}...")
