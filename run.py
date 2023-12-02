@@ -352,10 +352,7 @@ def menu(project):
     cls()
     os.chdir(project_dir)
     print(" \n\033[31m>项目菜单 \033[0m\n")
-    if not os.path.exists(os.path.abspath('config')):
-        print(f"  项目：{project}\033[91m(不完整)\033[0m\n")
-    else:
-        print(f"  项目：{project}\n")
+    print(f"  项目：{project}\033[91m(不完整)\033[0m\n") if not os.path.exists(os.path.abspath('config')) else print(f"  项目：{project}\n")
     if not os.path.exists(project_dir + os.sep + 'TI_out'):
         os.makedirs(project_dir + os.sep + 'TI_out')
     print('\033[33m    0> 回到主页     2> 解包菜单\033[0m\n')
