@@ -291,7 +291,7 @@ def plug_parse(js_on):
                                 radio_var_name = con['set']
                                 options = con['opins'].split()
                                 cs = 0
-                                print("---------------------------")
+                                print("-------选项---------")
                                 for option in options:
                                     cs += 1
                                     text, value = option.split('|')
