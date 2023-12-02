@@ -364,7 +364,7 @@ def main_menu():
     print("\033[92;44m Delta Edition \033[0m")
     if settings.online == 'true':
         try:
-            content = json.loads(requests.get('https://v1.jinrishici.com/all.json', timeout=3).content.decode())
+            content = json.loads(requests.get('https://v1.jinrishici.com/all.json', timeout=2).content.decode())
             shiju = content['content']
             fr = content['origin']
             another = content['author']
