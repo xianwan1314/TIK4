@@ -464,10 +464,7 @@ def subbed(project):
         input("任意按钮继续")
     elif op_pro == '77':
         chose = input("输入插件序号:")
-        if int(chose) in mysubs.keys():
-            unmpk(mysubs[int(chose)], names[int(chose)], binner + os.sep + "subs")
-        else:
-            print("序号错误")
+        unmpk(mysubs[int(chose)], names[int(chose)], binner + os.sep + "subs") if int(chose) in mysubs.keys() else ywarn("序号错误")
     elif op_pro == '0':
         return
     elif op_pro.isdigit():
