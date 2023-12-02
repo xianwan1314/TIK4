@@ -393,13 +393,13 @@ def main_menu():
 
 
 def menu(project):
-    PROJECT_DIR = LOCALDIR + os.sep + project
+    project_dir = LOCALDIR + os.sep + project
     cls()
-    os.chdir(PROJECT_DIR)
+    os.chdir(project_dir)
     if not os.path.exists(os.path.abspath('config')):
-        ywarn("项目已损坏！")
-    if not os.path.exists(PROJECT_DIR + os.sep + 'TI_out'):
-        os.makedirs(PROJECT_DIR + os.sep + 'TI_out')
+        ywarn("不完整项目")
+    if not os.path.exists(project_dir + os.sep + 'TI_out'):
+        os.makedirs(project_dir + os.sep + 'TI_out')
     print('\n')
     print(" \033[31m>ROM菜单 \033[0m\n")
     print(f"  项目：{project}")
@@ -412,13 +412,13 @@ def menu(project):
         os.chdir(LOCALDIR)
         return
     elif op_menu == '2':
-        unpack_choo(PROJECT_DIR)
+        unpack_choo(project_dir)
     elif op_menu == '3':
-        packChoo(PROJECT_DIR)
+        packChoo(project_dir)
     elif op_menu == '4':
-        subbed(PROJECT_DIR)
+        subbed(project_dir)
     elif op_menu == '5':
-        hczip(PROJECT_DIR)
+        hczip(project_dir)
         input("任意按钮继续")
     else:
         ywarn('   Input error!')
