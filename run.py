@@ -343,7 +343,7 @@ def main_menu():
         menu(projects[op_pro]) if op_pro in projects.keys() else ywarn("  Input error!")
     else:
         ywarn("  Input error!")
-        input("任意按钮继续")
+    input("任意按钮继续")
     main_menu()
 
 
