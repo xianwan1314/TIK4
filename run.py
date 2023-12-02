@@ -1430,6 +1430,7 @@ def inpayload(supersize, project):
     partname = []
     super_list = []
     pimages = []
+    out = project + os.sep + 'TI_out' + os.sep + 'payload' + os.sep + 'payload.bin'
     for sf in os.listdir(project + os.sep + 'payload'):
         if sf.endswith('.img'):
             partname.append(sf.replace('.img', ''))
@@ -1445,8 +1446,8 @@ def inpayload(supersize, project):
         txt.write(f"qti_dynamic_partitions_size={supersize}\n")
         txt.write(f"qti_dynamic_partitions_partition_list={' '.join(super_list)}")
     call(
-        f"delta_generator --out_file={project + os.sep + 'TI_out' + os.sep + 'payload' + os.sep + 'payload.bin'} {inparts} --dynamic_partition_info_file={project + os.sep + 'payload' + os.sep + 'dynamic_partitions_info.txt'}")
-    if call(f"delta_generator --in_file={project + os.sep + 'TI_out' + os.sep + 'payload' + os.sep + 'payload.bin'} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0:
+        f"delta_generator --out_file={out} {inparts} --dynamic_partition_info_file={project + os.sep + 'payload' + os.sep + 'dynamic_partitions_info.txt'}")
+    if call(f"delta_generator --in_file={out} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0:
         LOGS("成功创建payload!")
     else:
         LOGE("创建payload失败！")
