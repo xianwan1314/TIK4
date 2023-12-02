@@ -127,9 +127,7 @@ class setting:
         elif op_pro == '1':
             print(f"  调整brotli压缩等级(整数1-9，级别越高，压缩率越大，耗时越长):")
             brcom = input("  请输入（1-9）:")
-            if brcom.isdigit():
-                if 0 < int(brcom) < 10:
-                    settings.change('brcom', brcom)
+            settings.change('brcom', brcom if brcom.isdigit() and 0 < int(brcom) < 10 else '1')
         elif op_pro == '2':
             settings.change('diysize', "1" if input(f"  打包Ext镜像大小[1]动态最小 [2]手动改:") == '2' else '')
         elif op_pro == '3':
