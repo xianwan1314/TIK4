@@ -1068,10 +1068,7 @@ def inpacker(name, project, form, ftype):
     utc = int(time.time()) if not settings.utcstamp else settings.utcstamp
     out_img = project + os.sep + "TI_out" + os.sep + name + ".img"
     in_files = project + os.sep + name + os.sep
-    if os.path.exists(project + os.sep + "config" + os.sep + name + "_size.txt"):
-        img_size0 = int(cat(project + os.sep + "config" + os.sep + name + "_size.txt"))
-    else:
-        img_size0 = 0
+    img_size0 = int(cat(project + os.sep + "config" + os.sep + name + "_size.txt")) if os.path.exists(project + os.sep + "config" + os.sep + name + "_size.txt") else  0
     img_size1 = dirsize(in_files, 1, 1).rsize_v
     if settings.diysize == '' and img_size0 < img_size1:
         ywarn("您设置的size过小,将动态调整size!")
