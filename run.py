@@ -1438,7 +1438,7 @@ def inpayload(supersize, project):
             pimages += f"{pimages}{project}{os.sep}payload{os.sep}{sf.replace('.img', '')}.img:"
             yecho(f"预打包:{sf}")
     inparts = f"--partition_names={partname[:-1]} --new_partitions={pimages[:-1]}"
-    yecho(f"当前Super逻辑分区表：[{super_list}]")
+    yecho(f"当前Super逻辑分区表：{super_list}")
     with open(project + os.sep + "payload" + os.sep + "dynamic_partitions_info.txt", 'w', encoding='utf-8',
               newline='\n') as txt:
         txt.write(f"super_partition_groups={settings.super_group}\n")
