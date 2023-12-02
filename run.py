@@ -258,7 +258,7 @@ class setting:
        --------------------------
     ''')
         op_pro = input("   请输入编号: ")
-        if op_pro == "0" or op_pro == "1":
+        if op_pro == "0":
             return
         try:
             getattr(self, 'settings%s' % op_pro)()
