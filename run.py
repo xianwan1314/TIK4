@@ -1207,7 +1207,6 @@ def packsuper(project):
 
 def insuper(Imgdir, outputimg, ssize, stype, sparse):
     group_size_a = 0
-    group_size_b = 0
     for root, dirs, files in os.walk(Imgdir):
         for file in files:
             file_path = os.path.join(root, file)
@@ -1230,12 +1229,10 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse):
                         img_sizea = os.path.getsize(Imgdir + os.sep + image + "_a.img")
                         img_sizeb = os.path.getsize(Imgdir + os.sep + image + "_b.img")
                         group_size_a += img_sizea
-                        group_size_b += img_sizeb
                         superpa += f"--partition {image}_a:readonly:{img_sizea}:{settings.super_group}_a --image {image}_a={Imgdir}{os.sep}{image}_a.img --partition {image}_b:readonly:{img_sizeb}:{settings.super_group}_b --image {image}_b={Imgdir}{os.sep}{image}_b.img "
                     else:
                         img_size = os.path.getsize(Imgdir + os.sep + image + ".img")
                         group_size_a += img_size
-                        group_size_b += img_size
                         superpa += f"--partition {image}_a:readonly:{img_size}:{settings.super_group}_a --image {image}_a={Imgdir}{os.sep}{image}.img --partition {image}_b:readonly:0:{settings.super_group}_b "
                 else:
                     img_size = os.path.getsize(Imgdir + os.sep + image + ".img")
@@ -1243,7 +1240,7 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse):
                     group_size_a += img_size
     supersize = ssize
     if not supersize:
-        supersize += group_size_a + 4096000
+        supersize = group_size_a + 4096000
     superpa += f"--device super:{supersize} "
     if stype in ['VAB', 'AB']:
         superpa += "--metadata-slots 3 "
