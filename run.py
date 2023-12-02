@@ -202,7 +202,7 @@ class setting:
         elif op_pro == '7':
             settings.change('autoslotsuffixing', '' if input("  是否标记需要Slot后缀的分区？[1/0]") != '1' else '-x')
         else:
-            print("Input error!")
+            ywarn("Input error!")
         self.settings2()
 
     def settings3(self):
