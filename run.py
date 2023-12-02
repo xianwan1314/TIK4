@@ -295,7 +295,7 @@ def plug_parse(js_on):
                                 for option in options:
                                     cs += 1
                                     text, value = option.split('|')
-                                    self.gavs[radio_var_name].set(value)
+                                    self.gavs[radio_var_name] = value
                                     print(f"[{cs}] {text}")
                                     gavs["%s" % cs] = value
                                 print("---------------------------")
