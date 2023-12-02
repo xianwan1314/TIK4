@@ -1429,7 +1429,7 @@ def inpayload(supersize, project):
               newline='\n') as txt:
         txt.write(f"super_partition_groups={settings.super_group}\n")
         txt.write(f"qti_dynamic_partitions_size={supersize}\n")
-        txt.write(f"qti_dynamic_partitions_partition_list={' '.join(super_list)}")
+        txt.write(f"qti_dynamic_partitions_partition_list={' '.join(super_list)}\n")
     call(
         f"delta_generator --out_file={out} {inparts} --dynamic_partition_info_file={project + os.sep + 'payload' + os.sep + 'dynamic_partitions_info.txt'}")
     if call(f"delta_generator --in_file={out} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0:
