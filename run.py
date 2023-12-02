@@ -181,12 +181,10 @@ class setting:
             return
         elif op_pro == '1':
             super_group = input(f"  请输入（无特殊字符）: ")
-            if super_group:
-                settings.change('super_group', super_group)
+            settings.change('super_group', super_group if super_group else "qti_dynamic_partitions")
         elif op_pro == '2':
             metadatasize = input("  设置metadata最大保留size(默认为65536，至少512) ")
-            if metadatasize:
-                settings.change('metadatasize', metadatasize)
+            settings.change('metadatasize', metadatasize if metadatasize else '65536')
         elif op_pro == '3':
             BLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.BLOCKSIZE}\n  请输入: ")
             settings.change('BLOCKSIZE', BLOCKSIZE if BLOCKSIZE else "4096")
@@ -217,7 +215,7 @@ class setting:
         if op_pro == "0":
             return
         elif op_pro == '1':
-            print(f"  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2旧")
+            print(f"  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2")
             banner_i = input("  请输入序号: ")
             if banner_i.isdigit():
                 if 0 < int(banner_i) < 7:
