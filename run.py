@@ -748,10 +748,9 @@ def unpack_choo(project):
             unpack(files[int(filed)], infos[int(filed)], project)
         else:
             ywarn("Input error!")
-            input("任意按钮继续")
     else:
         ywarn("Input error!")
-        input("任意按钮继续")
+    input("任意按钮继续")
     unpack_choo(project)
 
 
@@ -873,10 +872,8 @@ def packChoo(project):
                     inpacker(parts[int(filed)], project, form, imgtype)
             else:
                 ywarn("Input error!")
-                input("任意按钮继续")
         else:
             ywarn("Input error!")
-            input("任意按钮继续")
         input("任意按钮继续")
         packChoo(project)
 
