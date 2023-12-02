@@ -1153,14 +1153,13 @@ def makedtbo(sf, project):
 
 
 def inpacker(name, project, form, ftype):
-    def rdi(name):
+    def rdi(name_):
         try:
-            os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat")
-            os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
-            os.remove(project + os.sep + "TI_out" + os.sep + name + ".transfer.list")
+            os.remove(project + os.sep + "TI_out" + os.sep + name_ + ".new.dat")
+            os.remove(project + os.sep + "TI_out" + os.sep + name_ + ".patch.dat")
+            os.remove(project + os.sep + "TI_out" + os.sep + name_ + ".transfer.list")
         except:
             pass
-    mount_path = f"/{name}"
     file_contexts = project + os.sep + "config" + os.sep + name + "_file_contexts"
     fs_config = project + os.sep + "config" + os.sep + name + "_fs_config"
     if not settings.utcstamp:
@@ -1187,14 +1186,14 @@ def inpacker(name, project, form, ftype):
     size = int(size)
     if ftype == 'erofs':
         call(
-            f'mkfs.erofs -z{settings.erofslim}  -T {utc} --mount-point={mount_path} --fs-config-file={fs_config} --product-out={os.path.dirname(out_img)} --file-contexts={file_contexts} {out_img} {in_files}')
+            f'mkfs.erofs -z{settings.erofslim}  -T {utc} --mount-point=/{name} --fs-config-file={fs_config} --product-out={os.path.dirname(out_img)} --file-contexts={file_contexts} {out_img} {in_files}')
     else:
         if settings.pack_e2 == '0':
             call(
                 f'make_ext4fs -J -T {utc} -S {file_contexts} -l {img_size0} -C {fs_config} -L {name} -a {name} {out_img} {in_files}')
         else:
             call(
-                f'mke2fs -O ^has_journal -L {name} -I 256 -M {mount_path} -m 0 -t ext4 -b {settings.BLOCKSIZE} {out_img} {size}')
+                f'mke2fs -O ^has_journal -L {name} -I 256 -M /{name} -m 0 -t ext4 -b {settings.BLOCKSIZE} {out_img} {size}')
             call(
                 f"e2fsdroid -e -T {utc} -S {file_contexts} -C {fs_config} -a /{name} -f {in_files} {out_img}")
     if settings.pack_sparse == '1' or form == 'dat' or form == 'br':
