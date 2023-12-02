@@ -226,19 +226,13 @@ class setting:
     @staticmethod
     def packset2():
         sizediy = input(f"  打包Ext镜像大小[1]动态最小 [2]手动改: ")
-        if sizediy == '2':
-            settings.change('diysize', '1')
-        else:
-            settings.change('diysize', '')
+        settings.change('diysize', "1" if sizediy == '2' else '')
 
     @staticmethod
     def packset3():
         print(f"  打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid:")
         pack_op = input("  请输入序号: ")
-        if pack_op == '1':
-            settings.change('pack_e2', '0')
-        else:
-            settings.change('pack_e2', '1')
+        settings.change('pack_e2', '0' if pack_op == '1' else '1')
 
     @staticmethod
     def packset5():
