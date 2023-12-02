@@ -1273,7 +1273,7 @@ def packpayload(project):
             f_remove(project + os.sep + 'TI_out' + os.sep + "payload" + os.sep + 'dynamic_partitions_info.txt')
     else:
         os.makedirs(project + os.sep + 'payload')
-    ywarn(f"请将所有分区镜像放置于{project + os.sep}payload中（非super）！")
+    ywarn(f"请将所有分区镜像放置于{project + os.sep}payload中！")
     yecho("很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
     if not os.listdir(project + os.sep + 'payload'):
         print("您似乎没有要打包的分区，要移动下列分区打包吗：")
