@@ -299,18 +299,12 @@ class setting:
     @staticmethod
     def dyset8():
         iffullsuper = input("  是否强制创建Super镜像？[1/0]")
-        if iffullsuper != '1':
-            settings.change('fullsuper', '')
-        else:
-            settings.change('fullsuper', '-F')
+        settings.change('fullsuper', '' if iffullsuper != '1' else '-F')
 
     @staticmethod
     def dyset9():
         autoslotsuffix = input("  是否标记需要Slot后缀的分区？[1/0]")
-        if autoslotsuffix != '1':
-            settings.change('autoslotsuffixing', '')
-        else:
-            settings.change('autoslotsuffixing', '-x')
+        settings.change('autoslotsuffixing', '' if autoslotsuffix != '1' else '-x')
 
     def __init__(self):
         cls()
