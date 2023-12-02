@@ -147,7 +147,6 @@ class setting:
         \033[33m  > 动态分区设置 \033[0m
            1> Super簇名 \033[93m[{settings.super_group}]\033[0m\n
            ----[Metadata设置]--
-           2> 元数据插槽数 \033[93m[{settings.slotnumber}]\033[0m
            3> 最大保留Size \033[93m[{settings.metadatasize}]\033[0m\n
            ----[分区设置]------
            4> 默认扇区/块大小 \033[93m[{settings.BLOCKSIZE}]\033[0m\n
@@ -285,13 +284,6 @@ class setting:
         if super_group:
             settings.change('super_group', super_group)
 
-    @staticmethod
-    def dyset2():
-        slotnumber = input("  强制Metadata插槽数：[2] [3]: ")
-        if slotnumber == '3':
-            settings.change('slotnumber', '3')
-        else:
-            settings.change('slotnumber', '2')
 
     @staticmethod
     def dyset3():
