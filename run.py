@@ -114,23 +114,51 @@ class setting:
            2> 大小处理 \033[93m[{settings.diysize}]\033[0m
            3> 打包方式 \033[93m[{settings.pack_e2}]\033[0m\n
            ----[EROFS设置]-----
-           5> 压缩方式 \033[93m[{settings.erofslim}]\033[0m\n
+           4> 压缩方式 \033[93m[{settings.erofslim}]\033[0m\n
            ----[IMG设置]-------
-           6> UTC时间戳 \033[93m[{settings.utcstamp}]\033[0m
-           7> 创建sparse \033[93m[{settings.pack_sparse}]\033[0m
-           8> 文件系统 \033[93m[{settings.diyimgtype}]\033[0m\n
+           5> UTC时间戳 \033[93m[{settings.utcstamp}]\033[0m
+           6> 创建sparse \033[93m[{settings.pack_sparse}]\033[0m
+           7> 文件系统 \033[93m[{settings.diyimgtype}]\033[0m\n
            0>返回上一级菜单
            --------------------------
         ''')
         op_pro = input("   请输入编号: ")
         if op_pro == "0":
             return 1
-        try:
-            getattr(self, 'packset%s' % op_pro)()
-            self.settings2()
-        except AttributeError:
+        elif op_pro == '1':
+            print(f"  调整brotli压缩等级（整数1-9，级别越高，压缩率越大，耗时越长），当前为：{settings.brcom}级")
+            brcom = input("  请输入（1-9）:")
+            if brcom.isdigit():
+                if 0 < int(brcom) < 10:
+                    settings.change('brcom', brcom)
+        elif op_pro == '2':
+            settings.change('diysize', "1" if input(f"  打包Ext镜像大小[1]动态最小 [2]手动改:") == '2' else '')
+        elif op_pro == '3':
+            print(f"  打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid:")
+            settings.change('pack_e2', '0' if input("  请输入序号: ") == '1' else '1')
+        elif op_pro == '4':
+            if input("  选择erofs压缩方式[1]是 [2]否:") == '1':
+                erofslim = input(
+                    "  选择erofs压缩方式：lz4/lz4hc/lzma/和压缩等级[1-9](数字越大耗时更长体积更小) 例如 lz4hc,8:")
+                if erofslim:
+                    settings.change("erofslim", erofslim)
+            else:
+                settings.change("erofslim", '')
+        elif op_pro == '5':
+            if input("  设置打包UTC时间戳[1]自动 [2]自定义:") == "2":
+                utcstamp = input("  请输入: ")
+                if utcstamp.isdigit():
+                    settings.change('utcstamp', utcstamp)
+            else:
+                settings.change('utcstamp', '')
+        elif op_pro == '6':
+            print("  Img是否打包为sparse(压缩体积)[1/0]")
+            settings.change('pack_sparse', '1' if input("  请输入序号: ") == '1' else "0")
+        elif op_pro == '7':
+            settings.change('diyimgtype', '1' if input(f"  打包镜像格式[1]同解包格式 [2]可选择: ") == '2' else '')
+        else:
             print("Input error!")
-            self.settings2()
+        self.settings2()
 
     def settings3(self):
         cls()
@@ -224,53 +252,6 @@ class setting:
         print("\033[0m")
         print('\033[31m---------------------------------\033[0m')
         input('\033[92m Powered By MIO-KITCHEN-ENVS\033[0m')
-
-    @staticmethod
-    def packset1():
-        print(f"  调整brotli压缩等级（整数1-9，级别越高，压缩率越大，耗时越长），当前为：{settings.brcom}级")
-        brcom = input("  请输入（1-9）:")
-        if brcom.isdigit():
-            if 0 < int(brcom) < 10:
-                settings.change('brcom', brcom)
-        else:
-            return
-
-    @staticmethod
-    def packset2():
-        settings.change('diysize', "1" if input(f"  打包Ext镜像大小[1]动态最小 [2]手动改:") == '2' else '')
-
-    @staticmethod
-    def packset3():
-        print(f"  打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid:")
-        settings.change('pack_e2', '0' if input("  请输入序号: ") == '1' else '1')
-
-    @staticmethod
-    def packset5():
-        if input("  选择erofs压缩方式[1]是 [2]否:") == '1':
-            erofslim = input(
-                "  选择erofs压缩方式：lz4/lz4hc/lzma/和压缩等级[1-9](数字越大耗时更长体积更小) 例如 lz4hc,8:")
-            if erofslim:
-                settings.change("erofslim", erofslim)
-        else:
-            settings.change("erofslim", '')
-
-    @staticmethod
-    def packset6():
-        if input("  设置打包UTC时间戳[1]自动 [2]自定义:") == "2":
-            utcstamp = input("  请输入: ")
-            if utcstamp.isdigit():
-                settings.change('utcstamp', utcstamp)
-        else:
-            settings.change('utcstamp', '')
-
-    @staticmethod
-    def packset7():
-        print("  Img是否打包为sparse(压缩体积)[1/0]")
-        settings.change('pack_sparse', '1' if input("  请输入序号: ") == '1' else "0")
-
-    @staticmethod
-    def packset8():
-        settings.change('diyimgtype', '1' if input(f"  打包镜像格式[1]同解包格式 [2]可选择: ") == '2' else '')
 
     def __init__(self):
         cls()
