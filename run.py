@@ -1432,7 +1432,7 @@ def inpayload(supersize, project):
     pimages = ''
     for sf in os.listdir(project + os.sep + 'payload'):
         if sf.endswith('.img'):
-            partname += sf.replace('.img', '') + ":"
+            partname += (sf.replace('.img', '') + ":")
             if gettype(project + os.sep + 'payload'+os.sep+sf) in ['ext', 'erofs']:
                 super_list.append(sf.replace('.img', ''))
             pimages += f"{pimages}{project}{os.sep}payload{os.sep}{sf.replace('.img', '')}.img:"
