@@ -139,15 +139,13 @@ class setting:
             if input("  选择erofs压缩方式[1]是 [2]否:") == '1':
                 erofslim = input(
                     "  选择erofs压缩方式：lz4/lz4hc/lzma/和压缩等级[1-9](数字越大耗时更长体积更小) 例如 lz4hc,8:")
-                if erofslim:
-                    settings.change("erofslim", erofslim)
+                settings.change("erofslim", erofslim if erofslim else 'lz4hc,8')
             else:
                 settings.change("erofslim", '')
         elif op_pro == '5':
             if input("  设置打包UTC时间戳[1]自动 [2]自定义:") == "2":
                 utcstamp = input("  请输入: ")
-                if utcstamp.isdigit():
-                    settings.change('utcstamp', utcstamp)
+                settings.change('utcstamp', utcstamp if utcstamp.isdigit() else '1230768000')
             else:
                 settings.change('utcstamp', '')
         elif op_pro == '6':
