@@ -451,7 +451,6 @@ def menu(project):
     print('\033[33m    0> 回到主页     2> 解包菜单\033[0m\n')
     print('\033[36m    3> 打包菜单     4> 插件菜单\033[0m\n')
     print('\033[32m    5> 一键封装\033[0m\n')
-    print()
     op_menu = input("    请输入编号: ")
     if op_menu == '0':
         os.chdir(LOCALDIR)
@@ -729,8 +728,7 @@ def unpack_choo(project):
     filen = 0
     files = {}
     infos = {}
-    ywarn(f"  请将文件放于{project}根目录下！")
-    print()
+    ywarn(f"  请将文件放于{project}根目录下！\n")
     print(" [0]- 分解所有文件\n")
     if dir_has(project, '.br'):
         print("\033[33m [Br]文件\033[0m\n")
@@ -835,16 +833,13 @@ def unpack_choo(project):
                     print(f'   [{filen}]- {dtb0}\n')
                     files[filen] = dtb0
                     infos[filen] = 'dtb'
-    print()
-    print("\033[33m  [00] 返回  [77] 循环解包  \033[0m")
+    print("\n\033[33m  [00] 返回  [77] 循环解包  \033[0m")
     print("  --------------------------------------")
     filed = input("  请输入对应序号：")
     if filed == '0':
-        print()
         for v in files.keys():
             unpack(files[v], infos[v], project)
     elif filed == '77':
-        print()
         imgcheck = 0
         upacall = input("  是否解包所有文件？ [1/0]")
         for v in files.keys():
@@ -902,8 +897,7 @@ def packChoo(project):
                     parts[partn] = packs
                     types[partn] = 'dtbo'
                     print(f"   [{partn}]- {packs} <dtbo>\n")
-        print()
-        print("\033[33m [55] 循环打包 [66] 打包Super [77] 打包Payload [00]返回\033[0m")
+        print("\n\033[33m [55] 循环打包 [66] 打包Super [77] 打包Payload [00]返回\033[0m")
         print("  --------------------------------------")
         filed = input("  请输入对应序号：")
         if filed == '0':
@@ -1584,7 +1578,6 @@ def unpackrom():
     else:
         ywarn("	没有ROM文件！")
     print("--------------------------------------------------\n")
-    print()
     zipd = input("请输入对应序列号：")
     if zipd.isdigit():
         if int(zipd) in zips.keys():
