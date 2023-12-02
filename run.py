@@ -1304,10 +1304,7 @@ def inpayload(supersize, project):
         txt.write(f"qti_dynamic_partitions_partition_list={' '.join(super_list)}\n")
     call(
         f"delta_generator --out_file={out} {inparts} --dynamic_partition_info_file={project + os.sep + 'payload' + os.sep + 'dynamic_partitions_info.txt'}")
-    if call(f"delta_generator --in_file={out} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0:
-        LOGS("成功创建payload!")
-    else:
-        LOGE("创建payload失败！")
+    LOGS("成功创建payload!") if call(f"delta_generator --in_file={out} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0 else LOGE("创建payload失败！")
     input("任意按钮继续")
 
 
