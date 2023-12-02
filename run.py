@@ -370,10 +370,9 @@ def menu(project):
         subbed(project_dir)
     elif op_menu == '5':
         hczip(project_dir)
-        input("任意按钮继续")
     else:
         ywarn('   Input error!')
-        input("任意按钮继续")
+    input("任意按钮继续")
     menu(project)
 
 
