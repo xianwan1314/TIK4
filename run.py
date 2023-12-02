@@ -281,7 +281,7 @@ def plug_parse(js_on):
                             if 'set' in con:
                                 self.value.append(con['set'])
                             if con["type"] == "text":
-                                print(con['text'])
+                                print("----------"+con['text']+"----------")
                             elif con["type"] == "filechose":
                                 file_var_name = con['set']
                                 ysuc("请在下方拖入文件或输入路径")
