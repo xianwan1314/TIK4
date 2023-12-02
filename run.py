@@ -528,7 +528,9 @@ def subbed(project):
                 if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.json"):
                     gavs, value = plug_parse(
                         binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.json")
-                gen = gen_sh_engine(project, gavs, value)
+                    gen = gen_sh_engine(project, gavs, value)
+                else:
+                    gen = gen_sh_engine(project)
                 call(
                     f'busybox ash {gen} {(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh").replace(os.sep, "/")}')
                 f_remove(gen)
