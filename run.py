@@ -1510,30 +1510,29 @@ def autounpack(project):
         shutil.move(project + os.sep + "payload_properties.txt", project + os.sep + "config")
         shutil.move(project + os.sep + "META-INF" + os.sep + "com" + os.sep + "android" + os.sep + "metadata",
                     project + os.sep + "config")
-    if True:
-        ask_ = input("解包所有文件？[1/0]")
-        for infile in os.listdir(project):
-            os.chdir(project)
-            if os.path.isdir(os.path.abspath(infile)):
+    ask_ = input("解包所有文件？[1/0]")
+    for infile in os.listdir(project):
+        os.chdir(project)
+        if os.path.isdir(os.path.abspath(infile)):
+            continue
+        elif not os.path.exists(os.path.abspath(infile)):
+            continue
+        elif os.path.getsize(os.path.abspath(infile)) == 0:
+            continue
+        elif os.path.abspath(infile).endswith('.list') or os.path.abspath(infile).endswith('.patch.dat'):
+            continue
+        if ask_ != '1':
+            ask = input(f"要分解{infile}吗 [1/0]")
+            if not ask == '1':
                 continue
-            elif not os.path.exists(os.path.abspath(infile)):
-                continue
-            elif os.path.getsize(os.path.abspath(infile)) == 0:
-                continue
-            elif os.path.abspath(infile).endswith('.list') or os.path.abspath(infile).endswith('.patch.dat'):
-                continue
-            if ask_ != '1':
-                ask = input(f"要分解{infile}吗 [1/0]")
-                if not ask == '1':
-                    continue
-            if infile.endswith('.new.dat.br'):
-                unpack(os.path.abspath(infile), 'br', project)
-            elif infile.endswith('.dat.1'):
-                unpack(os.path.abspath(infile), 'dat.1', project)
-            elif infile.endswith('.new.dat'):
-                unpack(os.path.abspath(infile), 'dat', project)
-            elif infile.endswith('.img'):
-                unpack(os.path.abspath(infile), 'img', project)
+        if infile.endswith('.new.dat.br'):
+            unpack(os.path.abspath(infile), 'br', project)
+        elif infile.endswith('.dat.1'):
+            unpack(os.path.abspath(infile), 'dat.1', project)
+        elif infile.endswith('.new.dat'):
+            unpack(os.path.abspath(infile), 'dat', project)
+        elif infile.endswith('.img'):
+            unpack(os.path.abspath(infile), 'img', project)
 
 
 if __name__ == '__main__':
