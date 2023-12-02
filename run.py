@@ -259,25 +259,18 @@ class setting:
     def packset7():
         print("  Img是否打包为sparse(压缩体积)[1/0]")
         ifpsparse = input("  请输入序号: ")
-        if ifpsparse == '1':
-            settings.change('pack_sparse', '1')
-        elif ifpsparse == '0':
-            settings.change('pack_sparse', '0')
+        settings.change('pack_sparse', '1' if ifpsparse == '1' else "0")
 
     @staticmethod
     def packset8():
         typediy = input(f"  打包镜像格式[1]同解包格式 [2]可选择: ")
-        if typediy == '2':
-            settings.change('diyimgtype', '1')
-        else:
-            settings.change('diyimgtype', '')
+        settings.change('diyimgtype', '1' if typediy == '2' else '')
 
     @staticmethod
     def dyset1():
         super_group = input(f"  请输入（无特殊字符）: ")
         if super_group:
             settings.change('super_group', super_group)
-
 
     @staticmethod
     def dyset3():
@@ -1388,7 +1381,8 @@ def packpayload(project):
             for i in move_list:
                 shutil.move(os.path.join(project + os.sep + 'TI_out', i), os.path.join(project + os.sep + 'payload', i))
     tool_auto_size = sum(
-        [os.path.getsize(os.path.join(project + os.sep + 'payload', p)) for p in os.listdir(project + os.sep + 'payload') if
+        [os.path.getsize(os.path.join(project + os.sep + 'payload', p)) for p in
+         os.listdir(project + os.sep + 'payload') if
          os.path.isfile(os.path.join(project + os.sep + 'payload', p))]) + 409600
     tool_auto_size = versize(tool_auto_size)
     checkssize = input(f"请设置构建Super.img大小:[1]9126805504 [2]10200547328 [3]工具推荐：{tool_auto_size} [5]自定义")
@@ -1413,7 +1407,7 @@ def inpayload(supersize, project):
     for sf in os.listdir(project + os.sep + 'payload'):
         if sf.endswith('.img'):
             partname.append(sf.replace('.img', ''))
-            if gettype(project + os.sep + 'payload'+os.sep+sf) in ['ext', 'erofs']:
+            if gettype(project + os.sep + 'payload' + os.sep + sf) in ['ext', 'erofs']:
                 super_list.append(sf.replace('.img', ''))
             pimages.append(f"{project}{os.sep}payload{os.sep}{sf.replace('.img', '')}.img")
             yecho(f"预打包:{sf}")
