@@ -190,16 +190,13 @@ class setting:
                 settings.change('metadatasize', metadatasize)
         elif op_pro == '3':
             BLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.BLOCKSIZE}\n  请输入: ")
-            if BLOCKSIZE:
-                settings.change('BLOCKSIZE', BLOCKSIZE)
+            settings.change('BLOCKSIZE', BLOCKSIZE if BLOCKSIZE else "4096")
         elif op_pro == '4':
             SBLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.SBLOCKSIZE}\n  请输入: ")
-            if SBLOCKSIZE:
-                settings.change('SBLOCKSIZE', SBLOCKSIZE)
+            settings.change('BLOCKSIZE', SBLOCKSIZE if SBLOCKSIZE else "4096")
         elif op_pro == '5':
             supername = input(f'  当前动态分区物理分区名(默认super)：{settings.supername}\n  请输入（无特殊字符）: ')
-            if supername:
-                settings.change('supername', supername)
+            settings.change('supername', supername if supername else "super")
         elif op_pro == '6':
             settings.change('fullsuper', '' if input("  是否强制创建Super镜像？[1/0]") != '1' else '-F')
         elif op_pro == '7':
