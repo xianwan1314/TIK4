@@ -202,12 +202,12 @@ class setting:
         print('YukongA')
         print("\033[0m")
         print('\033[31m---------------------------------\033[0m')
-        input('\033[97m Powered By MIO-KITCHEN-ENVS\033[0m')
+        input('\033[92m Powered By MIO-KITCHEN-ENVS\033[0m')
 
     @staticmethod
     def packset1():
         print(f"  调整brotli压缩等级（整数1-9，级别越高，压缩率越大，耗时越长），当前为：{settings.brcom}级")
-        brcom = input("  请输入（1-9）: ")
+        brcom = input("  请输入（1-9）:")
         if brcom.isdigit():
             if 0 < int(brcom) < 10:
                 settings.change('brcom', brcom)
@@ -216,7 +216,7 @@ class setting:
 
     @staticmethod
     def packset2():
-        sizediy = input(f"  打包Ext镜像大小[1]动态最小 [2]手动改: ")
+        sizediy = input(f"  打包Ext镜像大小[1]动态最小 [2]手动改:")
         settings.change('diysize', "1" if sizediy == '2' else '')
 
     @staticmethod
@@ -227,10 +227,10 @@ class setting:
 
     @staticmethod
     def packset5():
-        erofslim = input("  选择erofs压缩方式[1]是 [2]否: ")
+        erofslim = input("  选择erofs压缩方式[1]是 [2]否:")
         if erofslim == '1':
             erofslim = input(
-                "  选择erofs压缩方式：lz4/lz4hc/lzma/和压缩等级[1-9](数字越大耗时更长体积更小) 例如 lz4hc,8: ")
+                "  选择erofs压缩方式：lz4/lz4hc/lzma/和压缩等级[1-9](数字越大耗时更长体积更小) 例如 lz4hc,8:")
             if erofslim:
                 settings.change("erofslim", erofslim)
         else:
@@ -238,8 +238,7 @@ class setting:
 
     @staticmethod
     def packset6():
-        utcstamp = input("  设置打包UTC时间戳[1]自动 [2]自定义: ")
-        if utcstamp == "2":
+        if input("  设置打包UTC时间戳[1]自动 [2]自定义:") == "2":
             utcstamp = input("  请输入: ")
             if utcstamp.isdigit():
                 settings.change('utcstamp', utcstamp)
