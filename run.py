@@ -882,10 +882,7 @@ def packChoo(project):
                 form = 'img'
             if settings.diyimgtype == '1':
                 syscheck = input("手动打包所有分区格式为：[1]ext4 [2]erofs")
-                if syscheck == '2':
-                    imgtype = "erofs"
-                else:
-                    imgtype = "ext"
+                imgtype = "erofs" if syscheck == "2" else "ext"
             else:
                 imgtype = 'ext'
             for f in track(parts.keys()):
@@ -909,10 +906,7 @@ def packChoo(project):
                 form = 'img'
             if settings.diyimgtype == '1':
                 syscheck = input("手动打包所有分区格式为：[1]ext4 [2]erofs")
-                if syscheck == '2':
-                    imgtype = "erofs"
-                else:
-                    imgtype = "ext"
+                imgtype = "erofs" if syscheck == "2" else "ext"
             else:
                 imgtype = 'ext'
             for f in parts.keys():
