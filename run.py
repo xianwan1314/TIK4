@@ -840,10 +840,7 @@ def packChoo(project):
             else:
                 imgtype = 'ext'
             for f in parts.keys():
-                if pacall != '1':
-                    imgcheck = input(f"  是否打包{parts[f]}?[1/0]	")
-                else:
-                    imgcheck = '1'
+                imgcheck = input(f"  是否打包{parts[f]}?[1/0]	") if pacall != '1' else '1'
                 if not imgcheck == '1':
                     continue
                 yecho(f"打包{parts[f]}...")
