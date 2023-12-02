@@ -105,7 +105,7 @@ settings.load_set()
 
 
 class setting:
-    def settings2(self):
+    def settings1(self):
         cls()
         print(f'''
         \033[33m  > 打包设置 \033[0m
@@ -122,7 +122,7 @@ class setting:
            0>返回上一级菜单
            --------------------------
         ''')
-        op_pro = input("   请输入编号: ")
+        op_pro = input("   请输入编号:")
         if op_pro == "0":
             return 1
         elif op_pro == '1':
@@ -158,9 +158,9 @@ class setting:
             settings.change('diyimgtype', '1' if input(f"  打包镜像格式[1]同解包格式 [2]可选择: ") == '2' else '')
         else:
             print("Input error!")
-        self.settings2()
+        self.settings1()
 
-    def settings3(self):
+    def settings2(self):
         cls()
         print(f'''
         \033[33m  > 动态分区设置 \033[0m
@@ -206,9 +206,9 @@ class setting:
             settings.change('autoslotsuffixing', '' if input("  是否标记需要Slot后缀的分区？[1/0]") != '1' else '-x')
         else:
             print("Input error!")
-        self.settings3()
+        self.settings2()
 
-    def settings4(self):
+    def settings3(self):
         cls()
         print(f'''
     \033[33m  > 工具设置 \033[0m\n
@@ -228,10 +228,10 @@ class setting:
                     settings.change('banner', banner_i)
         elif op_pro == '2':
             settings.change('online', 'false' if settings.online == 'true' else 'true')
-        self.settings4()
+        self.settings3()
 
     @staticmethod
-    def settings5():
+    def settings4():
         cls()
         print(f'\033[31m {banner.banner1} \033[0m')
         print('\033[96m 开源的安卓全版本ROM处理工具\033[0m')
@@ -253,11 +253,10 @@ class setting:
         cls()
         print('''
     \033[33m  > 设置 \033[0m
-       1>[返回]上级菜单\n
-       2>[打包]相关细则设置\n
-       3>[动态分区]相关设置\n
-       4>工具设置\n
-       5>关于工具\n
+       1>[打包]相关设置\n
+       2>[动态分区]相关设置\n
+       3>工具设置\n
+       4>关于工具\n
        0>返回主页
        --------------------------
     ''')
