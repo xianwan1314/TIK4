@@ -248,13 +248,11 @@ class setting:
     @staticmethod
     def packset7():
         print("  Img是否打包为sparse(压缩体积)[1/0]")
-        ifpsparse = input("  请输入序号: ")
-        settings.change('pack_sparse', '1' if ifpsparse == '1' else "0")
+        settings.change('pack_sparse', '1' if input("  请输入序号: ") == '1' else "0")
 
     @staticmethod
     def packset8():
-        typediy = input(f"  打包镜像格式[1]同解包格式 [2]可选择: ")
-        settings.change('diyimgtype', '1' if typediy == '2' else '')
+        settings.change('diyimgtype', '1' if input(f"  打包镜像格式[1]同解包格式 [2]可选择: ") == '2' else '')
 
     @staticmethod
     def dyset1():
@@ -288,13 +286,11 @@ class setting:
 
     @staticmethod
     def dyset8():
-        iffullsuper = input("  是否强制创建Super镜像？[1/0]")
-        settings.change('fullsuper', '' if iffullsuper != '1' else '-F')
+        settings.change('fullsuper', '' if input("  是否强制创建Super镜像？[1/0]") != '1' else '-F')
 
     @staticmethod
     def dyset9():
-        autoslotsuffix = input("  是否标记需要Slot后缀的分区？[1/0]")
-        settings.change('autoslotsuffixing', '' if autoslotsuffix != '1' else '-x')
+        settings.change('autoslotsuffixing', '' if input("  是否标记需要Slot后缀的分区？[1/0]") != '1' else '-x')
 
     def __init__(self):
         cls()
