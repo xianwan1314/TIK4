@@ -589,8 +589,7 @@ class installmpk:
         print("介绍:")
         print(self.mconf.get('module', 'describe'))
         print("\033[0m\n")
-        install = input("要安装吗? [1/0]")
-        if install == '1':
+        if input("要安装吗? [1/0]") == '1':
             self.install()
         else:
             yecho("取消安装")
