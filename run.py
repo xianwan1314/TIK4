@@ -547,8 +547,8 @@ def gen_sh_engine(project, gavs=None, value=None):
     with open(engine, 'w', encoding='utf-8', newline='\n') as en:
         en.write(f"export project={project.replace(os.sep, '/')}\n")
         en.write(f'export tool_bin={ebinner.replace(os.sep, "/")}\n')
-        if gavs and value:
-            for i or value:
+        if gavs or value:
+            for i in value:
                 en.write(f"export {i}='{gavs[i]}'\n")
         en.write(f'source $1\n')
     return engine.replace(os.sep, '/')
