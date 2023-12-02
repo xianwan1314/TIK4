@@ -290,14 +290,13 @@ def main_menu():
     print(" >\033[33m 项目列表 \033[0m\n")
     print("\033[31m   [00]  删除项目\033[0m\n")
     print("   [0]  新建项目\n")
-    if os.listdir(LOCALDIR + os.sep):
-        for pros in os.listdir(LOCALDIR + os.sep):
-            if pros == 'bin' or pros.startswith('.'):
-                continue
-            if os.path.isdir(LOCALDIR + os.sep + pros):
-                pro += 1
-                print(f"   [{pro}]  {pros}\n")
-                projects['%s' % pro] = pros
+    for pros in os.listdir(LOCALDIR + os.sep):
+        if pros == 'bin' or pros.startswith('.'):
+            continue
+        if os.path.isdir(LOCALDIR + os.sep + pros):
+            pro += 1
+            print(f"   [{pro}]  {pros}\n")
+            projects['%s' % pro] = pros
     print("  --------------------------------------")
     print("\033[33m  [55] 解压  [66] 退出  [77] 设置  [88] 下载ROM\033[0m\n")
     op_pro = input("  请输入序号：")
