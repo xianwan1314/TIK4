@@ -276,7 +276,6 @@ def plug_parse(js_on):
                 yecho(data_['main']['info']['title'])
                 for group_name, group_data in data_['main'].items():
                     if group_name != "info":
-                        print(group_data['title'])
                         for con in group_data['controls']:
                             if 'set' in con:
                                 self.value.append(con['set'])
