@@ -637,11 +637,7 @@ class unmpk:
             for i in self.arr2:
                 print(i)
             print("\033[0m\n")
-        if input("确定卸载吗 [1/0]") == '1':
-            self.unloop()
-        else:
-            ysuc("取消")
-            pass
+        self.unloop() if input("确定卸载吗 [1/0]") == '1' else ysuc("取消")
         input("任意按钮继续")
 
     def lfdep(self, name=None):
