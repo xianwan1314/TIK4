@@ -781,10 +781,7 @@ def packChoo(project):
                 if os.path.exists(project + os.sep + "config" + os.sep + packs + "_fs_config"):
                     partn += 1
                     parts[partn] = packs
-                    if os.path.exists(project + os.sep + "config" + os.sep + packs + "_erofs"):
-                        typeo = 'erofs'
-                    else:
-                        typeo = 'ext'
+                    typeo = 'erofs' if os.path.exists(project + os.sep + "config" + os.sep + packs + "_erofs") else 'ext'
                     types[partn] = typeo
                     print(f"   [{partn}]- {packs} <{typeo}>\n")
                 elif os.path.exists(project + os.sep + packs + os.sep + "comp"):
