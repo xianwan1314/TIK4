@@ -1471,7 +1471,7 @@ def autounpack(project):
     if os.path.exists(project + os.sep + "payload.bin"):
         yecho('解包 payload.bin...')
         unpack(project + os.sep + 'payload.bin', 'payload', project)
-        yecho("payload.bin解包完成！")
+        yecho("解包完成！")
         wastes = ['care_map.pb', 'apex_info.pb']
         if input("你要删除payload吗[1/0]") == '1':
             wastes.append('payload.bin')
