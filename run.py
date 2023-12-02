@@ -1153,6 +1153,13 @@ def makedtbo(sf, project):
 
 
 def inpacker(name, project, form, ftype):
+    def rdi(name):
+        try:
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat")
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
+            os.remove(project + os.sep + "TI_out" + os.sep + name + ".transfer.list")
+        except:
+            pass
     mount_path = f"/{name}"
     file_contexts = project + os.sep + "config" + os.sep + name + "_file_contexts"
     fs_config = project + os.sep + "config" + os.sep + name + "_fs_config"
@@ -1195,26 +1202,14 @@ def inpacker(name, project, form, ftype):
         os.remove(out_img)
         os.rename(out_img + ".s", out_img)
     if form == 'br':
-        try:
-            os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat.br")
-            os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
-            os.remove(project + os.sep + "TI_out" + os.sep + name + ".transfer.list")
-        except:
-            pass
+        rdi(name)
     elif form == 'dat':
-        try:
-            os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat")
-            os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
-            os.remove(project + os.sep + "TI_out" + os.sep + name + ".transfer.list")
-        except:
-            pass
+        rdi(name)
     if form in ['dat', 'br']:
         yecho(f"打包[DAT]:{name}")
+        rdi(name)
         try:
-            os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat")
-            os.remove(project + os.sep + "TI_out" + os.sep + name + ".new.dat.br")
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
-            os.remove(project + os.sep + "TI_out" + os.sep + name + ".transfer.list")
         except:
             pass
         utils.img2sdat(out_img, project + os.sep + "TI_out", 4, name)
