@@ -167,8 +167,8 @@ class setting:
            ----[Super设置]-----
            4> 指定block大小 \033[93m[{settings.SBLOCKSIZE}]\033[0m
            5> 更改物理分区名 \033[93m[{settings.supername}]\033[0m
-           6> 强制烧写完整Img \033[93m[{settings.fullsuper}]\033[0m
-           9> 标记分区槽后缀 \033[93m[{settings.autoslotsuffixing}]\033[0m\n
+           6> 强制生成完整Img \033[93m[{settings.fullsuper}]\033[0m
+           7> 标记分区槽后缀 \033[93m[{settings.autoslotsuffixing}]\033[0m\n
            0>返回上一级菜单
            --------------------------
         ''')
