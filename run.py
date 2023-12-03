@@ -176,10 +176,10 @@ class setting:
         if op_pro == "0":
             return
         elif op_pro == '1':
-            super_group = input(f"  请输入（无特殊字符）: ")
+            super_group = input(f"  请输入（无特殊字符）:")
             settings.change('super_group', super_group if super_group else "qti_dynamic_partitions")
         elif op_pro == '2':
-            metadatasize = input("  设置metadata最大保留size(默认为65536，至少512) ")
+            metadatasize = input("  设置metadata最大保留size(默认为65536，至少512):")
             settings.change('metadatasize', metadatasize if metadatasize else '65536')
         elif op_pro == '3':
             BLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.BLOCKSIZE}\n  请输入: ")
