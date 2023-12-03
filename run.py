@@ -306,10 +306,7 @@ def plug_parse(js_on):
                                     gavs["%s" % cs] = value
                                 print("---------------------------")
                                 op_in = input("请输入您的选择:")
-                                if op_in in gavs.keys():
-                                    self.gavs[radio_var_name] = gavs[op_in]
-                                else:
-                                    self.gavs[radio_var_name] = gavs["1"]
+                                self.gavs[radio_var_name] = gavs[op_in] if op_in in gavs.keys() else gavs["1"]
                             elif con["type"] == 'input':
                                 input_var_name = con['set']
                                 if 'text' in con:
@@ -369,10 +366,7 @@ def main_menu():
             unpackrom()
     elif op_pro == '00':
         op_pro = input("  请输入你要删除的项目序号:")
-        if " " in op_pro:
-            op_pro = op_pro.split()
-        else:
-            op_pro = [op_pro]
+        op_pro = op_pro.split() if " " in op_pro else [op_pro]
         for op in op_pro:
             if op in projects.keys():
                 if input(f"  确认删除{projects[op]}？[1/0]") == '1':
@@ -725,15 +719,9 @@ def unpack_choo(project):
                 if os.path.isfile(os.path.abspath(img0)):
                     filen += 1
                     info = gettype(os.path.abspath(img0))
-                    if info == "unknow":
-                        ywarn(f"   [{filen}]- {img0} <UNKNOWN>\n")
-                    else:
-                        print(f'   [{filen}]- {img0} <{info.upper()}>\n')
+                    ywarn(f"   [{filen}]- {img0} <UNKNOWN>\n") if info == "unknow" else print(f'   [{filen}]- {img0} <{info.upper()}>\n')
                     files[filen] = img0
-                    if info != 'sparse':
-                        infos[filen] = 'img'
-                    else:
-                        infos[filen] = 'sparse'
+                    infos[filen] = 'img' if info != 'sparse' else 'sparse'
     if dir_has(project, '.bin'):
         for bin0 in os.listdir(project):
             if bin0.endswith('.bin'):
@@ -812,10 +800,7 @@ def unpack_choo(project):
     elif filed == '00':
         return
     elif filed.isdigit():
-        if int(filed) in files.keys():
-            unpack(files[int(filed)], infos[int(filed)], project)
-        else:
-            ywarn("Input error!")
+        unpack(files[int(filed)], infos[int(filed)], project) if int(filed) in files.keys() else ywarn("Input error!")
     else:
         ywarn("Input error!")
     input("任意按钮继续")
