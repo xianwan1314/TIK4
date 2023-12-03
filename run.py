@@ -276,7 +276,7 @@ def plug_parse(js_on):
                 try:
                     data_ = json.load(f)
                 except Exception as e:
-                    ywarn("解析错误", e.__str__())
+                    ywarn("解析错误 %s" % e)
                     return
                 plugin_title = data_['main']['info']['title']
                 print("----------"+plugin_title+"----------")
