@@ -366,7 +366,7 @@ class Tool:
         print("\033[33m  [55] 解压  [66] 退出  [77] 设置  [88] 下载ROM\033[0m\n")
         op_pro = input("  请输入序号：")
         if op_pro == '55':
-            unpackrom()
+            self.unpackrom()
         elif op_pro == '88':
             url = input("输入下载链接:")
             if url:
@@ -374,7 +374,7 @@ class Tool:
                     downloader.download([url], LOCALDIR)
                 except:
                     pass
-                unpackrom()
+                self.unpackrom()
         elif op_pro == '00':
             op_pro = input("  请输入你要删除的项目序号:")
             op_pro = op_pro.split() if " " in op_pro else [op_pro]
@@ -420,7 +420,8 @@ class Tool:
         cls()
         os.chdir(project_dir)
         print(" \n\033[31m>项目菜单 \033[0m\n")
-        print(f"  项目：{self.pro}\033[91m(不完整)\033[0m\n") if not os.path.exists(os.path.abspath('config')) else print(
+        print(f"  项目：{self.pro}\033[91m(不完整)\033[0m\n") if not os.path.exists(
+            os.path.abspath('config')) else print(
             f"  项目：{self.pro}\n")
         if not os.path.exists(project_dir + os.sep + 'TI_out'):
             os.makedirs(project_dir + os.sep + 'TI_out')
@@ -438,40 +439,80 @@ class Tool:
         elif op_menu == '4':
             subbed(project_dir)
         elif op_menu == '5':
-            hczip(project_dir)
+            self.hczip()
         else:
             ywarn('   Input error!')
         input("任意按钮继续")
         self.project()
 
+    def hczip(self):
+        cls()
+        project = LOCALDIR + os.sep + self.pro
+        print(" \033[31m>打包ROM \033[0m\n")
+        print(f"  项目：{os.path.basename(project)}\n")
+        print('\033[33m    1> 直接打包     2> 卡线一体 \n    3> 返回\033[0m\n')
+        chose = input("    请输入编号: ")
+        if chose == '1':
+            print("正在准备打包...")
+            for v in ['firmware-update', 'META-INF', 'exaid.img', 'dynamic_partitions_op_list']:
+                if os.path.isdir(os.path.join(project, v)):
+                    if not os.path.isdir(os.path.join(project, 'TI_out' + os.sep + v)):
+                        shutil.copytree(os.path.join(project, v), os.path.join(project, 'TI_out' + os.sep + v))
+                elif os.path.isfile(os.path.join(project, v)):
+                    if not os.path.isfile(os.path.join(project, 'TI_out' + os.sep + v)):
+                        shutil.copy(os.path.join(project, v), os.path.join(project, 'TI_out'))
+            for root, dirs, files in os.walk(project):
+                for f in files:
+                    if f.endswith('.br') or f.endswith('.dat') or f.endswith('.list'):
+                        if not os.path.isfile(os.path.join(project, 'TI_out' + os.sep + f)) and os.access(
+                                os.path.join(project, f), os.F_OK):
+                            shutil.copy(os.path.join(project, f), os.path.join(project, 'TI_out'))
+        elif chose == '2':
+            code = input("打包卡线一体限制机型代号:")
+            utils.dbkxyt(os.path.join(project, 'TI_out') + os.sep, code, binner + os.sep + 'extra_flash.zip')
+        else:
+            return
+        zip_file(os.path.basename(project) + ".zip", project + os.sep + 'TI_out', project + os.sep, LOCALDIR + os.sep)
 
-def hczip(project):
-    cls()
-    print(" \033[31m>打包ROM \033[0m\n")
-    print(f"  项目：{os.path.basename(project)}\n")
-    print('\033[33m    1> 直接打包     2> 卡线一体 \n    3> 返回\033[0m\n')
-    chose = input("    请输入编号: ")
-    if chose == '1':
-        print("正在准备打包...")
-        for v in ['firmware-update', 'META-INF', 'exaid.img', 'dynamic_partitions_op_list']:
-            if os.path.isdir(os.path.join(project, v)):
-                if not os.path.isdir(os.path.join(project, 'TI_out' + os.sep + v)):
-                    shutil.copytree(os.path.join(project, v), os.path.join(project, 'TI_out' + os.sep + v))
-            elif os.path.isfile(os.path.join(project, v)):
-                if not os.path.isfile(os.path.join(project, 'TI_out' + os.sep + v)):
-                    shutil.copy(os.path.join(project, v), os.path.join(project, 'TI_out'))
-        for root, dirs, files in os.walk(project):
-            for f in files:
-                if f.endswith('.br') or f.endswith('.dat') or f.endswith('.list'):
-                    if not os.path.isfile(os.path.join(project, 'TI_out' + os.sep + f)) and os.access(
-                            os.path.join(project, f), os.F_OK):
-                        shutil.copy(os.path.join(project, f), os.path.join(project, 'TI_out'))
-    elif chose == '2':
-        code = input("打包卡线一体限制机型代号:")
-        utils.dbkxyt(os.path.join(project, 'TI_out') + os.sep, code, binner + os.sep + 'extra_flash.zip')
-    else:
-        return
-    zip_file(os.path.basename(project) + ".zip", project + os.sep + 'TI_out', project + os.sep, LOCALDIR + os.sep)
+    def unpackrom(self):
+        cls()
+        zipn = 0
+        zips = {}
+        print(" \033[31m >ROM列表 \033[0m\n")
+        ywarn(f"   请将ROM置于{LOCALDIR}下！\n")
+        if dir_has(LOCALDIR, '.zip'):
+            for zip0 in os.listdir(LOCALDIR):
+                if zip0.endswith('.zip'):
+                    if os.path.isfile(os.path.abspath(zip0)):
+                        if os.path.getsize(os.path.abspath(zip0)):
+                            zipn += 1
+                            print(f"   [{zipn}]- {zip0}\n")
+                            zips[zipn] = zip0
+        else:
+            ywarn("	没有ROM文件！")
+        print("--------------------------------------------------\n")
+        zipd = input("请输入对应序列号：")
+        if zipd.isdigit():
+            if int(zipd) in zips.keys():
+                projec = input("请输入项目名称(可留空)：")
+                project = "TI_%s" % projec if projec else "TI_%s" % os.path.basename(zips[int(zipd)]).replace('.zip',
+                                                                                                              '')
+                if os.path.exists(LOCALDIR + os.sep + project):
+                    project = project + time.strftime("%m%d%H%M%S")
+                    ywarn(f"项目已存在！自动命名为：{project}")
+                os.makedirs(LOCALDIR + os.sep + project)
+                print(f"创建{project}成功！")
+                with Console().status("[yellow]解压刷机包中...[/]"):
+                    zipfile.ZipFile(os.path.abspath(zips[int(zipd)])).extractall(LOCALDIR + os.sep + project)
+                yecho("分解ROM中...")
+                autounpack(LOCALDIR + os.sep + project)
+                self.project()
+            else:
+                ywarn("Input Error")
+                time.sleep(0.3)
+        else:
+            ywarn("Input error!")
+            time.sleep(0.3)
 
 
 def get_all_file_paths(directory) -> Ellipsis:
@@ -1485,45 +1526,7 @@ def unpack(file, info, project):
         ywarn("未知格式！")
 
 
-def unpackrom():
-    os.chdir(LOCALDIR)
-    cls()
-    zipn = 0
-    zips = {}
-    print(" \033[31m >ROM列表 \033[0m\n")
-    ywarn(f"   请将ROM置于{LOCALDIR}下！\n")
-    if dir_has(LOCALDIR, '.zip'):
-        for zip0 in os.listdir(LOCALDIR):
-            if zip0.endswith('.zip'):
-                if os.path.isfile(os.path.abspath(zip0)):
-                    if os.path.getsize(os.path.abspath(zip0)):
-                        zipn += 1
-                        print(f"   [{zipn}]- {zip0}\n")
-                        zips[zipn] = zip0
-    else:
-        ywarn("	没有ROM文件！")
-    print("--------------------------------------------------\n")
-    zipd = input("请输入对应序列号：")
-    if zipd.isdigit():
-        if int(zipd) in zips.keys():
-            projec = input("请输入项目名称(可留空)：")
-            project = "TI_%s" % projec if projec else "TI_%s" % os.path.basename(zips[int(zipd)]).replace('.zip', '')
-            if os.path.exists(LOCALDIR + os.sep + project):
-                project = project + time.strftime("%m%d%H%M%S")
-                ywarn(f"项目已存在！自动命名为：{project}")
-            os.makedirs(LOCALDIR + os.sep + project)
-            print(f"创建{project}成功！")
-            with Console().status("[yellow]解压刷机包中...[/]"):
-                zipfile.ZipFile(os.path.abspath(zips[int(zipd)])).extractall(LOCALDIR + os.sep + project)
-            yecho("分解ROM中...")
-            autounpack(LOCALDIR + os.sep + project)
-            menu(project)
-        else:
-            ywarn("Input Error")
-            time.sleep(0.3)
-    else:
-        ywarn("Input error!")
-        time.sleep(0.3)
+
 
 
 def autounpack(project):
