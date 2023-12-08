@@ -486,7 +486,7 @@ class Tool:
                         cs += 1
                         dir_app[str(cs)] = path
                         print(f'\033[33m[{cs}]\033[0m--\033[94m[{path.replace(project, "")}]\033[0m')
-        print("\033[33m-------------------------------\033[0m\n")
+        print("\033[33m-------------------------------\033[0m")
         print("\033[33m    [00] 返回\033[0m\n")
         added.clear()
         op_menu = input("    请输入编号: ")
