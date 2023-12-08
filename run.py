@@ -1431,8 +1431,8 @@ def unpack(file, info, project):
     elif info == 'dtb':
         undtb(project, os.path.abspath(file))
     elif info == 'dat':
-        partname = os.path.basename(file).replace('.new.dat', '')
-        filepath = os.path.dirname(file)
+        partname = str(os.path.basename(file).replace('.new.dat', ''))
+        filepath = str(os.path.dirname(file))
         utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
                        os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
         try:
@@ -1502,8 +1502,8 @@ def unpack(file, info, project):
                     with open(project + os.sep + fd1, 'rb') as nfd:
                         ofd.write(nfd.read())
                     os.remove(project + os.sep + fd1)
-        partname = os.path.basename(file).replace('.new.dat.1', '')
-        filepath = os.path.dirname(file)
+        partname = str(os.path.basename(file).replace('.new.dat.1', ''))
+        filepath = str(os.path.dirname(file))
         utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
                        os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
         unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
