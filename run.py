@@ -167,6 +167,18 @@ class setting:
 
     def settings2(self):
         cls()
+        actions = {
+            '1': lambda: settings.change('super_group', super_group if (
+                super_group := input(f"  请输入（无特殊字符）:")) else "qti_dynamic_partitions"),
+            '2': lambda: settings.change('metadatasize', metadatasize if (
+                metadatasize := input("  设置metadata最大保留size(默认为65536，至少512):")) else '65536'),
+            '3': lambda: settings.change('BLOCKSIZE', BLOCKSIZE if (
+                BLOCKSIZE := input(f"  分区打包扇区/块大小：{settings.BLOCKSIZE}\n  请输入: ")) else "4096"),
+            '4':lambda: settings.change('BLOCKSIZE', SBLOCKSIZE if (SBLOCKSIZE := input(f"  分区打包扇区/块大小：{settings.SBLOCKSIZE}\n  请输入: ")) else "4096"),
+            '5':lambda: settings.change('supername', supername if (supername := input(f'  当前动态分区物理分区名(默认super)：{settings.supername}\n  请输入（无特殊字符）: ')) else "super"),
+            '6':lambda: settings.change('fullsuper', '' if input("  是否强制创建Super镜像？[1/0]") != '1' else '-F'),
+            '7':lambda: settings.change('autoslotsuffixing', '' if input("  是否标记需要Slot后缀的分区？[1/0]") != '1' else '-x')
+        }
         print(f'''
         \033[33m  > 动态分区设置 \033[0m
            1> Super簇名 \033[93m[{settings.super_group}]\033[0m\n
@@ -185,25 +197,8 @@ class setting:
         op_pro = input("   请输入编号: ")
         if op_pro == "0":
             return
-        elif op_pro == '1':
-            super_group = input(f"  请输入（无特殊字符）:")
-            settings.change('super_group', super_group if super_group else "qti_dynamic_partitions")
-        elif op_pro == '2':
-            metadatasize = input("  设置metadata最大保留size(默认为65536，至少512):")
-            settings.change('metadatasize', metadatasize if metadatasize else '65536')
-        elif op_pro == '3':
-            BLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.BLOCKSIZE}\n  请输入: ")
-            settings.change('BLOCKSIZE', BLOCKSIZE if BLOCKSIZE else "4096")
-        elif op_pro == '4':
-            SBLOCKSIZE = input(f"  分区打包扇区/块大小：{settings.SBLOCKSIZE}\n  请输入: ")
-            settings.change('BLOCKSIZE', SBLOCKSIZE if SBLOCKSIZE else "4096")
-        elif op_pro == '5':
-            supername = input(f'  当前动态分区物理分区名(默认super)：{settings.supername}\n  请输入（无特殊字符）: ')
-            settings.change('supername', supername if supername else "super")
-        elif op_pro == '6':
-            settings.change('fullsuper', '' if input("  是否强制创建Super镜像？[1/0]") != '1' else '-F')
-        elif op_pro == '7':
-            settings.change('autoslotsuffixing', '' if input("  是否标记需要Slot后缀的分区？[1/0]") != '1' else '-x')
+        elif op_pro in actions.keys():
+            actions[op_pro]()
         else:
             ywarn("Input error!")
         self.settings2()
