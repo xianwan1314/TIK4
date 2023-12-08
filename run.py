@@ -466,7 +466,7 @@ class Tool:
                     if f.endswith('.br') or f.endswith('.dat') or f.endswith('.list'):
                         if not os.path.isfile(os.path.join(project, 'TI_out' + os.sep + f)) and os.access(
                                 os.path.join(project, f), os.F_OK):
-                            shutil.copy(os.path.join(project, f), os.path.join(project, 'TI_out'))
+                            shutil.copy(os.path.join(project, str(f)), os.path.join(project, 'TI_out'))
         elif chose == '2':
             code = input("打包卡线一体限制机型代号:")
             utils.dbkxyt(os.path.join(project, 'TI_out') + os.sep, code, binner + os.sep + 'extra_flash.zip')
