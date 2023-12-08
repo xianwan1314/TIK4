@@ -135,7 +135,9 @@ class setting:
         if op_pro == "0":
             return
         elif op_pro == '1':
-            settings.change('brcom', brcom if (brcom := input(f"  调整brotli压缩等级(整数1-9，级别越高，压缩率越大，耗时越长):")).isdigit() and 0 < int(brcom) < 10 else '1')
+            settings.change('brcom', brcom if (brcom := input(
+                f"  调整brotli压缩等级(整数1-9，级别越高，压缩率越大，耗时越长):")).isdigit() and 0 < int(
+                brcom) < 10 else '1')
         elif op_pro == '2':
             settings.change('diysize', "1" if input("  打包Ext镜像大小[1]动态最小 [2]手动改:") == '2' else '')
         elif op_pro == '3':
@@ -171,10 +173,13 @@ class setting:
                 metadatasize := input("  设置metadata最大保留size(默认为65536，至少512):")) else '65536'),
             '3': lambda: settings.change('BLOCKSIZE', BLOCKSIZE if (
                 BLOCKSIZE := input(f"  分区打包扇区/块大小：{settings.BLOCKSIZE}\n  请输入: ")) else "4096"),
-            '4':lambda: settings.change('BLOCKSIZE', SBLOCKSIZE if (SBLOCKSIZE := input(f"  分区打包扇区/块大小：{settings.SBLOCKSIZE}\n  请输入: ")) else "4096"),
-            '5':lambda: settings.change('supername', supername if (supername := input(f'  当前动态分区物理分区名(默认super)：{settings.supername}\n  请输入（无特殊字符）: ')) else "super"),
-            '6':lambda: settings.change('fullsuper', '' if input("  是否强制创建Super镜像？[1/0]") != '1' else '-F'),
-            '7':lambda: settings.change('autoslotsuffixing', '' if input("  是否标记需要Slot后缀的分区？[1/0]") != '1' else '-x')
+            '4': lambda: settings.change('BLOCKSIZE', SBLOCKSIZE if (
+                SBLOCKSIZE := input(f"  分区打包扇区/块大小：{settings.SBLOCKSIZE}\n  请输入: ")) else "4096"),
+            '5': lambda: settings.change('supername', supername if (supername := input(
+                f'  当前动态分区物理分区名(默认super)：{settings.supername}\n  请输入（无特殊字符）: ')) else "super"),
+            '6': lambda: settings.change('fullsuper', '' if input("  是否强制创建Super镜像？[1/0]") != '1' else '-F'),
+            '7': lambda: settings.change('autoslotsuffixing',
+                                         '' if input("  是否标记需要Slot后缀的分区？[1/0]") != '1' else '-x')
         }
         print(f'''
         \033[33m  > 动态分区设置 \033[0m
@@ -325,111 +330,119 @@ def plug_parse(js_on):
     return data.gavs, data.value
 
 
-def main_menu():
-    projects = {}
-    pro = 0
-    cls()
-    print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
-    print("\033[92;44m Delta Edition \033[0m")
-    if settings.online == 'true':
-        try:
-            content = json.loads(requests.get('https://v1.jinrishici.com/all.json', timeout=2).content.decode())
-            shiju = content['content']
-            fr = content['origin']
-            another = content['author']
-        except:
-            print(f"\033[36m “开源，是一场无问西东的前行”\033[0m\n")
-        else:
-            print(f"\033[36m “{shiju}”")
-            print(f"\033[36m---{another}《{fr}》\033[0m\n")
-    else:
-        print(f"\033[36m “开源，是一场无问西东的前行”")
-    print(" >\033[33m 项目列表 \033[0m\n")
-    print("\033[31m   [00]  删除项目\033[0m\n\n", "  [0]  新建项目\n")
-    for pros in os.listdir(LOCALDIR):
-        if pros == 'bin' or pros.startswith('.'):
-            continue
-        if os.path.isdir(o_path.join(LOCALDIR, pros)):
-            pro += 1
-            print(f"   [{pro}]  {pros}\n")
-            projects['%s' % pro] = pros
-    print("  --------------------------------------")
-    print("\033[33m  [55] 解压  [66] 退出  [77] 设置  [88] 下载ROM\033[0m\n")
-    op_pro = input("  请输入序号：")
-    if op_pro == '55':
-        unpackrom()
-    elif op_pro == '88':
-        url = input("输入下载链接:")
-        if url:
+class Tool:
+    def __init__(self):
+        self.pro = None
+
+    def main(self):
+        projects = {}
+        pro = 0
+        cls()
+        print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
+        print("\033[92;44m Delta Edition \033[0m")
+        if settings.online == 'true':
             try:
-                downloader.download([url], LOCALDIR)
+                content = json.loads(requests.get('https://v1.jinrishici.com/all.json', timeout=2).content.decode())
+                shiju = content['content']
+                fr = content['origin']
+                another = content['author']
             except:
-                pass
+                print(f"\033[36m “开源，是一场无问西东的前行”\033[0m\n")
+            else:
+                print(f"\033[36m “{shiju}”")
+                print(f"\033[36m---{another}《{fr}》\033[0m\n")
+        else:
+            print(f"\033[36m “开源，是一场无问西东的前行”")
+        print(" >\033[33m 项目列表 \033[0m\n")
+        print("\033[31m   [00]  删除项目\033[0m\n\n", "  [0]  新建项目\n")
+        for pros in os.listdir(LOCALDIR):
+            if pros == 'bin' or pros.startswith('.'):
+                continue
+            if os.path.isdir(o_path.join(LOCALDIR, pros)):
+                pro += 1
+                print(f"   [{pro}]  {pros}\n")
+                projects['%s' % pro] = pros
+        print("  --------------------------------------")
+        print("\033[33m  [55] 解压  [66] 退出  [77] 设置  [88] 下载ROM\033[0m\n")
+        op_pro = input("  请输入序号：")
+        if op_pro == '55':
             unpackrom()
-    elif op_pro == '00':
-        op_pro = input("  请输入你要删除的项目序号:")
-        op_pro = op_pro.split() if " " in op_pro else [op_pro]
-        for op in op_pro:
-            if op in projects.keys():
-                if input(f"  确认删除{projects[op]}？[1/0]") == '1':
-                    rmdire(o_path.join(LOCALDIR, projects[op]))
-                    ysuc("删除成功！")
-                else:
-                    ywarn("取消删除")
-    elif op_pro == '0':
-        projec = input("请输入项目名称(非中文)：")
-        if projec:
-            if os.path.exists(o_path.join(LOCALDIR, projec)):
-                projec = f'{projec}_{time.strftime("%m%d%H%M%S")}'
-                ywarn(f"项目已存在！自动命名为：{projec}")
-                time.sleep(1)
-            os.makedirs(o_path.join(LOCALDIR, projec, "config"))
-            menu(projec)
+        elif op_pro == '88':
+            url = input("输入下载链接:")
+            if url:
+                try:
+                    downloader.download([url], LOCALDIR)
+                except:
+                    pass
+                unpackrom()
+        elif op_pro == '00':
+            op_pro = input("  请输入你要删除的项目序号:")
+            op_pro = op_pro.split() if " " in op_pro else [op_pro]
+            for op in op_pro:
+                if op in projects.keys():
+                    if input(f"  确认删除{projects[op]}？[1/0]") == '1':
+                        rmdire(o_path.join(LOCALDIR, projects[op]))
+                        ysuc("删除成功！")
+                    else:
+                        ywarn("取消删除")
+        elif op_pro == '0':
+            projec = input("请输入项目名称(非中文)：")
+            if projec:
+                if os.path.exists(o_path.join(LOCALDIR, projec)):
+                    projec = f'{projec}_{time.strftime("%m%d%H%M%S")}'
+                    ywarn(f"项目已存在！自动命名为：{projec}")
+                    time.sleep(1)
+                os.makedirs(o_path.join(LOCALDIR, projec, "config"))
+                self.pro = projec
+                self.project()
+            else:
+                ywarn("  Input error!")
+                input("任意按钮继续")
+        elif op_pro == '66':
+            cls()
+            ysuc("\n感谢使用TI-KITCHEN4,再见！")
+            sys.exit(0)
+        elif op_pro == '77':
+            setting()
+        elif op_pro.isdigit():
+            if op_pro in projects.keys():
+                self.pro = projects[op_pro]
+                self.project()
+            else:
+                ywarn("  Input error!")
         else:
             ywarn("  Input error!")
-            input("任意按钮继续")
-    elif op_pro == '66':
+        input("任意按钮继续")
+        self.main()
+
+    def project(self):
+        project_dir = LOCALDIR + os.sep + self.pro
         cls()
-        ysuc("\n感谢使用TI-KITCHEN4,再见！")
-        sys.exit(0)
-    elif op_pro == '77':
-        setting()
-    elif op_pro.isdigit():
-        menu(projects[op_pro]) if op_pro in projects.keys() else ywarn("  Input error!")
-    else:
-        ywarn("  Input error!")
-    input("任意按钮继续")
-    main_menu()
-
-
-def menu(project):
-    project_dir = LOCALDIR + os.sep + project
-    cls()
-    os.chdir(project_dir)
-    print(" \n\033[31m>项目菜单 \033[0m\n")
-    print(f"  项目：{project}\033[91m(不完整)\033[0m\n") if not os.path.exists(os.path.abspath('config')) else print(
-        f"  项目：{project}\n")
-    if not os.path.exists(project_dir + os.sep + 'TI_out'):
-        os.makedirs(project_dir + os.sep + 'TI_out')
-    print('\033[33m    0> 回到主页     2> 解包菜单\033[0m\n')
-    print('\033[36m    3> 打包菜单     4> 插件菜单\033[0m\n')
-    print('\033[32m    5> 一键封装\033[0m\n')
-    op_menu = input("    请输入编号: ")
-    if op_menu == '0':
-        os.chdir(LOCALDIR)
-        return
-    elif op_menu == '2':
-        unpack_choo(project_dir)
-    elif op_menu == '3':
-        packChoo(project_dir)
-    elif op_menu == '4':
-        subbed(project_dir)
-    elif op_menu == '5':
-        hczip(project_dir)
-    else:
-        ywarn('   Input error!')
-    input("任意按钮继续")
-    menu(project)
+        os.chdir(project_dir)
+        print(" \n\033[31m>项目菜单 \033[0m\n")
+        print(f"  项目：{self.pro}\033[91m(不完整)\033[0m\n") if not os.path.exists(os.path.abspath('config')) else print(
+            f"  项目：{self.pro}\n")
+        if not os.path.exists(project_dir + os.sep + 'TI_out'):
+            os.makedirs(project_dir + os.sep + 'TI_out')
+        print('\033[33m    0> 回到主页     2> 解包菜单\033[0m\n')
+        print('\033[36m    3> 打包菜单     4> 插件菜单\033[0m\n')
+        print('\033[32m    5> 一键封装\033[0m\n')
+        op_menu = input("    请输入编号: ")
+        if op_menu == '0':
+            os.chdir(LOCALDIR)
+            return
+        elif op_menu == '2':
+            unpack_choo(project_dir)
+        elif op_menu == '3':
+            packChoo(project_dir)
+        elif op_menu == '4':
+            subbed(project_dir)
+        elif op_menu == '5':
+            hczip(project_dir)
+        else:
+            ywarn('   Input error!')
+        input("任意按钮继续")
+        self.project()
 
 
 def hczip(project):
@@ -1559,4 +1572,4 @@ def autounpack(project):
 
 
 if __name__ == '__main__':
-    main_menu()
+    Tool().main()
