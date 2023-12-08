@@ -488,8 +488,10 @@ class Tool:
                             path = path.replace(project, '').replace('\\', '/')
                             apkname = apk.get_app_name()
                             print(
-                                f'\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}:{apk.get_package()}]\033[0m({path})')
+                                f'''\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}]:{apk.get_package()}
+            \033[0m\033[35m({path})\033[0m''')
                         del apk
+        print(f"共读取了\033[32m{cs}\033[0m个APK。")
         op_menu = input("    请输入编号: ")
 
     def hczip(self):
