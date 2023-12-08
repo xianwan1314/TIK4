@@ -496,6 +496,8 @@ class Tool:
             return
         elif op_menu == '01':
             pass
+        elif op_menu in app.keys():
+            pass
         else:
             ywarn('Input Error!')
         self.sim_app()
