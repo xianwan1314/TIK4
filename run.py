@@ -54,6 +54,9 @@ temp = binner + os.sep + 'temp'
 def rmdire(path):
     if os.path.exists(path):
         if os.name == 'nt':
+            if path.endswith('.'):
+                call('mv {} {}'.format(path, path[:1]))
+                path = path[:1]
             for r, d, f in os.walk(path):
                 for i in d:
                     if i.endswith('.'):
