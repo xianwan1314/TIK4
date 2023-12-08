@@ -35,7 +35,7 @@
 3.Windows 7 and Newer[x64/x86]
 
 Note: WSL 可能存在权限出错的问题 请自行判断测试！
-#### ** 引用项目 **
+#### **引用项目**
 1. [ApkParse](https://github.com/zxvzxv/ApkParse/)
 2. [sdat2img](https://github.com/xpirt/sdat2img)
 3. [img2sdat](https://github.com/xpirt/img2sdat)
@@ -46,6 +46,7 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
 8. [rich](https://github.com/Textualize/rich/)
 9. [context_patch](https://github.com/ColdWindScholar/context_patch)
 10. [erofs-utils](https://github.com/sekaiacg/erofs-utils/)
+11. And More...
 #### **合作伙伴**
 1. Sakura
 2. Affggh
