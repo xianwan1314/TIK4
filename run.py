@@ -54,9 +54,6 @@ temp = binner + os.sep + 'temp'
 def rmdire(path):
     if os.path.exists(path):
         if os.name == 'nt':
-            if path.endswith('.'):
-                call('mv {} {}'.format(path, path[:1]))
-                path = path[:1]
             for r, d, f in os.walk(path):
                 for i in d:
                     if i.endswith('.'):
@@ -356,7 +353,7 @@ def main_menu():
         print(f"\033[36m “开源，是一场无问西东的前行”")
     print(" >\033[33m 项目列表 \033[0m\n")
     print("\033[31m   [00]  删除项目\033[0m\n\n", "  [0]  新建项目\n")
-    for pros in os.listdir(LOCALDIR + os.sep):
+    for pros in os.listdir(LOCALDIR):
         if pros == 'bin' or pros.startswith('.'):
             continue
         if os.path.isdir(LOCALDIR + os.sep + pros):
