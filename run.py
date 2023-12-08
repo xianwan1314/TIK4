@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import json
 import os
-from os.path import join as p_join
 import platform as plat
 import re
 import shutil
@@ -44,12 +43,12 @@ from rich.table import Table
 from rich.console import Console
 
 LOCALDIR = os.getcwd()
-binner = p_join(LOCALDIR, "bin")
-setfile = LOCALDIR + os.sep + "bin" + os.sep + "settings.json"
+binner = os.path.join(LOCALDIR, "bin")
+setfile = os.path.join(LOCALDIR, "bin", "settings.json")
 platform = plat.machine()
 ostype = plat.system()
-ebinner = binner + os.sep + ostype + os.sep + platform + os.sep
-temp = binner + os.sep + 'temp'
+ebinner = os.path.join(binner, ostype, platform) + os.sep
+temp = os.path.join(binner, 'temp')
 
 
 def rmdire(path):
