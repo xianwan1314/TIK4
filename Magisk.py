@@ -10,19 +10,19 @@ from time import strftime
 local = os.getcwd()
 
 
-def LOGE(self, info):
+def LOGE(info):
     print('\033[91m[%s]%s\033[0m' % (strftime('%H:%M:%S'), info))
 
 
-def LOGW(self, info):
+def LOGW(info):
     print('\033[93m[%s]%s\033[0m' % (strftime('%H:%M:%S'), info))
 
 
-def LOGS(self, info):
+def LOGS(info):
     print('\033[92m[%s]%s\033[0m' % (strftime('%H:%M:%S'), info))
 
 
-def yecho(self, info): print(f"\033[36m[{strftime('%H:%M:%S')}]{info}\033[0m")
+def yecho(info): print(f"\033[36m[{strftime('%H:%M:%S')}]{info}\033[0m")
 
 
 class Magisk_patch:
