@@ -487,12 +487,18 @@ class Tool:
                             apkname = apk.get_app_name()
                             app[str(cs)] = (path, apkname, apk.get_package())
                             path = path.replace(project, '').replace('\\', '/')
-                            print(
-                                f'''\r\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}]:{apk.get_package()}
-            \033[0m\033[35m({path})\033[0m''', end="")
+                            print(f'''\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}]:{apk.get_package()}\n    \033[0m\033[35m({path})\033[0m''')
                         del apk
         print(f"共读取了\033[32m{cs}\033[0m个APK。")
+        print("\033[33m  [01] 移除 [00] 返回\033[0m\n")
         op_menu = input("    请输入编号: ")
+        if op_menu == '00':
+            return
+        elif op_menu == '01':
+            pass
+        else:
+            ywarn('Input Error!')
+        self.sim_app()
 
     def hczip(self):
         cls()
