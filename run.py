@@ -1425,8 +1425,8 @@ def unpack(file, info, project):
         undtbo(project, os.path.abspath(file))
     elif info == 'br':
         call(f'brotli -dj {file}')
-        partname = os.path.basename(file).replace('.new.dat.br', '')
-        filepath = os.path.dirname(file)
+        partname = str(os.path.basename(file).replace('.new.dat.br', ''))
+        filepath = str(os.path.dirname(file))
         unpack(os.path.join(filepath, partname + ".new.dat"), 'dat', project)
     elif info == 'dtb':
         undtb(project, os.path.abspath(file))
