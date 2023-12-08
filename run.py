@@ -451,14 +451,14 @@ class Tool:
         cls()
         print(" \n\033[31m>定制菜单 \033[0m\n")
         print(f"  项目：{self.pro}\n")
-        print('\033[33m    0> 返回上级     2> 应用精简\033[0m\n')
-        print('\033[36m    3> 面具修补     4> 暂定\033[0m\n')
-        print('\033[32m    5> 暂定功能     6> 暂定\033[0m\n')
+        print('\033[33m    0> 返回上级     1> 应用精简\033[0m\n')
+        print('\033[36m    2> 面具修补     3> 暂定\033[0m\n')
+        print('\033[32m    4> 暂定功能     5> 暂定\033[0m\n')
         op_menu = input("    请输入编号: ")
         if op_menu == '0':
             return
         elif op_menu == '1':
-            pass
+            self.sim_app()
         elif op_menu == '2':
             pass
         else:
@@ -466,6 +466,23 @@ class Tool:
         input("任意按钮继续")
         self.custom_rom()
 
+    def sim_app(self):
+        cls()
+        app = {}
+        cs = 0
+        project = LOCALDIR + os.sep + self.pro
+        print(" \n\033[31m>应用精简 \033[0m\n")
+        print(f"  项目：{self.pro}\n")
+        for root, dirs, files in os.walk(project):
+            for f in track(files, description='正在读取...'):
+                if f.endswith('.apk'):
+                    cs += 1
+                    path = os.path.join(root, f)
+                    app[str(cs)] = path
+                    apk = ApkFile(path)
+                    print(f'[{cs}]--[{f}]({apk.get_app_name()})')
+                    del apk
+        op_menu = input("    请输入编号: ")
 
     def hczip(self):
         cls()
