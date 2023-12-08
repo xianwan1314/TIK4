@@ -1527,9 +1527,6 @@ def unpack(file, info, project):
         ywarn("未知格式！")
 
 
-
-
-
 def autounpack(project):
     yecho("自动解包开始！")
     os.chdir(project)
