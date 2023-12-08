@@ -532,13 +532,13 @@ class Tool:
         elif op_menu == '01':
             op_menu = input("输入你想精简的序号[空格分割]:")
             if op_menu.isdigit() and op_menu in app.keys():
-                print(f"正在精简{app[op_menu][2]}")
-                rmdire(app[op_menu][0])
+                print(f"正在精简{app[op_menu][:1]}")
+                os.remove(app[op_menu][0])
             elif ' ' in op_menu:
                 for u in op_menu.split():
                     if u in app.keys():
-                        print(f"正在精简{app[u][2]}")
-                        rmdire(app[u][0])
+                        print(f"正在精简{app[u][:1]}")
+                        os.remove(app[u][0])
         elif op_menu in app.keys():
             print(f"\033[33m如何操作：{app[op_menu]}\033[0m?")
             print("\033[33m  [01] 移除 [00] 返回\033[0m\n")
@@ -547,7 +547,7 @@ class Tool:
                 pass
             elif op_men == '01':
                 print(f"正在精简{app[op_menu][2]}")
-                rmdire(app[op_menu][0])
+                os.remove(app[op_menu][0])
         else:
             ywarn('Input Error!')
         input("任意按钮继续")
