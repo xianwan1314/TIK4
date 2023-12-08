@@ -135,14 +135,11 @@ class setting:
         if op_pro == "0":
             return
         elif op_pro == '1':
-            print(f"  调整brotli压缩等级(整数1-9，级别越高，压缩率越大，耗时越长):")
-            brcom = input("  请输入（1-9）:")
-            settings.change('brcom', brcom if brcom.isdigit() and 0 < int(brcom) < 10 else '1')
+            settings.change('brcom', brcom if (brcom := input(f"  调整brotli压缩等级(整数1-9，级别越高，压缩率越大，耗时越长):")).isdigit() and 0 < int(brcom) < 10 else '1')
         elif op_pro == '2':
-            settings.change('diysize', "1" if input(f"  打包Ext镜像大小[1]动态最小 [2]手动改:") == '2' else '')
+            settings.change('diysize', "1" if input("  打包Ext镜像大小[1]动态最小 [2]手动改:") == '2' else '')
         elif op_pro == '3':
-            print(f"  打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid:")
-            settings.change('pack_e2', '0' if input("  请输入序号: ") == '1' else '1')
+            settings.change('pack_e2', '0' if input("  打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid:") == '1' else '1')
         elif op_pro == '4':
             if input("  选择erofs压缩方式[1]是 [2]否:") == '1':
                 erofslim = input(
