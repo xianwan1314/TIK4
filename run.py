@@ -357,7 +357,7 @@ def main_menu():
     for pros in os.listdir(LOCALDIR):
         if pros == 'bin' or pros.startswith('.'):
             continue
-        if os.path.isdir(LOCALDIR + os.sep + pros):
+        if os.path.isdir(o_path.join(LOCALDIR, pros)):
             pro += 1
             print(f"   [{pro}]  {pros}\n")
             projects['%s' % pro] = pros
@@ -380,18 +380,18 @@ def main_menu():
         for op in op_pro:
             if op in projects.keys():
                 if input(f"  确认删除{projects[op]}？[1/0]") == '1':
-                    rmdire(LOCALDIR + os.sep + projects[op])
+                    rmdire(o_path.join(LOCALDIR, projects[op]))
                     ysuc("删除成功！")
                 else:
                     ywarn("取消删除")
     elif op_pro == '0':
         projec = input("请输入项目名称(非中文)：")
         if projec:
-            if os.path.exists(LOCALDIR + os.sep + projec):
+            if os.path.exists(o_path.join(LOCALDIR, projec)):
                 projec = f'{projec}_{time.strftime("%m%d%H%M%S")}'
                 ywarn(f"项目已存在！自动命名为：{projec}")
                 time.sleep(1)
-            os.makedirs(LOCALDIR + os.sep + projec + os.sep + "config")
+            os.makedirs(o_path.join(LOCALDIR, projec, "config"))
             menu(projec)
         else:
             ywarn("  Input error!")
