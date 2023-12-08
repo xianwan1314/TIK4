@@ -489,7 +489,7 @@ class Tool:
                             path = path.replace(project, '').replace('\\', '/')
                             print(f'''\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}]:{apk.get_package()}\n    \033[0m\033[35m({path})\033[0m''')
                         del apk
-        print(f"共读取了\033[32m{cs}\033[0m个APK。")
+        print(f"  --共读取了\033[32m{cs}\033[0m个APK。--")
         print("\033[33m  [01] 移除 [00] 返回\033[0m\n")
         op_menu = input("    请输入编号: ")
         if op_menu == '00':
