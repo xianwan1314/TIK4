@@ -490,6 +490,14 @@ class Tool:
         print("\033[33m    [00] 返回\033[0m\n")
         added.clear()
         op_menu = input("    请输入编号: ")
+        if op_menu == '00':
+            return
+        elif op_menu in dir_app.keys():
+            self.sim_app_2(dir_app[op_menu])
+        else:
+            ywarn('Input Error!')
+        input("任意按钮继续")
+        self.sim_app()
 
     def sim_app_2(self, app_path):
         cls()
@@ -525,7 +533,8 @@ class Tool:
             pass
         else:
             ywarn('Input Error!')
-        self.sim_app_2()
+        input("任意按钮继续")
+        self.sim_app_2(app_path)
 
     def hczip(self):
         cls()
