@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import json
 import os
+from os.path import join as p_join
 import platform as plat
 import re
 import shutil
@@ -43,7 +44,7 @@ from rich.table import Table
 from rich.console import Console
 
 LOCALDIR = os.getcwd()
-binner = LOCALDIR + os.sep + "bin"
+binner = p_join(LOCALDIR, "bin")
 setfile = LOCALDIR + os.sep + "bin" + os.sep + "settings.json"
 platform = plat.machine()
 ostype = plat.system()
