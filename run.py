@@ -503,6 +503,7 @@ class Tool:
         cls()
         app = {}
         cs = 0
+        project = LOCALDIR + os.sep + self.pro
         print(" \n\033[31m>应用精简 \033[0m\n")
         print(f"  项目：{self.pro}\n")
         for root, dirs, files in os.walk(app_path):
@@ -518,7 +519,7 @@ class Tool:
                             cs += 1
                             apkname = apk.get_app_name()
                             app[str(cs)] = (path, apkname, apk.get_package())
-                            path = path.replace(app_path, '').replace('\\', '/')
+                            path = path.replace(project, '').replace('\\', '/')
                             print(
                                 f'''\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}]:{apk.get_package()}\n    \033[0m\033[35m({path})\033[0m''')
                         del apk
