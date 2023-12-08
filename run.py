@@ -506,6 +506,7 @@ class Tool:
                     zipfile.ZipFile(os.path.abspath(zips[int(zipd)])).extractall(LOCALDIR + os.sep + project)
                 yecho("分解ROM中...")
                 autounpack(LOCALDIR + os.sep + project)
+                self.pro = project
                 self.project()
             else:
                 ywarn("Input Error")
