@@ -476,11 +476,15 @@ class Tool:
         for root, dirs, files in os.walk(project):
             for f in track(files, description='正在读取...'):
                 if f.endswith('.apk'):
-                    cs += 1
                     path = os.path.join(root, f)
-                    app[str(cs)] = path
-                    apk = ApkFile(path)
-                    print(f'[{cs}]--[{f}]({apk.get_app_name()})')
+                    try:
+                        apk = ApkFile(path)
+                    except KeyError:
+                        continue
+                    else:
+                        cs += 1
+                        app[str(cs)] = path
+                        print(f'[{cs}]--[{f}]({apk.get_app_name()})')
                     del apk
         op_menu = input("    请输入编号: ")
 
