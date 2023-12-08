@@ -474,7 +474,7 @@ class Tool:
         print(" \n\033[31m>应用精简 \033[0m\n")
         print(f"  项目：{self.pro}\n")
         for root, dirs, files in os.walk(project):
-            for f in track(files, description='正在读取...'):
+            for f in files:
                 if f.endswith('.apk'):
                     path = os.path.join(root, f)
                     try:
@@ -484,7 +484,8 @@ class Tool:
                     else:
                         cs += 1
                         app[str(cs)] = path
-                        print(f'[{cs}]--[{f}]({apk.get_app_name()})')
+                        path = path.replace(project, '').replace('\\','/')
+                        print(f'\033[33m[{cs}]\033[0m--[{apk.get_app_name()}:{apk.get_package()}]({path})')
                     del apk
         op_menu = input("    请输入编号: ")
 
