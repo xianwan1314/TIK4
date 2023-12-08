@@ -477,15 +477,15 @@ class Tool:
         for root, dirs, files in os.walk(project):
             for d in dirs:
                 path = os.path.join(root, d)
-                if path in added:
-                    continue
-                else:
-                    added.append(path)
                 for i in os.listdir(str(path)):
                     if os.path.isfile(os.path.join(str(path), i, i+'.apk')):
+                        if str(path) in added:
+                            continue
+                        else:
+                            added.append(str(path))
                         cs += 1
                         dir_app[str(cs)] = path
-                        print(f'\033[33m[{cs}]\033[0m--\033[94m[{path}]\033[0m')
+                        print(f'\033[33m[{cs}]\033[0m--\033[94m[{path.replace(project, "")}]\033[0m')
         print("\033[33m  [00] 返回\033[0m\n")
         op_menu = input("    请输入编号: ")
 
