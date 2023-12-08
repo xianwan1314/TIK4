@@ -1151,9 +1151,7 @@ def inpacker(name, project, form, ftype):
         call(f"img2simg {out_img} {out_img}.s")
         os.remove(out_img)
         os.rename(out_img + ".s", out_img)
-    if form == 'br':
-        rdi(name)
-    elif form == 'dat':
+    if form in ['br', 'dat']:
         rdi(name)
     if form in ['dat', 'br']:
         yecho(f"打包[DAT]:{name}")
