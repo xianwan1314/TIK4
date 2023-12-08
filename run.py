@@ -475,19 +475,21 @@ class Tool:
         print(f"  项目：{self.pro}\n")
         for root, dirs, files in os.walk(project):
             for f in files:
-                if f.endswith('.apk'):
-                    path = os.path.join(root, f)
-                    try:
-                        apk = ApkFile(path)
-                    except KeyError:
-                        continue
-                    else:
-                        cs += 1
-                        app[str(cs)] = path
-                        path = path.replace(project, '').replace('\\', '/')
-                        apkname = apk.get_app_name()
-                        print(f'\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}:{apk.get_package()}]\033[0m({path})')
-                    del apk
+                with Console().status("[red]正在读取...[/]"):
+                    if f.endswith('.apk'):
+                        path = os.path.join(root, f)
+                        try:
+                            apk = ApkFile(path)
+                        except KeyError:
+                            continue
+                        else:
+                            cs += 1
+                            app[str(cs)] = path
+                            path = path.replace(project, '').replace('\\', '/')
+                            apkname = apk.get_app_name()
+                            print(
+                                f'\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}:{apk.get_package()}]\033[0m({path})')
+                        del apk
         op_menu = input("    请输入编号: ")
 
     def hczip(self):
