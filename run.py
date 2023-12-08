@@ -53,6 +53,15 @@ temp = binner + os.sep + 'temp'
 
 def rmdire(path):
     if os.path.exists(path):
+        if os.name == 'nt':
+            for r, d, f in os.walk(path):
+                for i in d:
+                    if i.endswith('.'):
+                        call('mv {} {}'.format(os.path.join(r, i), os.path.join(r, i[:1])))
+                for i in f:
+                    if i.endswith('.'):
+                        call('mv {} {}'.format(os.path.join(r, i), os.path.join(r, i[:1])))
+
         try:
             shutil.rmtree(path)
         except PermissionError:
@@ -279,7 +288,7 @@ def plug_parse(js_on):
                     ywarn("解析错误 %s" % e)
                     return
                 plugin_title = data_['main']['info']['title']
-                print("----------"+plugin_title+"----------")
+                print("----------" + plugin_title + "----------")
                 for group_name, group_data in data_['main'].items():
                     if group_name != "info":
                         for con in group_data['controls']:
@@ -287,7 +296,7 @@ def plug_parse(js_on):
                                 self.value.append(con['set'])
                             if con["type"] == "text":
                                 if con['text'] != plugin_title:
-                                    print("----------"+con['text']+"----------")
+                                    print("----------" + con['text'] + "----------")
                             elif con["type"] == "filechose":
                                 file_var_name = con['set']
                                 ysuc("请在下方拖入文件或输入路径")
@@ -719,7 +728,8 @@ def unpack_choo(project):
                 if os.path.isfile(os.path.abspath(img0)):
                     filen += 1
                     info = gettype(os.path.abspath(img0))
-                    ywarn(f"   [{filen}]- {img0} <UNKNOWN>\n") if info == "unknow" else print(f'   [{filen}]- {img0} <{info.upper()}>\n')
+                    ywarn(f"   [{filen}]- {img0} <UNKNOWN>\n") if info == "unknow" else print(
+                        f'   [{filen}]- {img0} <{info.upper()}>\n')
                     files[filen] = img0
                     infos[filen] = 'img' if info != 'sparse' else 'sparse'
     if dir_has(project, '.bin'):
