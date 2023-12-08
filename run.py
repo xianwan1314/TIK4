@@ -11,7 +11,7 @@ import zipfile
 from argparse import Namespace
 from configparser import ConfigParser
 from io import BytesIO
-
+from ApkParse.main import ApkFile
 import banner
 
 if os.name == 'nt':
