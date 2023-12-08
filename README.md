@@ -35,7 +35,16 @@
 3.Windows 7 and Newer[x64/x86]
 
 Note: WSL 可能存在权限出错的问题 请自行判断测试！
-
+#### ** 引用项目 **
+1. [ApkParse](https://github.com/zxvzxv/ApkParse/)
+2. [sdat2img](https://github.com/xpirt/sdat2img)
+3. [img2sdat](https://github.com/xpirt/img2sdat)
+4. [make_ext4fs](https://github.com/jamflux/make_ext4fs)
+5. [oppo_decrypt](https://github.com/bkerler/oppo_decrypt)
+6. [lpunpack](https://github.com/unix3dgforce/lpunpack)
+7. [brotli](https://github.com/google/brotli)
+8. [rich](https://github.com/Textualize/rich/)
+9. [context_patch](https://github.com/ColdWindScholar/context_patch)
 #### **合作伙伴**
 1. Sakura
 2. Affggh
