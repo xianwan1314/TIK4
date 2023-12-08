@@ -468,12 +468,34 @@ class Tool:
 
     def sim_app(self):
         cls()
-        app = {}
+        dir_app = {}
+        added = []
         cs = 0
         project = LOCALDIR + os.sep + self.pro
         print(" \n\033[31m>应用精简 \033[0m\n")
-        print(f"  项目：{self.pro}\n")
+        print(f"  项目：{self.pro}\n请选择带APK的文件夹")
         for root, dirs, files in os.walk(project):
+            for d in dirs:
+                path = os.path.join(root, d)
+                if path in added:
+                    continue
+                else:
+                    added.append(path)
+                for i in os.listdir(str(path)):
+                    if os.path.isfile(os.path.join(str(path), i, i+'.apk')):
+                        cs += 1
+                        dir_app[str(cs)] = path
+                        print(f'\033[33m[{cs}]\033[0m--\033[94m[{path}]\033[0m')
+        print("\033[33m  [00] 返回\033[0m\n")
+        op_menu = input("    请输入编号: ")
+
+    def sim_app_2(self, app_path):
+        cls()
+        app = {}
+        cs = 0
+        print(" \n\033[31m>应用精简 \033[0m\n")
+        print(f"  项目：{self.pro}\n")
+        for root, dirs, files in os.walk(app_path):
             for f in files:
                 with Console().status("[red]正在读取...[/]"):
                     if f.endswith('.apk'):
@@ -486,8 +508,9 @@ class Tool:
                             cs += 1
                             apkname = apk.get_app_name()
                             app[str(cs)] = (path, apkname, apk.get_package())
-                            path = path.replace(project, '').replace('\\', '/')
-                            print(f'''\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}]:{apk.get_package()}\n    \033[0m\033[35m({path})\033[0m''')
+                            path = path.replace(app_path, '').replace('\\', '/')
+                            print(
+                                f'''\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}]:{apk.get_package()}\n    \033[0m\033[35m({path})\033[0m''')
                         del apk
         print(f"  --共读取了\033[32m{cs}\033[0m个APK。--")
         print("\033[33m  [01] 移除 [00] 返回\033[0m\n")
@@ -500,7 +523,7 @@ class Tool:
             pass
         else:
             ywarn('Input Error!')
-        self.sim_app()
+        self.sim_app_2()
 
     def hczip(self):
         cls()
