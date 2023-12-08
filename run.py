@@ -427,7 +427,7 @@ class Tool:
             os.makedirs(project_dir + os.sep + 'TI_out')
         print('\033[33m    0> 回到主页     2> 解包菜单\033[0m\n')
         print('\033[36m    3> 打包菜单     4> 插件菜单\033[0m\n')
-        print('\033[32m    5> 一键封装\033[0m\n')
+        print('\033[32m    5> 一键封装     6> 定制功能\033[0m\n')
         op_menu = input("    请输入编号: ")
         if op_menu == '0':
             os.chdir(LOCALDIR)
