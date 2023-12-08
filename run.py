@@ -486,7 +486,7 @@ class Tool:
                         app[str(cs)] = path
                         path = path.replace(project, '').replace('\\', '/')
                         apkname = apk.get_app_name()
-                        print(f'\033[33m[{cs}]\033[0m--[{apkname if apkname else "None"}:{apk.get_package()}]({path})')
+                        print(f'\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}:{apk.get_package()}]\033[0m({path})')
                     del apk
         op_menu = input("    请输入编号: ")
 
