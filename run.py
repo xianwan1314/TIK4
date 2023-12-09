@@ -492,6 +492,12 @@ class Tool:
             else:
                 patch = Magisk_patch(boots[op_menu], '', MAGISAPK=mapk)
                 patch.auto_patch()
+                if os.path.exists(os.path.join(project, 'new-boot.img')):
+                    os.remove(boots[op_menu])
+                    shutil.move(os.path.join(project, 'new-boot.img'), boots[op_menu])
+                    LOGS("修补完成")
+                else:
+                    LOGE("修补失败")
         elif op_menu == '00':
             os.chdir(project)
             return
