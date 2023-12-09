@@ -1707,6 +1707,7 @@ def unpack(file, info, project):
         unpackboot(os.path.abspath(file), project)
     else:
         ywarn("未知格式！")
+    json_.write(parts)
 
 
 def autounpack(project):
