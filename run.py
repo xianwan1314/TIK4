@@ -339,7 +339,7 @@ class Tool:
         projects = {}
         pro = 0
         cls()
-        if settings.banner != "7":
+        if settings.banner != "6":
             print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
         else:
             print('-----------------------------------------')
