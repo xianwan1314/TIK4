@@ -1,9 +1,8 @@
 import struct
 from typing import Dict, List, Tuple, Union
 from lxml import etree
-from xml.etree.ElementTree import Element   #这个用于开启代码提示
+from xml.etree.ElementTree import Element  # 这个用于开启代码提示
 import logging
-
 
 from ApkParse.utils.public_res_ids import PUBLIC_RES_ID
 
@@ -13,70 +12,70 @@ logger = logging.getLogger("apk_parse")
 
 
 ############ ResType
-RES_NULL_TYPE                     = 0x0000
-RES_STRING_POOL_TYPE              = 0x0001
-RES_TABLE_TYPE                    = 0x0002
-RES_XML_TYPE                      = 0x0003
+RES_NULL_TYPE = 0x0000
+RES_STRING_POOL_TYPE = 0x0001
+RES_TABLE_TYPE = 0x0002
+RES_XML_TYPE = 0x0003
 
 # Chunk types in RES_XML_TYPE
-RES_XML_FIRST_CHUNK_TYPE          = 0x0100
-RES_XML_START_NAMESPACE_TYPE      = 0x0100
-RES_XML_END_NAMESPACE_TYPE        = 0x0101
-RES_XML_START_ELEMENT_TYPE        = 0x0102
-RES_XML_END_ELEMENT_TYPE          = 0x0103
-RES_XML_CDATA_TYPE                = 0x0104
-RES_XML_LAST_CHUNK_TYPE           = 0x017f
+RES_XML_FIRST_CHUNK_TYPE = 0x0100
+RES_XML_START_NAMESPACE_TYPE = 0x0100
+RES_XML_END_NAMESPACE_TYPE = 0x0101
+RES_XML_START_ELEMENT_TYPE = 0x0102
+RES_XML_END_ELEMENT_TYPE = 0x0103
+RES_XML_CDATA_TYPE = 0x0104
+RES_XML_LAST_CHUNK_TYPE = 0x017f
 # This contains a uint32_t array mapping strings in the string
 # pool back to resource identifiers.  It is optional.
-RES_XML_RESOURCE_MAP_TYPE         = 0x0180
+RES_XML_RESOURCE_MAP_TYPE = 0x0180
 
 # Chunk types in RES_TABLE_TYPE
-RES_TABLE_PACKAGE_TYPE            = 0x0200
-RES_TABLE_TYPE_TYPE               = 0x0201
-RES_TABLE_TYPE_SPEC_TYPE          = 0x0202
-RES_TABLE_LIBRARY_TYPE            = 0x0203
-RES_TABLE_OVERLAYABLE_TYPE        = 0x0204
+RES_TABLE_PACKAGE_TYPE = 0x0200
+RES_TABLE_TYPE_TYPE = 0x0201
+RES_TABLE_TYPE_SPEC_TYPE = 0x0202
+RES_TABLE_LIBRARY_TYPE = 0x0203
+RES_TABLE_OVERLAYABLE_TYPE = 0x0204
 RES_TABLE_OVERLAYABLE_POLICY_TYPE = 0x0205
-RES_TABLE_STAGED_ALIAS_TYPE       = 0x0206
+RES_TABLE_STAGED_ALIAS_TYPE = 0x0206
 ############ ResType end
 
 ############ Res_value types
-TYPE_NULL               = 0x00
-TYPE_REFERENCE          = 0x01
-TYPE_ATTRIBUTE          = 0x02
-TYPE_STRING             = 0x03
-TYPE_FLOAT              = 0x04
-TYPE_DIMENSION          = 0x05
-TYPE_FRACTION           = 0x06
-TYPE_DYNAMIC_REFERENCE  = 0x07
-TYPE_DYNAMIC_ATTRIBUTE  = 0x08
-TYPE_FIRST_INT          = 0x10
-TYPE_INT_DEC            = 0x10
-TYPE_INT_HEX            = 0x11
-TYPE_INT_BOOLEAN        = 0x12
-TYPE_FIRST_COLOR_INT    = 0x1c
-TYPE_INT_COLOR_ARGB8    = 0x1c
-TYPE_INT_COLOR_RGB8     = 0x1d
-TYPE_INT_COLOR_ARGB4    = 0x1e
-TYPE_INT_COLOR_RGB4     = 0x1f
-TYPE_LAST_COLOR_INT     = 0x1f
-TYPE_LAST_INT           = 0x1f
+TYPE_NULL = 0x00
+TYPE_REFERENCE = 0x01
+TYPE_ATTRIBUTE = 0x02
+TYPE_STRING = 0x03
+TYPE_FLOAT = 0x04
+TYPE_DIMENSION = 0x05
+TYPE_FRACTION = 0x06
+TYPE_DYNAMIC_REFERENCE = 0x07
+TYPE_DYNAMIC_ATTRIBUTE = 0x08
+TYPE_FIRST_INT = 0x10
+TYPE_INT_DEC = 0x10
+TYPE_INT_HEX = 0x11
+TYPE_INT_BOOLEAN = 0x12
+TYPE_FIRST_COLOR_INT = 0x1c
+TYPE_INT_COLOR_ARGB8 = 0x1c
+TYPE_INT_COLOR_RGB8 = 0x1d
+TYPE_INT_COLOR_ARGB4 = 0x1e
+TYPE_INT_COLOR_RGB4 = 0x1f
+TYPE_LAST_COLOR_INT = 0x1f
+TYPE_LAST_INT = 0x1f
 ############ Res_value types end
 
 ############ size of some struct
-RES_CHUNK_HEADER_SIZE           = 8         # 只有这个chunkheader大小是固定的，其他的供参考
-STRING_POOL_HEADER_SIZE         = 0x1C      # string pool 头部大小
-START_NAMESPACE_SIZE            = 0x18      # namespace结构体的大小，start namespace和end namespace是一样的
-RES_XML_TREE_ATTREXT_SIZE       = 0x14      # res xml tree中关于attribute的描述信息的大小
-CDATA_SIZE                      = 0x1C      # CData结构的基本大小
-RES_VALUE_SIZE                  = 0x08      # ResValue结构体的大小
-RES_TABLE_PACKAGE_HEADER_SIZE   = 0x120     # ResTablePackage的头部大小
-RES_TABLE_TYPE_SPEC_SIZE        = 0x10      # ResTypeSpec的基本大小
-RES_TABLE_TYPE_SIZE             = 0x14      # ResTableType的基本大小
+RES_CHUNK_HEADER_SIZE = 8  # 只有这个chunkheader大小是固定的，其他的供参考
+STRING_POOL_HEADER_SIZE = 0x1C  # string pool 头部大小
+START_NAMESPACE_SIZE = 0x18  # namespace结构体的大小，start namespace和end namespace是一样的
+RES_XML_TREE_ATTREXT_SIZE = 0x14  # res xml tree中关于attribute的描述信息的大小
+CDATA_SIZE = 0x1C  # CData结构的基本大小
+RES_VALUE_SIZE = 0x08  # ResValue结构体的大小
+RES_TABLE_PACKAGE_HEADER_SIZE = 0x120  # ResTablePackage的头部大小
+RES_TABLE_TYPE_SPEC_SIZE = 0x10  # ResTypeSpec的基本大小
+RES_TABLE_TYPE_SIZE = 0x14  # ResTableType的基本大小
 ############ size end
 
 ############ android官方资源中的，各个types对应的数值，没用到，先放着
-RES_TYPES = {  
+RES_TYPES = {
     0x01: "attr",
     0x02: "id",
     0x03: "style",
@@ -97,26 +96,27 @@ RES_TYPES = {
     # 0x1010: "attr",   # TODO 还不知道pkg id为0x10的是干啥的
     # 0x10c0: "interpolator",
 }
-############
 
+
+############
 
 
 class ResChunkHeader:
 
-    def __init__(self, buff:bytes) -> None:
+    def __init__(self, buff: bytes) -> None:
         '''
         读取资源头 (8 bytes)
         '''
         if len(buff) >= RES_CHUNK_HEADER_SIZE:
             (self.res_type,
-            self.header_size,
-            self.size) = struct.unpack("<HHI", buff[:RES_CHUNK_HEADER_SIZE])
+             self.header_size,
+             self.size) = struct.unpack("<HHI", buff[:RES_CHUNK_HEADER_SIZE])
 
             if len(buff) < self.size:
                 raise Exception(f"Chunk length error, except {self.size}, got {len(buff)}")
 
             self.buff = buff
-            
+
             # self.ptr 作为一个虚拟的指针，用于定位当前数据读取的位置，由于android的资源文件都是4字节对齐的，
             # 读取完数据后需要有对齐操作，因此增加此指针和相关方法，方便数据读取
             self.ptr = RES_CHUNK_HEADER_SIZE
@@ -130,7 +130,7 @@ class ResChunkHeader:
         self.ptr += offset
         while self.ptr % 4 != 0:
             self.ptr += 1
-    
+
     def _ptr_reset(self, offset) -> None:
         '''
         self.ptr 重置位置，同时保证4字节对齐
@@ -139,12 +139,14 @@ class ResChunkHeader:
         while self.ptr % 4 != 0:
             self.ptr += 1
 
+
 # string chunk header flag
 SORTED_FLAG = 1 << 0
 UTF8_FLAG = 1 << 8
 
+
 class StringPool(ResChunkHeader):
-    def __init__(self, buff: bytes, pre_decode:bool = True) -> None:
+    def __init__(self, buff: bytes, pre_decode: bool = True) -> None:
         '''
         解析字符串池
 
@@ -158,28 +160,30 @@ class StringPool(ResChunkHeader):
             # raise Exception("AXML: String pool header length error")
             logger.error("AXML: String pool header length error")
             pass
-        
+
         header_buff = self.buff[RES_CHUNK_HEADER_SIZE: STRING_POOL_HEADER_SIZE]
 
         (self.string_cnt,
-        self.style_cnt,
-        self.flag,
-        self.string_offset,
-        self.style_offset) = struct.unpack("<5I", header_buff)
+         self.style_cnt,
+         self.flag,
+         self.string_offset,
+         self.style_offset) = struct.unpack("<5I", header_buff)
         self.is_utf8 = ((self.flag & UTF8_FLAG) != 0)
         logger.debug(f"StringPool: cnt--{self.string_cnt}, is utf-8? {self.is_utf8}")
 
-        self.string_offsets:List[int] = []
-        self.style_offsets:List[int] = []
+        self.string_offsets: List[int] = []
+        self.style_offsets: List[int] = []
         if self.string_cnt > 0:
-            self.string_offsets:List[int] = list(struct.unpack(f"<{self.string_cnt}I", 
-                        self.buff[self.header_size: self.header_size + 4*self.string_cnt]))
+            self.string_offsets: List[int] = list(struct.unpack(f"<{self.string_cnt}I",
+                                                                self.buff[
+                                                                self.header_size: self.header_size + 4 * self.string_cnt]))
         if self.style_cnt > 0:
-            self.style_offsets:List[int] = list(struct.unpack(f"<{self.style_cnt}I", 
-                        self.buff[self.header_size + 4*self.string_cnt: self.header_size + 4*self.string_cnt + 4*self.style_cnt]))
-        
-        self.strings:Dict[int, str] = {}
-        self.styles:Dict[int, str] = {}
+            self.style_offsets: List[int] = list(struct.unpack(f"<{self.style_cnt}I",
+                                                               self.buff[
+                                                               self.header_size + 4 * self.string_cnt: self.header_size + 4 * self.string_cnt + 4 * self.style_cnt]))
+
+        self.strings: Dict[int, str] = {}
+        self.styles: Dict[int, str] = {}
 
         if pre_decode:
             for i in range(self.string_cnt):
@@ -187,7 +191,7 @@ class StringPool(ResChunkHeader):
             for i in range(self.style_cnt):
                 self.styles[i] = self.string_at(self.style_offset + self.style_offsets[i])
 
-    def get_string(self, num:int) -> str:
+    def get_string(self, num: int) -> str:
         '''
         通过字符串序号(id)获取字符串, 传入值必须大于0
         '''
@@ -203,7 +207,7 @@ class StringPool(ResChunkHeader):
         self.strings[num] = self.string_at(index)
         return self.strings[num]
 
-    def get_style(self, num:int) -> str:
+    def get_style(self, num: int) -> str:
         '''
         通过style序号(id)获取style字符串, 传入值必须大于0
         '''
@@ -218,7 +222,7 @@ class StringPool(ResChunkHeader):
         self.styles[num] = self.string_at(index)
         return self.styles[num]
 
-    def string_at(self, index:int) -> str:
+    def string_at(self, index: int) -> str:
         '''
         从index开始解析一个字符串
 
@@ -239,7 +243,7 @@ class StringPool(ResChunkHeader):
                 logger.warning("decode utf-16 string error")
                 return ""
 
-    def _decode_utf8(self, offset:int) -> str:
+    def _decode_utf8(self, offset: int) -> str:
         """
         Check bytes length, return bytes
 
@@ -262,7 +266,7 @@ class StringPool(ResChunkHeader):
         data = data_b.decode("utf-8", "replace")
         return data
 
-    def _decode_utf16(self, offset:int) -> str:
+    def _decode_utf16(self, offset: int) -> str:
         """
         Check bytes length, return bytes
 
@@ -323,26 +327,26 @@ class ResMap(ResChunkHeader):
 
         # headersize of this chunk is 8
         res_ids_buff = self.buff[self.header_size: self.size]
-        self.num_res_ids:int = int(len(res_ids_buff) / 4)
-        self.res_ids:tuple = struct.unpack("<{}I".format(str(self.num_res_ids)), res_ids_buff)
-        
-        self.res_id_str:List[str] = []
+        self.num_res_ids: int = int(len(res_ids_buff) / 4)
+        self.res_ids: tuple = struct.unpack("<{}I".format(str(self.num_res_ids)), res_ids_buff)
+
+        self.res_id_str: List[str] = []
         for idx in self.res_ids:
             self.res_id_str.append(PUBLIC_RES_ID.get(idx, ""))
 
 
-class StartNS(ResChunkHeader): # start namespace chunck
+class StartNS(ResChunkHeader):  # start namespace chunck
     def __init__(self, buff: bytes) -> None:
         super().__init__(buff)
 
         if self.size != START_NAMESPACE_SIZE:
-            pass    # TODO add log: "StartNamespace size is not equal to 0x18"
+            pass  # TODO add log: "StartNamespace size is not equal to 0x18"
 
         (self.line_num,
-        self.comment) = struct.unpack("<2I", self.buff[RES_CHUNK_HEADER_SIZE: RES_CHUNK_HEADER_SIZE + 8])
+         self.comment) = struct.unpack("<2I", self.buff[RES_CHUNK_HEADER_SIZE: RES_CHUNK_HEADER_SIZE + 8])
 
         (self.prefix,
-        self.uri) = struct.unpack("<2I", self.buff[self.header_size: self.header_size + 8])
+         self.uri) = struct.unpack("<2I", self.buff[self.header_size: self.header_size + 8])
 
 
 class EndNS(ResChunkHeader):
@@ -350,13 +354,13 @@ class EndNS(ResChunkHeader):
         super().__init__(buff)
 
         if self.size != START_NAMESPACE_SIZE:
-            logger.warning(f"EndNamespace size is not equal to 0x18, size={self.size}") 
+            logger.warning(f"EndNamespace size is not equal to 0x18, size={self.size}")
 
         (self.line_num,
-        self.comment) = struct.unpack("<2I", self.buff[RES_CHUNK_HEADER_SIZE: RES_CHUNK_HEADER_SIZE + 8])
+         self.comment) = struct.unpack("<2I", self.buff[RES_CHUNK_HEADER_SIZE: RES_CHUNK_HEADER_SIZE + 8])
 
         (self.prefix,
-        self.uri) = struct.unpack("<2I", self.buff[self.header_size: self.header_size + 8])
+         self.uri) = struct.unpack("<2I", self.buff[self.header_size: self.header_size + 8])
 
 
 class StartElement(ResChunkHeader):
@@ -364,18 +368,19 @@ class StartElement(ResChunkHeader):
         super().__init__(buff)
 
         (self.line_num,
-        self.comment) = struct.unpack("<2I", self.buff[RES_CHUNK_HEADER_SIZE: RES_CHUNK_HEADER_SIZE + 8])
+         self.comment) = struct.unpack("<2I", self.buff[RES_CHUNK_HEADER_SIZE: RES_CHUNK_HEADER_SIZE + 8])
 
         (self.ns,
-        self.name,
-        self.attribute_start,
-        self.attribute_size,
-        self.attribute_count,
-        self.id_index,
-        self.class_index,
-        self.style_index) = struct.unpack("<2I6H", self.buff[self.header_size: self.header_size + RES_XML_TREE_ATTREXT_SIZE])
+         self.name,
+         self.attribute_start,
+         self.attribute_size,
+         self.attribute_count,
+         self.id_index,
+         self.class_index,
+         self.style_index) = struct.unpack("<2I6H",
+                                           self.buff[self.header_size: self.header_size + RES_XML_TREE_ATTREXT_SIZE])
 
-        self.attributes:List[AxmlAttribute] = []
+        self.attributes: List[AxmlAttribute] = []
 
         index = self.header_size + self.attribute_start
         for i in range(self.attribute_count):
@@ -389,20 +394,20 @@ class EndElement(ResChunkHeader):
         super().__init__(buff)
 
         (self.line_num,
-        self.comment) = struct.unpack("<2I", self.buff[RES_CHUNK_HEADER_SIZE: RES_CHUNK_HEADER_SIZE + 8])
+         self.comment) = struct.unpack("<2I", self.buff[RES_CHUNK_HEADER_SIZE: RES_CHUNK_HEADER_SIZE + 8])
 
         (self.ns,
-        self.name) = struct.unpack("<2I", self.buff[self.header_size: self.header_size + 8])
+         self.name) = struct.unpack("<2I", self.buff[self.header_size: self.header_size + 8])
 
 
 class CData(ResChunkHeader):
     def __init__(self, buff: bytes) -> None:
         super().__init__(buff)
         if len(buff) < CDATA_SIZE:
-            pass # TODO add log
+            pass  # TODO add log
 
         (self.line_num,
-        self.comment) = struct.unpack("<2I", self.buff[RES_CHUNK_HEADER_SIZE: RES_CHUNK_HEADER_SIZE + 8])
+         self.comment) = struct.unpack("<2I", self.buff[RES_CHUNK_HEADER_SIZE: RES_CHUNK_HEADER_SIZE + 8])
 
         self.raw_data = struct.unpack("<I", self.buff[RES_CHUNK_HEADER_SIZE + 8: RES_CHUNK_HEADER_SIZE + 12])
 
@@ -412,52 +417,52 @@ class CData(ResChunkHeader):
 class AxmlAttribute:
     def __init__(self, buff: bytes) -> None:
         (self.ns,
-        self.name,
-        self.raw_value) = struct.unpack("<3I", buff[:12])
-        
+         self.name,
+         self.raw_value) = struct.unpack("<3I", buff[:12])
+
         # res_value 的结构体固定长8字节
-        self.value:ResValue = ResValue(buff[12:20])
+        self.value: ResValue = ResValue(buff[12:20])
 
 
 class ResValue:
     def __init__(self, buff: bytes) -> None:
         if len(buff) != RES_VALUE_SIZE:
-            pass # TODO add log: res value length error
+            pass  # TODO add log: res value length error
 
         (self.size,
-        self.res0,
-        self.data_type,
-        self.data) = struct.unpack("<H2BI", buff)
+         self.res0,
+         self.data_type,
+         self.data) = struct.unpack("<H2BI", buff)
 
-        self.data_bin:bytes = buff[4:]    # 二进制的data
+        self.data_bin: bytes = buff[4:]  # 二进制的data
 
         if self.data_type > 0x1f:
-            logger.error(f"res value type error,type:{self.data_type}") 
-    
-    def parse_data(self, string_pool:StringPool):
+            logger.error(f"res value type error,type:{self.data_type}")
+
+    def parse_data(self, string_pool: StringPool):
         '''
         使用指定的字符串池解析当前的value
         '''
         self.string_pool = string_pool
 
         # Type of the data value.
-        decode_methods = {       
-            0x00:self._type_null,       # TYPE_NULL
-            0x01:self._type_reference,  # TYPE_REFERENCE
-            0x02:self._type_tmp,        # TYPE_ATTRIBUTE
-            0x03:self._type_string,     # TYPE_STRING
-            0x04:self._type_float,      # TYPE_FLOAT
-            0x05:self._type_tmp,        # TYPE_DIMENSION
-            0x06:self._type_tmp,        # TYPE_FRACTION
-            0x07:self._type_tmp,        # TYPE_DYNAMIC_REFERENCE
-            0x08:self._type_tmp,        # TYPE_DYNAMIC_ATTRIBUTE
-            0x10:self._type_int_dec,    # TYPE_INT_DEC
-            0x11:self._type_int_hex,    # TYPE_INT_HEX
-            0x12:self._type_int_bool,   # TYPE_INT_BOOLEAN
-            0x1c:self._type_int_hex,    # TYPE_INT_COLOR_ARGB8  # 颜色没必要解析，就用十六进制表示
-            0x1d:self._type_int_hex,    # TYPE_INT_COLOR_RGB8
-            0x1e:self._type_int_hex,    # TYPE_INT_COLOR_ARGB4
-            0x1f:self._type_int_hex,    # TYPE_INT_COLOR_RGB4
+        decode_methods = {
+            0x00: self._type_null,  # TYPE_NULL
+            0x01: self._type_reference,  # TYPE_REFERENCE
+            0x02: self._type_tmp,  # TYPE_ATTRIBUTE
+            0x03: self._type_string,  # TYPE_STRING
+            0x04: self._type_float,  # TYPE_FLOAT
+            0x05: self._type_tmp,  # TYPE_DIMENSION
+            0x06: self._type_tmp,  # TYPE_FRACTION
+            0x07: self._type_tmp,  # TYPE_DYNAMIC_REFERENCE
+            0x08: self._type_tmp,  # TYPE_DYNAMIC_ATTRIBUTE
+            0x10: self._type_int_dec,  # TYPE_INT_DEC
+            0x11: self._type_int_hex,  # TYPE_INT_HEX
+            0x12: self._type_int_bool,  # TYPE_INT_BOOLEAN
+            0x1c: self._type_int_hex,  # TYPE_INT_COLOR_ARGB8  # 颜色没必要解析，就用十六进制表示
+            0x1d: self._type_int_hex,  # TYPE_INT_COLOR_RGB8
+            0x1e: self._type_int_hex,  # TYPE_INT_COLOR_ARGB4
+            0x1f: self._type_int_hex,  # TYPE_INT_COLOR_RGB4
         }
 
         try:
@@ -465,7 +470,7 @@ class ResValue:
         except:
             return None
 
-    def _type_tmp(self):    # TODO complete these methods.
+    def _type_tmp(self):  # TODO complete these methods.
         return self.data
 
     def _type_null(self):
@@ -476,20 +481,18 @@ class ResValue:
 
     def _type_string(self):
         return self.string_pool.get_string(self.data)
-    
+
     def _type_int_dec(self):
         return self.data
 
     def _type_int_hex(self):
         return hex(self.data)
-    
+
     def _type_int_bool(self):
         return True if self.data else False
 
     def _type_float(self):
         return struct.unpack("<f", self.data_bin)
-
-
 
     # Structure of complex data values (TYPE_UNIT and TYPE_FRACTION)
     class ComplexDataValues:
@@ -545,29 +548,29 @@ class ResValue:
 
 class ResTableEntry:
     # flag的取值
-    FLAG_COMPLEX    = 0x0001    # 此entry后面跟着ResTable_map
-    FLAG_PUBLIC     = 0x0002    # 此entry为公有，可被其他库引用
-    FLAG_WEAK       = 0x0004    # 此资源会被其他同类型且同名资源覆盖
+    FLAG_COMPLEX = 0x0001  # 此entry后面跟着ResTable_map
+    FLAG_PUBLIC = 0x0002  # 此entry为公有，可被其他库引用
+    FLAG_WEAK = 0x0004  # 此资源会被其他同类型且同名资源覆盖
 
     # 这里有个offset参数，表示从buff[offset:]开始解析数据，如果传入buff[xxx:yyy]，
     # 内存中会额外复制一份切片后的buff传入此类，导致效率降低，所以直接传入完整的buff，这样python会自动复用同一个buff，
     # 其他很多类是传入的buff[xxx:yyy]，但是那些类调用次数很少（个位数到百位数），这点内存复制耗时可忽略了，这个类调用次数的数量级在万级以上
     # 不过后续可以考虑全部代码共用一个buff，这样耗时大概能缩短几十毫秒
-    def __init__(self, buff: bytes, key_sp:StringPool, offset:int) -> None:
+    def __init__(self, buff: bytes, key_sp: StringPool, offset: int) -> None:
         (self.size,
-        self.flag,
-        self.key_str_id) = struct.unpack("<2HI", buff[offset: offset + 8])
+         self.flag,
+         self.key_str_id) = struct.unpack("<2HI", buff[offset: offset + 8])
 
-        if (self.flag & self.FLAG_COMPLEX):     # 逆向apk一般用不到这个数据
+        if (self.flag & self.FLAG_COMPLEX):  # 逆向apk一般用不到这个数据
             (self.ref_parant,
-            self.count) = struct.unpack("<2I", buff[offset + 8: offset + 16])
+             self.count) = struct.unpack("<2I", buff[offset + 8: offset + 16])
 
-            self.value = {"map object":"is not yet parsed"}
+            self.value = {"map object": "is not yet parsed"}
         else:
             self.value = ResValue(buff[offset + 8: offset + 16])
 
         self.key_str = key_sp.get_string(self.key_str_id)
-        
+
 
 class ResTablePackage(ResChunkHeader):
     # 资源id形式如：0x7f010002
@@ -577,7 +580,7 @@ class ResTablePackage(ResChunkHeader):
     # 一般在android开发中写法为@res_type/res_name，与资源id的0x010002相对应
     # 此结构体中的两个字符串池 type_str_pool，key_str_pool就是保存的res_type和res_name字符串
 
-    def __init__(self, buff: bytes, global_sp:StringPool) -> None:
+    def __init__(self, buff: bytes, global_sp: StringPool) -> None:
         '''
         读取table package信息
 
@@ -587,27 +590,27 @@ class ResTablePackage(ResChunkHeader):
         '''
         super().__init__(buff)
 
-        self.name:str = ""
-        
+        self.name: str = ""
+
         # table package header
         (self.id,
-        self.name,
-        self.type_str_offset,
-        self.last_pub_type,
-        self.key_str_offset,
-        self.last_pub_key,
-        self.type_id_offset) = struct.unpack("<I256s5I", 
-                            self.buff[RES_CHUNK_HEADER_SIZE: RES_TABLE_PACKAGE_HEADER_SIZE])
+         self.name,
+         self.type_str_offset,
+         self.last_pub_type,
+         self.key_str_offset,
+         self.last_pub_key,
+         self.type_id_offset) = struct.unpack("<I256s5I",
+                                              self.buff[RES_CHUNK_HEADER_SIZE: RES_TABLE_PACKAGE_HEADER_SIZE])
         logger.debug(f"ResTablePackage: id:{hex(self.id)},len:{hex(self.size)}")
 
-        self.type_str_pool:StringPool = StringPool(self.buff[self.type_str_offset:])
-        self.key_str_pool:StringPool = StringPool(self.buff[self.key_str_offset:])
+        self.type_str_pool: StringPool = StringPool(self.buff[self.type_str_offset:])
+        self.key_str_pool: StringPool = StringPool(self.buff[self.key_str_offset:])
 
         # table package spec dict: {type_id: type_spec, ...}
-        self.specs:Dict[int, ResTypeSpec] = {}
+        self.specs: Dict[int, ResTypeSpec] = {}
 
         # table package Types dict: {type_id: [type_type1, type_type2, ... ], ...}
-        self.tp_types:Dict[int, List[ResTableType]] = {}
+        self.tp_types: Dict[int, List[ResTableType]] = {}
 
         self.ptr = self.key_str_offset + self.key_str_pool.size
         while (self.ptr < self.size):
@@ -621,54 +624,54 @@ class ResTablePackage(ResChunkHeader):
                 tmp_obj = ResTableType(self.buff[self.ptr:], global_sp, self.key_str_pool)
                 self.tp_types.setdefault(tmp_obj.id, []).append(tmp_obj)
                 self._ptr_add(tmp_obj.size)
-            else:   # TODO 完善其他数据块的读取
+            else:  # TODO 完善其他数据块的读取
                 h = ResChunkHeader(self.buff[self.ptr:])
                 logger.debug(f"ResTablePackage: read unknow chunk:{h.res_type},size:{h.size}")
                 self._ptr_add(h.size)
 
 
 class ResTypeSpec(ResChunkHeader):
-    SPEC_PUBLIC = 0x40000000        # TODO flags的取值，目前没有用到
+    SPEC_PUBLIC = 0x40000000  # TODO flags的取值，目前没有用到
     SPEC_STAGED_API = 0x20000000
 
     def __init__(self, buff: bytes) -> None:
         super().__init__(buff)
 
         (self.id,
-        self.res0,
-        self.res1,
-        self.entry_count) = struct.unpack("<2BHI", self.buff[RES_CHUNK_HEADER_SIZE: RES_TABLE_TYPE_SPEC_SIZE])
+         self.res0,
+         self.res1,
+         self.entry_count) = struct.unpack("<2BHI", self.buff[RES_CHUNK_HEADER_SIZE: RES_TABLE_TYPE_SPEC_SIZE])
 
-        self.flags:Tuple[int, ...] = struct.unpack(f"<{self.entry_count}I", self.buff[self.header_size: self.header_size + 4 * self.entry_count])
+        self.flags: Tuple[int, ...] = struct.unpack(f"<{self.entry_count}I", self.buff[
+                                                                             self.header_size: self.header_size + 4 * self.entry_count])
 
 
 class ResTableType(ResChunkHeader):
 
-    
-    def __init__(self, buff: bytes, global_sp:StringPool, key_sp:StringPool) -> None:
+    def __init__(self, buff: bytes, global_sp: StringPool, key_sp: StringPool) -> None:
         '''
         读取res_table_type
         '''
         super().__init__(buff)
 
         (self.id,
-        self.flag,
-        self.res1,
-        self.entry_count,
-        self.entry_start) = struct.unpack("<2BH2I", self.buff[RES_CHUNK_HEADER_SIZE: RES_TABLE_TYPE_SIZE])
+         self.flag,
+         self.res1,
+         self.entry_count,
+         self.entry_start) = struct.unpack("<2BH2I", self.buff[RES_CHUNK_HEADER_SIZE: RES_TABLE_TYPE_SIZE])
         logger.debug(f"ResTableType: id:{self.id},size:{self.size},flag:{self.flag}")
 
         # TODO 完善config解析，config用于资源的语言适配，屏幕大小适配等，反编译一般用不到这个东西，暂不处理
         # config是在ResChunkHeader头部里面的，只能用固定长度0x14获取到其位置了
-        self.config_count = struct.unpack("<I",self.buff[0x14: 0x18])[0]
-        self.config:bytes = self.buff[0x14: 0x14 + self.config_count]
+        self.config_count = struct.unpack("<I", self.buff[0x14: 0x18])[0]
+        self.config: bytes = self.buff[0x14: 0x14 + self.config_count]
 
-        entry_off_end = self.header_size + self.entry_count*4
-        self.entry_offsets:Tuple[int, ...] = struct.unpack(f"<{self.entry_count}I", 
-                                    self.buff[self.header_size : entry_off_end])
-        
+        entry_off_end = self.header_size + self.entry_count * 4
+        self.entry_offsets: Tuple[int, ...] = struct.unpack(f"<{self.entry_count}I",
+                                                            self.buff[self.header_size: entry_off_end])
+
         # entries字典，{entry序号: [ResTableEntry,Resvalue], ...}，方便根据序号查询对应的资源
-        self.entries:Dict[int, ResTableEntry] = {}
+        self.entries: Dict[int, ResTableEntry] = {}
         # entry的编码方式有区别，参考ResourceTypes.h里面的ResTable_type.flags
         if self.flag == 0:
             count = 0
@@ -699,26 +702,26 @@ class ResTableType(ResChunkHeader):
 #######################
 
 class Axml(ResChunkHeader):
-    def __init__(self, buff: bytes, pre_decode:bool = True) -> None:
+    def __init__(self, buff: bytes, pre_decode: bool = True) -> None:
         super().__init__(buff)
         self.pre_decode = pre_decode
 
-        self.string_pool:StringPool = None
-        self.res_map:ResMap = None
-        self.start_nss:List[StartNS] = []
-        self.end_nss:List[EndNS] = []
-        self.start_elements:List[StartElement] = []
-        self.end_elements:List[EndElement] = []
-        self.cdatas:List[CData] = []
+        self.string_pool: StringPool = None
+        self.res_map: ResMap = None
+        self.start_nss: List[StartNS] = []
+        self.end_nss: List[EndNS] = []
+        self.start_elements: List[StartElement] = []
+        self.end_elements: List[EndElement] = []
+        self.cdatas: List[CData] = []
 
         # 字典格式保存的xml内容，相比xml缺少了层级关系，我写出来了但是不知道有啥用，先放着。
         # 下面有相应的解析函数_parse_nodes_dict()
-        self.xml_nodes_dict:Dict[str,list] = {}
+        self.xml_nodes_dict: Dict[str, list] = {}
 
         self.node_ptr = None
         first_tag = ""
         count = 0
-        while(self.ptr < self.size):
+        while (self.ptr < self.size):
             next_chunk_type = struct.unpack("<H", self.buff[self.ptr: self.ptr + 2])[0]
 
             # 出现频率高的类型往前放，提高效率
@@ -732,7 +735,7 @@ class Axml(ResChunkHeader):
                     self.node_ptr = tmp_node
                     first_tag = tmp_node.tag
                 else:
-                    self.node_ptr.append(tmp_node)   # 增加当前节点，并指向它
+                    self.node_ptr.append(tmp_node)  # 增加当前节点，并指向它
                     self.node_ptr = list(self.node_ptr)[-1]
                 self.start_elements.append(tmp)
                 self._ptr_add(tmp.size)
@@ -744,9 +747,9 @@ class Axml(ResChunkHeader):
             elif next_chunk_type == RES_XML_END_ELEMENT_TYPE:
                 tmp = EndElement(self.buff[self.ptr:])
                 tmp_name = self.string_pool.get_string(tmp.name)
-                if tmp_name == first_tag or self.node_ptr.tag == first_tag:    # 遇到第一个node表示xml解析完成
+                if tmp_name == first_tag or self.node_ptr.tag == first_tag:  # 遇到第一个node表示xml解析完成
                     pass
-                elif tmp_name != self.node_ptr.tag:   # 一个node的结尾需要与开头名称匹配，如<activity>xxxx</activity>
+                elif tmp_name != self.node_ptr.tag:  # 一个node的结尾需要与开头名称匹配，如<activity>xxxx</activity>
                     raise Exception(f"Parse xml error. start_tag not equal to end_tag: {self.node_ptr.tag}=={tmp_name}")
                 else:
                     self.node_ptr = self.node_ptr.getparent()
@@ -785,8 +788,7 @@ class Axml(ResChunkHeader):
                 self._ptr_add(4)
                 continue
 
-
-    def _create_node(self, element:StartElement) -> Union[Element,None]:
+    def _create_node(self, element: StartElement) -> Union[Element, None]:
         '''
         使用StartElement实例创建xml node
         '''
@@ -800,7 +802,7 @@ class Axml(ResChunkHeader):
                 key = attr_name
             # xml中所有的value都是字符串格式，这里要用str()转换一下
             attr_dict[key] = str(attr.value.parse_data(self.string_pool))
-        
+
         # 有apk会故意加入错误字符，导致无法解析成标准xml，只要app没有使用此字符串，则可以正常安装
         # 这里如果遇到这种对抗，就插入一个空的node
         # 如果tag name被插入错误字符，则直接返回None，错误的tag 并没有实际作用，只是妨碍逆向
@@ -808,19 +810,18 @@ class Axml(ResChunkHeader):
         if tag_name == "":
             return None
         try:
-            node:Element = etree.Element(
+            node: Element = etree.Element(
                 tag_name,
                 attrib=attr_dict,
                 nsmap=None
             )
         except:
-            node:Element = etree.Element(
+            node: Element = etree.Element(
                 tag_name,
-                attrib={"this":"is_not_a_valid_unicode_str"},
+                attrib={"this": "is_not_a_valid_unicode_str"},
                 nsmap=None
             )
         return node
-
 
     def _parse_nodes_dict(self):
         '''
@@ -828,41 +829,38 @@ class Axml(ResChunkHeader):
         '''
         for line in self.start_elements:
             name = self.string_pool.get_string(line.name)
-            self.xml_nodes_dict.setdefault(name,[])
+            self.xml_nodes_dict.setdefault(name, [])
 
             inline_data = {}
             for attr in line.attributes:
-                
                 inline_data[self._parse_name(attr.name)] = attr.value.parse_data(self.string_pool)
-            
+
             self.xml_nodes_dict[name].append(inline_data)
 
-
-    def _parse_name(self, idx:int) -> str:
+    def _parse_name(self, idx: int) -> str:
         '''
         解析以id形式保存的name(如AxmlAttribute.name), 解析出对应的字符串返回
         也可以解析AxmlAttribute.ns
 
         如果解析出错, 返回空字符串
         '''
-        #某些namespace字段可能取这个值，用于表示没有namespace
+        # 某些namespace字段可能取这个值，用于表示没有namespace
         if idx == 0xffffffff:
             return ""
-        
-        try:    # 某些attributes会使用错误的字符串索引，这里直接跳过
+
+        try:  # 某些attributes会使用错误的字符串索引，这里直接跳过
             name = self.string_pool.get_string(idx)
         except:
             return ""
-        
+
         if name == "":
             try:
                 name = self.res_map.res_id_str[idx]
                 name = name.split("_", 1)[-1]
             except:
                 name = ""
-        
-        return name
 
+        return name
 
     def list_strings(self) -> list:
         '''
@@ -873,7 +871,6 @@ class Axml(ResChunkHeader):
         else:
             raise Exception("Strings are not decoded. ")
 
-
     def get_xml_str(self) -> str:
         '''
         返回字符串格式的xml数据
@@ -882,16 +879,16 @@ class Axml(ResChunkHeader):
 
 
 class Arsc(ResChunkHeader):
-    def __init__(self, buff: bytes, pre_decode:bool = True) -> None:
+    def __init__(self, buff: bytes, pre_decode: bool = True) -> None:
         super().__init__(buff)
         self.pre_decode = pre_decode
-        self.package_count = struct.unpack("<I",self.buff[self.ptr: self.ptr + 4])[0]
+        self.package_count = struct.unpack("<I", self.buff[self.ptr: self.ptr + 4])[0]
         self._ptr_add(4)
         # 重置ptr位置，因为部分apk的资源文件头部可能会添加自定义的额外数据
         self._ptr_reset(self.header_size)
 
-        self.string_pool:StringPool= None
-        self.table_packages:Dict[int, ResTablePackage] = {}
+        self.string_pool: StringPool = None
+        self.table_packages: Dict[int, ResTablePackage] = {}
 
         while (self.ptr < self.size):
             next_chunk_type = struct.unpack("<H", self.buff[self.ptr: self.ptr + 2])[0]
@@ -910,7 +907,7 @@ class Arsc(ResChunkHeader):
                 self._ptr_add(4)
                 continue
 
-    def get_resources(self, res_id:int) -> list:
+    def get_resources(self, res_id: int) -> list:
         '''
         通过资源id获取资源的数据
 
@@ -923,7 +920,7 @@ class Arsc(ResChunkHeader):
         pkg_num = (res_id >> 24) & 0xff
         # print(hex(pkg_num), hex(type_num), num)
         pkg = self.table_packages.get(pkg_num)
-        for item in pkg.tp_types.get(type_num,[]):
+        for item in pkg.tp_types.get(type_num, []):
             entry = item.entries.get(num)
             if entry:
                 if type(entry.value) == dict:
@@ -932,4 +929,3 @@ class Arsc(ResChunkHeader):
                 res.append((entry.key_str, entry.value.parse_data(self.string_pool)))
 
         return res
-
