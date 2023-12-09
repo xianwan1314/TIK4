@@ -341,6 +341,8 @@ class Tool:
         cls()
         if settings.banner != "7":
             print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
+        else:
+            print('-----------------------------------------')
         print("\033[92;44m Delta Edition \033[0m")
         if settings.online == 'true':
             try:
