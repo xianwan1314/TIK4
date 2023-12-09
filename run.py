@@ -470,6 +470,7 @@ class Tool:
         cls()
         cs = 0
         project = LOCALDIR + os.sep + self.pro
+        os.chdir(LOCALDIR)
         print(" \n\033[31m>面具修补 \033[0m\n")
         print(f"  项目：{self.pro}\n")
         print(f"  请将要修补的镜像放入{project}")
@@ -480,7 +481,7 @@ class Tool:
             if gettype(os.path.join(project, i)) in ['boot', 'vendor_boot']:
                 cs += 1
                 boots[str(cs)] = os.path.join(project, i)
-                print(f'[{cs}]--{i}')
+                print(f'  [{cs}]--{i}')
         print("\033[33m-------------------------------\033[0m")
         print("\033[33m    [00] 返回\033[0m\n")
         op_menu = input("    请输入编号: ")
@@ -492,6 +493,7 @@ class Tool:
                 patch = Magisk_patch(boots[op_menu], '', MAGISAPK=mapk)
                 patch.auto_patch()
         elif op_menu == '00':
+            os.chdir(project)
             return
         else:
             ywarn('Input Error!')
