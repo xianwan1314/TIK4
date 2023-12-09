@@ -51,6 +51,27 @@ platform = plat.machine()
 ostype = plat.system()
 ebinner = o_path.join(binner, ostype, platform) + os.sep
 temp = o_path.join(binner, 'temp')
+class json_edit:
+    def __init__(self, j_f):
+        self.file = j_f
+
+    def read(self):
+        if not os.path.exists(self.file):
+            return {}
+        with open(self.file, 'r+', encoding='utf-8') as pf:
+            try:
+                return json.loads(pf.read())
+            except:
+                return {}
+
+    def write(self, data):
+        with open(self.file, 'w+', encoding='utf-8') as pf:
+            json.dump(data, pf, indent=4)
+
+    def edit(self, name, value):
+        data = self.read()
+        data[name] = value
+        self.write(data)
 
 
 def rmdire(path):
@@ -1566,6 +1587,8 @@ def inpayload(supersize, project):
 
 
 def unpack(file, info, project):
+    json_ = json_edit(os.path.join(project, 'config', 'parts_info'))
+    parts = json_.read()
     if not os.path.exists(project + os.sep + 'config'):
         os.makedirs(project + os.sep + 'config')
     yecho(f"[{info}]解包{os.path.basename(file)}中...")
@@ -1584,8 +1607,9 @@ def unpack(file, info, project):
     elif info == 'dat':
         partname = str(os.path.basename(file).replace('.new.dat', ''))
         filepath = str(os.path.dirname(file))
-        utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
+        version = utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
                        os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
+        parts['dat_ver'] = version
         try:
             os.remove(os.path.join(filepath, partname + ".new.dat"))
             os.remove(os.path.join(filepath, partname + '.transfer.list'))
@@ -1594,6 +1618,7 @@ def unpack(file, info, project):
             pass
         unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
     elif info == 'img':
+        parts[os.path.basename(file).split('.')[0]] = gettype(file)
         unpack(file, gettype(file), project)
     elif info == 'ofp':
         ofpm = input(" ROM机型处理器为？[1]高通 [2]MTK	")
