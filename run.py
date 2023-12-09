@@ -13,7 +13,7 @@ from configparser import ConfigParser
 from io import BytesIO
 from ApkParse.main import ApkFile
 import banner
-
+from Magisk import Magisk_patch
 if os.name == 'nt':
     import ctypes
 
