@@ -51,6 +51,8 @@ platform = plat.machine()
 ostype = plat.system()
 ebinner = o_path.join(binner, ostype, platform) + os.sep
 temp = o_path.join(binner, 'temp')
+
+
 class json_edit:
     def __init__(self, j_f):
         self.file = j_f
@@ -1337,9 +1339,10 @@ def makedtbo(sf, project):
 def inpacker(name, project, form, ftype):
     def rdi(name_):
         try:
-            os.remove(project + os.sep + "TI_out" + os.sep + name_ + ".new.dat")
-            os.remove(project + os.sep + "TI_out" + os.sep + name_ + ".patch.dat")
-            os.remove(project + os.sep + "TI_out" + os.sep + name_ + ".transfer.list")
+            dir_path = os.path.join(project, "TI_out")
+            os.remove(dir_path + os.sep + name_ + ".new.dat")
+            os.remove(dir_path + os.sep + name_ + ".patch.dat")
+            os.remove(dir_path + os.sep + name_ + ".transfer.list")
         except:
             pass
 
@@ -1608,7 +1611,8 @@ def unpack(file, info, project):
         partname = str(os.path.basename(file).replace('.new.dat', ''))
         filepath = str(os.path.dirname(file))
         version = utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
-                       os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
+                                 os.path.join(filepath, partname + ".new.dat"),
+                                 os.path.join(filepath, partname + ".img"))
         parts['dat_ver'] = version
         try:
             os.remove(os.path.join(filepath, partname + ".new.dat"))
