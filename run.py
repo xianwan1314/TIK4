@@ -475,6 +475,8 @@ class Tool:
         print(f"  请将要修补的镜像放入{project}")
         boots = {}
         for i in os.listdir(project):
+            if os.path.isdir(os.path.join(project, i)):
+                continue
             if gettype(os.path.join(project, i)) in ['boot', 'vendor_boot']:
                 cs += 1
                 boots[str(cs)] = os.path.join(project, i)
