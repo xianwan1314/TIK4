@@ -1045,7 +1045,7 @@ def packChoo(project):
     partn = 0
     parts = {}
     types = {}
-    json_ = json_edit(project + os.sep + "config"+os.sep+'parts_info')
+    json_ = json_edit(project + os.sep + "config" + os.sep + 'parts_info').read()
     if not os.path.exists(project + os.sep + "config"):
         os.makedirs(project + os.sep + "config")
     if project:
@@ -1055,8 +1055,10 @@ def packChoo(project):
                 if os.path.exists(project + os.sep + "config" + os.sep + packs + "_fs_config"):
                     partn += 1
                     parts[partn] = packs
-                    typeo = 'erofs' if os.path.exists(
-                        project + os.sep + "config" + os.sep + packs + "_erofs") else 'ext'
+                    if packs in json_.keys():
+                        typeo = json_[packs]
+                    else:
+                        typeo = 'ext'
                     types[partn] = typeo
                     print(f"   [{partn}]- {packs} <{typeo}>\n")
                 elif os.path.exists(project + os.sep + packs + os.sep + "comp"):
@@ -1690,7 +1692,6 @@ def unpack(file, info, project):
         unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
     elif info == 'erofs':
         call(f'extract.erofs -i {os.path.abspath(file)} -o {project} -x ')
-        open(project + os.sep + 'config' + os.sep + os.path.basename(file).split('.')[0] + "_erofs", 'w').close()
     elif info == 'super':
         lpunpack.unpack(os.path.abspath(file), project)
         for v in os.listdir(project):
