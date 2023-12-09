@@ -1126,7 +1126,7 @@ def packChoo(project):
                 elif types[f] == 'dtbo':
                     makedtbo(parts[f], project)
                 else:
-                    inpacker(parts[f], project, form, imgtype)
+                    inpacker(parts[f], project, form, imgtype, json_)
         elif filed == '66':
             packsuper(project)
         elif filed == '77':
@@ -1157,7 +1157,7 @@ def packChoo(project):
                 elif types[int(filed)] == 'dtbo':
                     makedtbo(parts[int(filed)], project)
                 else:
-                    inpacker(parts[int(filed)], project, form, imgtype)
+                    inpacker(parts[int(filed)], project, form, imgtype, json_)
             else:
                 ywarn("Input error!")
         else:
@@ -1339,7 +1339,10 @@ def makedtbo(sf, project):
     input("任意按钮继续")
 
 
-def inpacker(name, project, form, ftype):
+def inpacker(name, project, form, ftype, json_=None):
+    if json_ is None:
+        json_ = {}
+
     def rdi(name_):
         try:
             dir_path = os.path.join(project, "TI_out")
@@ -1393,7 +1396,10 @@ def inpacker(name, project, form, ftype):
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
         except:
             pass
-        utils.img2sdat(out_img, project + os.sep + "TI_out", 4, name)
+        if 'dat_ver' in json_.keys():
+            utils.img2sdat(out_img, project + os.sep + "TI_out", int(json_['dat_ver']), name)
+        else:
+            utils.img2sdat(out_img, project + os.sep + "TI_out", 4, name)
         try:
             os.remove(out_img)
         except:
