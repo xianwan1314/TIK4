@@ -1229,7 +1229,7 @@ def undtb(project, infile):
     rmdire(dtbdir)
     if not os.path.exists(dtbdir):
         os.makedirs(dtbdir)
-    extract_dtb.extract_dtb.split(Namespace(filename=infile, output_dir=dtbdir + os.sep + "dtb_files"))
+    extract_dtb.extract_dtb.split(Namespace(filename=infile, output_dir=dtbdir + os.sep + "dtb_files", extract=1))
     yecho("正在反编译dtb...")
     for i in track(os.listdir(dtbdir + os.sep + "dtb_files")):
         if i.endswith('.dtb'):
