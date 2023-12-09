@@ -1045,6 +1045,7 @@ def packChoo(project):
     partn = 0
     parts = {}
     types = {}
+    json_ = json_edit(project + os.sep + "config"+os.sep+'parts_info')
     if not os.path.exists(project + os.sep + "config"):
         os.makedirs(project + os.sep + "config")
     if project:
