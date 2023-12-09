@@ -219,10 +219,10 @@ class setting:
         if op_pro == "0":
             return
         elif op_pro == '1':
-            print(f"  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2 [7]原神 [8]DXY")
+            print(f"  首页banner: [1]TIK4 [2]镰刀斧头 [3]TIK2 [4]原神 [5]DXY [6]None")
             banner_i = input("  请输入序号: ")
             if banner_i.isdigit():
-                if 0 < int(banner_i) < 9:
+                if 0 < int(banner_i) < 7:
                     settings.change('banner', banner_i)
         elif op_pro == '2':
             settings.change('online', 'false' if settings.online == 'true' else 'true')
@@ -339,7 +339,8 @@ class Tool:
         projects = {}
         pro = 0
         cls()
-        print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
+        if settings.banner != "7":
+            print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
         print("\033[92;44m Delta Edition \033[0m")
         if settings.online == 'true':
             try:
