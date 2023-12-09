@@ -14,6 +14,7 @@ from io import BytesIO
 from ApkParse.main import ApkFile
 import banner
 from Magisk import Magisk_patch
+
 if os.name == 'nt':
     import ctypes
 
@@ -453,18 +454,22 @@ class Tool:
         print(f"  项目：{self.pro}\n")
         print('\033[33m    0> 返回上级     1> 应用精简\033[0m\n')
         print('\033[36m    2> 面具修补     3> 暂定\033[0m\n')
-        print('\033[32m    4> 暂定功能     5> 暂定\033[0m\n')
         op_menu = input("    请输入编号: ")
         if op_menu == '0':
             return
         elif op_menu == '1':
             self.sim_app()
         elif op_menu == '2':
-            pass
+            self.magisk_patch()
         else:
             ywarn('   Input error!')
         input("任意按钮继续")
         self.custom_rom()
+
+    def magisk_patch(self):
+        cls()
+        print(" \n\033[31m>面具修补 \033[0m\n")
+        print(f"  项目：{self.pro}\n")
 
     def sim_app(self):
         cls()
@@ -478,7 +483,7 @@ class Tool:
             for d in dirs:
                 path = os.path.join(root, d)
                 for i in os.listdir(str(path)):
-                    if os.path.isfile(os.path.join(str(path), i, i+'.apk')):
+                    if os.path.isfile(os.path.join(str(path), i, i + '.apk')):
                         if str(path) in added:
                             continue
                         else:
