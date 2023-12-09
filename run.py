@@ -468,8 +468,33 @@ class Tool:
 
     def magisk_patch(self):
         cls()
+        cs = 0
+        project = LOCALDIR + os.sep + self.pro
         print(" \n\033[31m>面具修补 \033[0m\n")
         print(f"  项目：{self.pro}\n")
+        print(f"  请将要修补的镜像放入{project}")
+        boots = {}
+        for i in os.listdir(project):
+            if gettype(os.path.join(project, i)) in ['boot', 'vendor_boot']:
+                cs += 1
+                boots[str(cs)] = os.path.join(project, i)
+                print(f'[{cs}]--{i}')
+        print("\033[33m-------------------------------\033[0m")
+        print("\033[33m    [00] 返回\033[0m\n")
+        op_menu = input("    请输入编号: ")
+        if op_menu in boots.keys():
+            mapk = input("    请输入Magisk.apk路径:")
+            if not os.path.isfile(mapk):
+                ywarn('Input Error!')
+            else:
+                patch = Magisk_patch(boots[op_menu], '', MAGISAPK=mapk)
+                patch.auto_patch()
+        elif op_menu == '00':
+            return
+        else:
+            ywarn('Input Error!')
+        input("任意按钮继续")
+        self.magisk_patch()
 
     def sim_app(self):
         cls()
