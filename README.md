@@ -46,7 +46,8 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
 8. [rich](https://github.com/Textualize/rich/)
 9. [context_patch](https://github.com/ColdWindScholar/context_patch)
 10. [erofs-utils](https://github.com/sekaiacg/erofs-utils/)
-11. And More...
+11. [Magisk_Patch_Python](https://github.com/ColdWindScholar/Magisk_Patch_Python)
+12. And More...
 #### **合作伙伴**
 1. Sakura
 2. Affggh
@@ -61,14 +62,14 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
 
 ####  **使用说明** 
 
-1.  Termux内所有操作尽量【 **不要使用系统root功能** 】， PC端需要root权限(sudo) 且最好不要在【root用户登录状态下】运行此工具，以免打包后刷入手机出现权限问题 ！
+1.  Termux内所有操作尽量【 **不要使用系统root功能** 】， PC端需要root权限(sudo，其实不需要也行) 且最好不要在【root用户登录状态下】运行此工具，以免打包后刷入手机出现权限问题 ！
 
 2.   **关于手机解压zip** 
-    - 请将zip文件放置在【 **内置存储 /sdcard/TIK3** 】，工具会自动查找（设置中可以修改)
+    - 请将zip文件放置在【 **内置存储 工具根目录** 】，工具会自动查找（设置中可以修改)
 
 3.  手机端termux proot ubuntu下工具目录： 【**/data/data/com.termux/files/home/ubuntu/root/TIK** 】
 
-4.  **请勿删除【工程目录/TI_config文件夹】，打包时所需的文件信息都在此处，默认工具会自动帮您修改大小，适配动态分区！（可自行调整）
+4.  **请勿删除【工程目录/config文件夹】，打包时所需的文件信息都在此处，默认工具会自动帮您修改大小，适配动态分区！（可自行调整）
 
 5.  由于手机性能、proot效率、工作模式( **如打包img前自动比对fs_config，不会立刻打包** )等原因，保持耐心，等待片刻即可；
 
@@ -90,7 +91,7 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
 
 ####  **交流反馈** 
 
-  QQ群：[932388310]
+  QQ群：[932388310](#交流反馈-)
 
 ####  **免责声明** 
 
