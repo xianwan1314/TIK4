@@ -219,10 +219,10 @@ class setting:
         if op_pro == "0":
             return
         elif op_pro == '1':
-            print(f"  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2 [7]原神")
+            print(f"  首页banner: [1]TIK4 [2]爷 [3]电摇嘲讽 [4]镰刀斧头 [5]镰刀斧头(大) [6]TIK2 [7]原神 [8]DXY")
             banner_i = input("  请输入序号: ")
             if banner_i.isdigit():
-                if 0 < int(banner_i) < 8:
+                if 0 < int(banner_i) < 9:
                     settings.change('banner', banner_i)
         elif op_pro == '2':
             settings.change('online', 'false' if settings.online == 'true' else 'true')
