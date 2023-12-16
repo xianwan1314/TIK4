@@ -1182,11 +1182,13 @@ def dboot(infile, orig):
         except Exception as e:
             print("Ramdisk Not Found.. %s" % e)
             return
-        cpio = ebinner + os.sep + "cpio"
+        cpio = utils.findfile("cpio.exe" if os.name != 'posix' else 'cpio',
+                        ebinner).replace(
+            '\\', "/")
         call(exe="busybox ash -c \"find | sed 1d | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % cpio, sp=1,
              shstate=True)
-        os.chdir(infile + os.sep)
-        with open(infile + os.sep + "comp", "r", encoding='utf-8') as compf:
+        os.chdir(infile)
+        with open("comp", "r", encoding='utf-8') as compf:
             comp = compf.read()
         print("Compressing:%s" % comp)
         if comp != "unknow":
