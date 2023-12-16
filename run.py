@@ -139,6 +139,19 @@ settings.load_set()
 
 class setting:
     def settings1(self):
+        actions = {
+            "1": lambda: settings.change('brcom', brcom if (brcom := input(
+                f"  调整brotli压缩等级(整数1-9，级别越高，压缩率越大，耗时越长):")).isdigit() and 0 < int(
+                brcom) < 10 else '1'),
+            "2": lambda: settings.change('diysize',
+                                         "1" if input("  打包Ext镜像大小[1]动态最小 [2]原大小:") == '2' else ''),
+            "3": lambda: settings.change('pack_e2', '0' if input(
+                "  打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid:") == '1' else '1'),
+            "6": lambda: settings.change('pack_sparse', '1' if input(
+                "  Img是否打包为sparse(压缩体积)[1/0]\n  请输入序号:") == '1' else "0"),
+            "7": lambda: settings.change('diyimgtype',
+                                         '1' if input(f"  打包镜像格式[1]同解包格式 [2]可选择:") == '2' else '')
+        }
         cls()
         print(f'''
         \033[33m  > 打包设置 \033[0m
@@ -158,14 +171,8 @@ class setting:
         op_pro = input("   请输入编号:")
         if op_pro == "0":
             return
-        elif op_pro == '1':
-            settings.change('brcom', brcom if (brcom := input(
-                f"  调整brotli压缩等级(整数1-9，级别越高，压缩率越大，耗时越长):")).isdigit() and 0 < int(
-                brcom) < 10 else '1')
-        elif op_pro == '2':
-            settings.change('diysize', "1" if input("  打包Ext镜像大小[1]动态最小 [2]手动改:") == '2' else '')
-        elif op_pro == '3':
-            settings.change('pack_e2', '0' if input("  打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid:") == '1' else '1')
+        elif op_pro in actions.keys():
+            actions[op_pro]()
         elif op_pro == '4':
             if input("  选择erofs压缩方式[1]是 [2]否:") == '1':
                 erofslim = input(
@@ -179,11 +186,6 @@ class setting:
                 settings.change('utcstamp', utcstamp if utcstamp.isdigit() else '1230768000')
             else:
                 settings.change('utcstamp', '')
-        elif op_pro == '6':
-            print("  Img是否打包为sparse(压缩体积)[1/0]")
-            settings.change('pack_sparse', '1' if input("  请输入序号:") == '1' else "0")
-        elif op_pro == '7':
-            settings.change('diyimgtype', '1' if input(f"  打包镜像格式[1]同解包格式 [2]可选择:") == '2' else '')
         else:
             print("Input error!")
         self.settings1()
