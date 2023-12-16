@@ -357,6 +357,9 @@ def plug_parse(js_on):
 
 
 class Tool:
+    """
+    Free Android Rom Tool
+    """
     def __init__(self):
         self.pro = None
 
