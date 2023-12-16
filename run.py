@@ -1183,7 +1183,8 @@ def dboot(infile, orig):
             print("Ramdisk Not Found.. %s" % e)
             return
         cpio = ebinner + os.sep + "cpio"
-        os.system(ebinner + os.sep + "busybox find . | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio" % cpio)
+        call(exe="busybox ash -c \"find | sed 1d | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % cpio, sp=1,
+             shstate=True)
         os.chdir(infile + os.sep)
         with open(infile + os.sep + "comp", "r", encoding='utf-8') as compf:
             comp = compf.read()
@@ -1251,7 +1252,7 @@ def unpackboot(file, project):
             os.mkdir(project + os.sep + name + os.sep + "ramdisk")
         os.chdir(project + os.sep + name + os.sep)
         print("Unpacking Ramdisk...")
-        call("cpio -d --no-absolute-filenames -F %s -i -D %s" % ("ramdisk.cpio", "ramdisk"))
+        call("cpio -i -d -F %s -D %s" % ("ramdisk.cpio", "ramdisk"))
         os.chdir(LOCALDIR)
     else:
         print("Unpack Done!")
