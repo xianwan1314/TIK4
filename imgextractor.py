@@ -153,9 +153,8 @@ class Extractor(object):
                     scan_dir(entry_inode, entry_inode_path)
                     if tmppath.find(' ', 1, len(tmppath)) > 0:
                         if not os.path.isfile(spaces_file):
-                            f = open(spaces_file, 'tw', encoding='utf-8')
-                            self.__appendf(tmppath, spaces_file)
-                            f.close()
+                            with open(spaces_file, 'tw', encoding='utf-8') as f:
+                                self.__appendf(tmppath, spaces_file)
                         else:
                             self.__appendf(tmppath, spaces_file)
                         tmppath = tmppath.replace(' ', '_')
@@ -188,9 +187,8 @@ class Extractor(object):
                             os.chown(file_target, uid, gid)
                     if tmppath.find(' ', 1, len(tmppath)) > 0:
                         if not os.path.isfile(spaces_file):
-                            f = open(spaces_file, 'tw', encoding='utf-8')
-                            self.__appendf(tmppath, spaces_file)
-                            f.close()
+                            with open(spaces_file, 'tw', encoding='utf-8') as f:
+                                self.__appendf(tmppath, spaces_file)
                         else:
                             self.__appendf(tmppath, spaces_file)
                         tmppath = tmppath.replace(' ', '_')
@@ -209,9 +207,8 @@ class Extractor(object):
                         target = self.EXTRACT_DIR + entry_inode_path.replace(' ', '_')
                         if tmppath.find(' ', 1, len(tmppath)) > 0:
                             if not os.path.isfile(spaces_file):
-                                f = open(spaces_file, 'tw', encoding='utf-8')
-                                self.__appendf(tmppath, spaces_file)
-                                f.close()
+                                with open(spaces_file, 'tw', encoding='utf-8') as f:
+                                    self.__appendf(tmppath, spaces_file)
                             else:
                                 self.__appendf(tmppath, spaces_file)
                             tmppath = tmppath.replace(' ', '_')
@@ -264,9 +261,8 @@ class Extractor(object):
                             if link_target and all(c in string.printable for c in link_target):
                                 if tmppath.find(' ', 1, len(tmppath)) > 0:
                                     if not os.path.isfile(spaces_file):
-                                        f = open(spaces_file, 'tw', encoding='utf-8')
-                                        self.__appendf(tmppath, spaces_file)
-                                        f.close()
+                                        with open(spaces_file, 'tw', encoding='utf-8') as f:
+                                            self.__appendf(tmppath, spaces_file)
                                     else:
                                         self.__appendf(tmppath, spaces_file)
                                     tmppath = tmppath.replace(' ', '_')
