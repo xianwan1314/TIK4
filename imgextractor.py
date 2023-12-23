@@ -6,12 +6,10 @@ import struct
 import ext4
 
 if os.name == 'nt':
-    from ctypes.wintypes import LPCSTR
-    from ctypes.wintypes import DWORD
+    from ctypes.wintypes import LPCSTR, DWORD
     from stat import FILE_ATTRIBUTE_SYSTEM
     from ctypes import windll
 from timeit import default_timer as dti
-from collections import deque
 from utils import simg2img
 
 EXT4_HEADER_MAGIC = 0xED26FF3A
@@ -19,7 +17,7 @@ EXT4_SPARSE_HEADER_LEN = 28
 EXT4_CHUNK_HEADER_SIZE = 12
 
 
-class ext4_file_header(object):
+class ext4_file_header:
     def __init__(self, buf):
         (self.magic,
          self.major,
@@ -32,7 +30,7 @@ class ext4_file_header(object):
          self.crc32) = struct.unpack('<I4H4I', buf)
 
 
-class ext4_chunk_header(object):
+class ext4_chunk_header:
     def __init__(self, buf):
         (self.type,
          self.reserved,
@@ -40,7 +38,7 @@ class ext4_chunk_header(object):
          self.total_size) = struct.unpack('<2H2I', buf)
 
 
-class Extractor(object):
+class Extractor:
     def __init__(self):
         self.CONFING_DIR = None
         self.MYFileName = None
@@ -52,23 +50,15 @@ class Extractor(object):
         self.OUTPUT_IMAGE_FILE = ""
         self.EXTRACT_DIR = ""
         self.BLOCK_SIZE = 4096
-        self.TYPE_IMG = 'system'
-        self.context = deque()
-        self.fs_config = deque()
+        self.context = []
+        self.fs_config = []
 
     @staticmethod
-    def __file_name(file_path):
-        name = os.path.basename(file_path).rsplit('.', 1)[0]
-        name = name.split('-')[0]
-        name = name.split(' ')[0]
-        name = name.split('+')[0]
-        name = name.split('{')[0]
-        name = name.split('(')[0]
-        return name
-
-    @staticmethod
-    def __out_name(file_path):
-        name = file_path
+    def __out_name(file_path, out=1):
+        if out == 1:
+            name = file_path
+        else:
+            name = os.path.basename(file_path).rsplit('.', 1)[0]
         name = name.split('-')[0]
         name = name.split(' ')[0]
         name = name.split('+')[0]
@@ -140,6 +130,7 @@ class Extractor(object):
                 gid = entry_inode.inode.i_gid
                 con = ''
                 cap = ''
+                link_target = ''
                 tmp_path = self.DIR + entry_inode_path
                 spaces_file = self.BASE_DIR_ + 'config' + os.sep + self.FileName + '_space.txt'
                 for i in list(entry_inode.xattrs()):
@@ -153,9 +144,12 @@ class Extractor(object):
                             cap = f"{hex(int('%04x%04x%04x' % (raw_cap[3], raw_cap[2], raw_cap[1]), 16))}"
                         cap = f' capabilities={cap}'
                 if entry_inode.is_symlink:
-                    link_target = entry_inode.open_read().read().decode("utf8")
-                else:
-                    link_target = ''
+                    try:
+                        link_target = entry_inode.open_read().read().decode("utf8")
+                    except Exception and BaseException:
+                        link_target_block = int.from_bytes(entry_inode.open_read().read(), "little")
+                        link_target = root_inode.volume.read(link_target_block * root_inode.volume.block_size,
+                                                             entry_inode.inode.i_size).decode("utf8")
                 if tmp_path.find(' ', 1, len(tmp_path)) > 0:
                     if not os.path.isfile(spaces_file):
                         with open(spaces_file, 'tw', encoding='utf-8'):
@@ -164,14 +158,14 @@ class Extractor(object):
                         self.__append(tmp_path, spaces_file)
                     tmp_path = tmp_path.replace(' ', '_')
                     self.fs_config.append(
-                        f'{tmp_path} {uid} {gid} {mode + cap} {link_target}')
+                        f'{tmp_path} {uid} {gid} {mode}{cap} {link_target}')
                 else:
                     self.fs_config.append(
-                        f'{self.DIR + entry_inode_path} {uid} {gid} {mode + cap} {link_target}')
+                        f'{self.DIR + entry_inode_path} {uid} {gid} {mode}{cap} {link_target}')
                 if con:
                     for fuk_ in fuk_symbols:
                         tmp_path = tmp_path.replace(fuk_, '\\' + fuk_)
-                    self.context.append('/%s %s' % (tmp_path, con))
+                    self.context.append(f'/{tmp_path} {con}')
                 if entry_inode.is_dir:
                     dir_target = self.EXTRACT_DIR + entry_inode_path.replace(' ', '_').replace('"', '')
                     if dir_target.endswith('.') and os.name == 'nt':
@@ -191,13 +185,11 @@ class Extractor(object):
                             out.write(entry_inode.open_read().read())
                     except Exception and BaseException as e:
                         print(f'ERROR:Cannot Write {file_target}, Because of {e}')
-                    if os.name == 'posix':
-                        if os.geteuid() == 0:
-                            os.chmod(file_target, int(mode, 8))
-                            os.chown(file_target, uid, gid)
+                    if os.name == 'posix' and os.geteuid() == 0:
+                        os.chmod(file_target, int(mode, 8))
+                        os.chown(file_target, uid, gid)
                 elif entry_inode.is_symlink:
                     try:
-                        link_target = entry_inode.open_read().read().decode("utf8")
                         target = self.EXTRACT_DIR + entry_inode_path.replace(' ', '_')
                         if os.path.islink(target) or os.path.isfile(target):
                             try:
@@ -212,17 +204,13 @@ class Extractor(object):
                                 for index in list(link_target):
                                     tmp = tmp + struct.pack('>sx', index.encode('utf-8'))
                                 out.write(tmp + struct.pack('xx'))
-                                if os.name == 'nt':
-                                    try:
-                                        windll.kernel32.SetFileAttributesA(LPCSTR(target.encode()),
-                                                                           DWORD(FILE_ATTRIBUTE_SYSTEM))
-                                    except Exception as e:
-                                        print(e.__str__())
+                                try:
+                                    windll.kernel32.SetFileAttributesA(LPCSTR(target.encode()),
+                                                                       DWORD(FILE_ATTRIBUTE_SYSTEM))
+                                except Exception as e:
+                                    print(e.__str__())
                     except BaseException and Exception:
                         try:
-                            link_target_block = int.from_bytes(entry_inode.open_read().read(), "little")
-                            link_target = root_inode.volume.read(link_target_block * root_inode.volume.block_size,
-                                                                 entry_inode.inode.i_size).decode("utf8")
                             target = self.EXTRACT_DIR + entry_inode_path.replace(' ', '_')
                             if link_target and all(c_ in string.printable for c_ in link_target):
                                 if os.name == 'posix':
@@ -233,8 +221,6 @@ class Extractor(object):
                                         for index in list(link_target):
                                             tmp = tmp + struct.pack('>sx', index.encode('utf-8'))
                                         out.write(tmp + struct.pack('xx'))
-                            else:
-                                ...
                         finally:
                             ...
 
@@ -250,17 +236,18 @@ class Extractor(object):
             scan_dir(root)
             if dir_r == 'vendor':
                 self.fs_config.insert(0, '/ 0 2000 0755')
-                self.fs_config.insert(1, dir_r + ' 0 2000 0755')
+                self.fs_config.insert(1, f'{dir_r} 0 2000 0755')
             elif dir_r == 'system':
                 self.fs_config.insert(0, '/ 0 0 0755')
                 self.fs_config.insert(1, '/lost+found 0 0 0700')
-                self.fs_config.insert(2, dir_r + ' 0 0 0755')
+                self.fs_config.insert(2, f'{dir_r} 0 0 0755')
             else:
                 self.fs_config.insert(0, '/ 0 0 0755')
-                self.fs_config.insert(1, dir_r + ' 0 0 0755')
+                self.fs_config.insert(1, f'{dir_r} 0 0 0755')
 
             self.__append('\n'.join(self.fs_config), self.CONFING_DIR + os.sep + fs_config_file)
             if self.context:  # 11.05.18
+                self.context.sort()
                 for c in self.context:
                     if re.search('lost..found', c):
                         self.context.insert(0, '/' + ' ' + c.split(" ")[1])
@@ -274,7 +261,7 @@ class Extractor(object):
                         self.context.insert(3, '/lost+\\found' + ' u:object_r:rootfs:s0')
                         self.context.insert(4, '/' + dir_r + '/' + dir_r + '(/.*)? ' + c.split(" ")[1])
                         break
-                self.__append('\n'.join(sorted(self.context)), contexts)  # 11.05.18
+                self.__append('\n'.join(self.context), contexts)  # 11.05.18
 
     @staticmethod
     def fix_moto(input_file):
@@ -314,7 +301,7 @@ class Extractor(object):
         self.OUTPUT_IMAGE_FILE = self.BASE_DIR + os.path.basename(target)
         self.OUTPUT_MYIMAGE_FILE = os.path.basename(target)
         self.MYFileName = os.path.basename(self.OUTPUT_IMAGE_FILE).replace(".img", "")
-        self.FileName = self.__file_name(os.path.basename(target))
+        self.FileName = self.__out_name(os.path.basename(target), out=0)
         target_type = 'img'
         self.CONFING_DIR = work + os.sep + 'config'
         if target_type == 's_img':

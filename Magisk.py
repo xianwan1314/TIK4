@@ -52,7 +52,7 @@ class Magisk_patch:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
+        ...
 
     def auto_patch(self):
         yecho("Magisk Boot Patcher By ColdWindScholar(3590361911@qq.com)")

@@ -97,7 +97,7 @@ if os.name == 'posix' and os.geteuid() == 0:
     try:
         os.chmod(binner, 0o777)
     except:
-        pass
+        ...
 
 
 def error(code, message):
@@ -405,7 +405,7 @@ class Tool:
                 try:
                     downloader.download([url], LOCALDIR)
                 except:
-                    pass
+                    ...
                 self.unpackrom()
         elif op_pro == '00':
             op_pro = input("  请输入你要删除的项目序号:")
@@ -615,7 +615,7 @@ class Tool:
             print("\033[33m  [01] 移除 [00] 返回\033[0m\n")
             op_men = input("    请输入编号: ")
             if op_men == '00':
-                pass
+                ...
             elif op_men == '01':
                 print(f"正在精简{app[op_menu][1:]}")
                 rmdire(os.path.dirname(app[op_menu][0]))
@@ -1201,7 +1201,7 @@ def dboot(infile, orig):
                 try:
                     os.remove("ramdisk.cpio")
                 except:
-                    pass
+                    ...
                 os.rename("ramdisk-new.cpio.%s" % comp.split('_')[0], "ramdisk.cpio")
         else:
             print("Pack Ramdisk Successful..")
@@ -1307,7 +1307,7 @@ def undtbo(project, infile):
         try:
             os.makedirs(dtbodir + os.sep + "dts_files")
         except:
-            pass
+            ...
     yecho("正在解压dtbo.img")
     mkdtboimg.dump_dtbo(infile, dtbodir + os.sep + "dtbo_files" + os.sep + "dtbo")
     for dtbo_files in os.listdir(dtbodir + os.sep + "dtbo_files"):
@@ -1358,7 +1358,7 @@ def inpacker(name, project, form, ftype, json_=None):
             os.remove(dir_path + os.sep + name_ + ".patch.dat")
             os.remove(dir_path + os.sep + name_ + ".transfer.list")
         except:
-            pass
+            ...
 
     file_contexts = project + os.sep + "config" + os.sep + name + "_file_contexts"
     fs_config = project + os.sep + "config" + os.sep + name + "_fs_config"
@@ -1403,7 +1403,7 @@ def inpacker(name, project, form, ftype, json_=None):
         try:
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
         except:
-            pass
+            ...
         if 'dat_ver' in json_.keys():
             utils.img2sdat(out_img, project + os.sep + "TI_out", int(json_['dat_ver']), name)
         else:
@@ -1411,7 +1411,7 @@ def inpacker(name, project, form, ftype, json_=None):
         try:
             os.remove(out_img)
         except:
-            pass
+            ...
     if form == 'br':
         yecho(f"打包[BR]:{name}")
         call(
@@ -1636,7 +1636,7 @@ def unpack(file, info, project):
             os.remove(os.path.join(filepath, partname + '.transfer.list'))
             os.remove(os.path.join(filepath, partname + '.patch.dat'))
         except:
-            pass
+            ...
         unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
     elif info == 'img':
         parts[os.path.basename(file).split('.')[0]] = gettype(file)
@@ -1689,7 +1689,7 @@ def unpack(file, info, project):
         try:
             os.remove(file)
         except:
-            pass
+            ...
     elif info == 'dat.1':
         for fd in [f for f in os.listdir(project) if re.search(r'\.new\.dat\.\d+', f)]:
             with open(project + os.sep + os.path.basename(fd).rsplit('.', 1)[0], 'ab') as ofd:
@@ -1740,7 +1740,7 @@ def autounpack(project):
                 try:
                     os.remove(project + os.sep + waste)
                 except:
-                    pass
+                    ...
         if not os.path.isdir(project + os.sep + "config"):
             os.makedirs(project + os.sep + "config")
         shutil.move(project + os.sep + "payload_properties.txt", project + os.sep + "config")
