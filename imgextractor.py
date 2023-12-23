@@ -13,7 +13,7 @@ if os.name == 'nt':
 from timeit import default_timer as dti
 from collections import deque
 from utils import simg2img
-from rich.console import Console
+
 EXT4_HEADER_MAGIC = 0xED26FF3A
 EXT4_SPARSE_HEADER_LEN = 28
 EXT4_CHUNK_HEADER_SIZE = 12
@@ -122,7 +122,7 @@ class Extractor(object):
         if wx == 't':
             s += 1
             w += 1
-        return str(s) + str(o) + str(g) + str(w)
+        return f'{s}{o}{g}{w}'
 
     def __ext4extractor(self):
         fs_config_file = self.FileName + '_fs_config'
@@ -148,10 +148,10 @@ class Extractor(object):
                     elif i[0] == 'security.capability':
                         raw_cap = struct.unpack("<5I", i[1])
                         if raw_cap[1] > 65535:
-                            cap = '' + str(hex(int('%04x%04x' % (raw_cap[3], raw_cap[1]), 16)))
+                            cap = f"{hex(int('%04x%04x' % (raw_cap[3], raw_cap[1]), 16))}"
                         else:
-                            cap = '' + str(hex(int('%04x%04x%04x' % (raw_cap[3], raw_cap[2], raw_cap[1]), 16)))
-                        cap = ' capabilities={cap}'.format(cap=cap)
+                            cap = f"{hex(int('%04x%04x%04x' % (raw_cap[3], raw_cap[2], raw_cap[1]), 16))}"
+                        cap = f' capabilities={cap}'
                 if entry_inode.is_symlink:
                     link_target = entry_inode.open_read().read().decode("utf8")
                 else:
@@ -163,15 +163,15 @@ class Extractor(object):
                     else:
                         self.__append(tmp_path, spaces_file)
                     tmp_path = tmp_path.replace(' ', '_')
-                    self.fs_config.append(" ".join([tmp_path, uid, gid, mode + cap if cap else mode, link_target]))
+                    self.fs_config.append(
+                        f'{tmp_path} {uid} {gid} {mode + cap} {link_target}')
                 else:
                     self.fs_config.append(
-                        ' '.join([self.DIR + entry_inode_path, uid, gid, mode + cap if cap else mode, link_target]))
-                if not cap:
-                    if con:
-                        for fuk_ in fuk_symbols:
-                            tmp_path = tmp_path.replace(fuk_, '\\' + fuk_)
-                        self.context.append('/%s %s' % (tmp_path, con))
+                        f'{self.DIR + entry_inode_path} {uid} {gid} {mode + cap} {link_target}')
+                if con:
+                    for fuk_ in fuk_symbols:
+                        tmp_path = tmp_path.replace(fuk_, '\\' + fuk_)
+                    self.context.append('/%s %s' % (tmp_path, con))
                 if entry_inode.is_dir:
                     dir_target = self.EXTRACT_DIR + entry_inode_path.replace(' ', '_').replace('"', '')
                     if dir_target.endswith('.') and os.name == 'nt':
@@ -328,8 +328,7 @@ class Extractor(object):
             if re.search(b'\x4d\x4f\x54\x4f', data):
                 print(".....Finding MOTO structure! Fixing.....")
                 self.fix_moto(os.path.abspath(self.OUTPUT_IMAGE_FILE))
-            with Console().status(
-                    "[yellow]Extracting %s --> %s[/]" % (os.path.basename(target), os.path.basename(self.EXTRACT_DIR))):
-                start = dti()
-                self.__ext4extractor()
-                print("Done! [%s]" % (dti() - start))
+            print("Extracting %s --> %s" % (os.path.basename(target), os.path.basename(self.EXTRACT_DIR)))
+            start = dti()
+            self.__ext4extractor()
+            print("Done! [%s]" % (dti() - start))

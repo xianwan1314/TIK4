@@ -1684,7 +1684,8 @@ def unpack(file, info, project):
         filepath = os.path.dirname(file)
         unpack(os.path.join(filepath, file), gettype(os.path.join(filepath, file)), project)
     elif info == 'ext':
-        imgextractor.Extractor().main(file, project + os.sep + os.path.basename(file).split('.')[0], project)
+        with Console().status(f"[yellow]正在提取{os.path.basename(file)}[/]"):
+            imgextractor.Extractor().main(file, project + os.sep + os.path.basename(file).split('.')[0], project)
         try:
             os.remove(file)
         except:
