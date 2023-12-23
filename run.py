@@ -1629,7 +1629,7 @@ def unpack(file, info, project):
         filepath = str(os.path.dirname(file))
         version = utils.sdat2img(os.path.join(filepath, partname + '.transfer.list'),
                                  os.path.join(filepath, partname + ".new.dat"),
-                                 os.path.join(filepath, partname + ".img"))
+                                 os.path.join(filepath, partname + ".img")).version
         parts['dat_ver'] = version
         try:
             os.remove(os.path.join(filepath, partname + ".new.dat"))
