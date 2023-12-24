@@ -1,6 +1,6 @@
 import os
 import re
-import string
+from string import printable
 import struct
 
 import ext4
@@ -12,41 +12,13 @@ if os.name == 'nt':
 from timeit import default_timer as dti
 from utils import simg2img
 
-EXT4_HEADER_MAGIC = 0xED26FF3A
-EXT4_SPARSE_HEADER_LEN = 28
-EXT4_CHUNK_HEADER_SIZE = 12
-
-
-class ext4_file_header:
-    def __init__(self, buf):
-        (self.magic,
-         self.major,
-         self.minor,
-         self.file_header_size,
-         self.chunk_header_size,
-         self.block_size,
-         self.total_blocks,
-         self.total_chunks,
-         self.crc32) = struct.unpack('<I4H4I', buf)
-
-
-class ext4_chunk_header:
-    def __init__(self, buf):
-        (self.type,
-         self.reserved,
-         self.chunk_size,
-         self.total_size) = struct.unpack('<2H2I', buf)
-
 
 class Extractor:
     def __init__(self):
-        self.CONFING_DIR = None
-        self.MYFileName = None
-        self.OUTPUT_MYIMAGE_FILE = None
         self.BASE_DIR_ = None
+        self.CONFING_DIR = None
         self.DIR = None
         self.FileName = ""
-        self.BASE_DIR = ""
         self.OUTPUT_IMAGE_FILE = ""
         self.EXTRACT_DIR = ""
         self.BLOCK_SIZE = 4096
@@ -55,10 +27,7 @@ class Extractor:
 
     @staticmethod
     def __out_name(file_path, out=1):
-        if out == 1:
-            name = file_path
-        else:
-            name = os.path.basename(file_path).rsplit('.', 1)[0]
+        name = file_path if out == 1 else os.path.basename(file_path).rsplit('.', 1)[0]
         name = name.split('-')[0]
         name = name.split(' ')[0]
         name = name.split('+')[0]
@@ -68,6 +37,9 @@ class Extractor:
 
     @staticmethod
     def __append(msg, log):
+        if not os.path.isfile(log) and not os.path.exists(log):
+            with open(log, 'tw', encoding='utf-8'):
+                ...
         with open(log, 'a', newline='\n') as file:
             print(msg, file=file)
 
@@ -117,7 +89,7 @@ class Extractor:
     def __ext4extractor(self):
         fs_config_file = self.FileName + '_fs_config'
         fuk_symbols = '\\^$.|?*+(){}[]'
-        contexts = self.CONFING_DIR + os.sep + self.FileName + "_file_contexts"  # 08.05.18
+        contexts = self.CONFING_DIR + os.sep + self.FileName + "_file_contexts"
 
         def scan_dir(root_inode, root_path=""):
             for entry_name, entry_inode_idx, entry_type in root_inode.open_dir():
@@ -133,16 +105,16 @@ class Extractor:
                 link_target = ''
                 tmp_path = self.DIR + entry_inode_path
                 spaces_file = self.BASE_DIR_ + 'config' + os.sep + self.FileName + '_space.txt'
-                for i in list(entry_inode.xattrs()):
-                    if i[0] == 'security.selinux':
-                        con = i[1].decode('utf8')[:-1]
-                    elif i[0] == 'security.capability':
-                        raw_cap = struct.unpack("<5I", i[1])
-                        if raw_cap[1] > 65535:
-                            cap = f"{hex(int('%04x%04x' % (raw_cap[3], raw_cap[1]), 16))}"
+                for f, e in entry_inode.xattrs():
+                    if f == 'security.selinux':
+                        con = e.decode('utf8')[:-1]
+                    elif f == 'security.capability':
+                        r = struct.unpack('<5I', e)
+                        if r[1] > 65535:
+                            cap = hex(int(f'{r[3]:04x}{r[1]:04x}', 16))
                         else:
-                            cap = f"{hex(int('%04x%04x%04x' % (raw_cap[3], raw_cap[2], raw_cap[1]), 16))}"
-                        cap = f' capabilities={cap}'
+                            cap = hex(int(f'{r[3]:04x}{r[2]:04x}{r[1]:04x}', 16))
+                        cap = f" capabilities={cap}"
                 if entry_inode.is_symlink:
                     try:
                         link_target = entry_inode.open_read().read().decode("utf8")
@@ -151,14 +123,9 @@ class Extractor:
                         link_target = root_inode.volume.read(link_target_block * root_inode.volume.block_size,
                                                              entry_inode.inode.i_size).decode("utf8")
                 if tmp_path.find(' ', 1, len(tmp_path)) > 0:
-                    if not os.path.isfile(spaces_file):
-                        with open(spaces_file, 'tw', encoding='utf-8'):
-                            self.__append(tmp_path, spaces_file)
-                    else:
-                        self.__append(tmp_path, spaces_file)
-                    tmp_path = tmp_path.replace(' ', '_')
+                    self.__append(tmp_path, spaces_file)
                     self.fs_config.append(
-                        f'{tmp_path} {uid} {gid} {mode}{cap} {link_target}')
+                        f"{tmp_path.replace(' ', '_')} {uid} {gid} {mode}{cap} {link_target}")
                 else:
                     self.fs_config.append(
                         f'{self.DIR + entry_inode_path} {uid} {gid} {mode}{cap} {link_target}')
@@ -184,13 +151,13 @@ class Extractor:
                         with open(file_target, 'wb') as out:
                             out.write(entry_inode.open_read().read())
                     except Exception and BaseException as e:
-                        print(f'ERROR:Cannot Write {file_target}, Because of {e}')
+                        print(f'[E] Cannot Write {file_target}, Because of {e}')
                     if os.name == 'posix' and os.geteuid() == 0:
                         os.chmod(file_target, int(mode, 8))
                         os.chown(file_target, uid, gid)
                 elif entry_inode.is_symlink:
+                    target = self.EXTRACT_DIR + entry_inode_path.replace(' ', '_')
                     try:
-                        target = self.EXTRACT_DIR + entry_inode_path.replace(' ', '_')
                         if os.path.islink(target) or os.path.isfile(target):
                             try:
                                 os.remove(target)
@@ -208,8 +175,7 @@ class Extractor:
                                     print(e.__str__())
                     except BaseException and Exception:
                         try:
-                            target = self.EXTRACT_DIR + entry_inode_path.replace(' ', '_')
-                            if link_target and all(c_ in string.printable for c_ in link_target):
+                            if link_target and all(c_ in printable for c_ in link_target):
                                 if os.name == 'posix':
                                     os.symlink(link_target, target)
                                 if os.name == 'nt':
@@ -226,41 +192,31 @@ class Extractor:
         dir_my = self.CONFING_DIR + os.sep
         if not os.path.isdir(dir_my):
             os.makedirs(dir_my)
-        with open(dir_my + self.FileName + '_size.txt', 'tw', encoding='utf-8'):
-            self.__append(os.path.getsize(self.OUTPUT_IMAGE_FILE), dir_my + self.FileName + '_size.txt')
+        self.__append(os.path.getsize(self.OUTPUT_IMAGE_FILE), dir_my + self.FileName + '_size.txt')
         with open(self.OUTPUT_IMAGE_FILE, 'rb') as file:
-            root = ext4.Volume(file).root
-            dir_r = self.__out_name(os.path.basename(self.OUTPUT_IMAGE_FILE).rsplit('.', 1)[0])  # 11.05.18
+            dir_r = self.__out_name(os.path.basename(self.OUTPUT_IMAGE_FILE).rsplit('.', 1)[0])
             self.DIR = dir_r
-            scan_dir(root)
-            if dir_r == 'vendor':
-                self.fs_config.insert(0, '/ 0 2000 0755')
-                self.fs_config.insert(1, f'{dir_r} 0 2000 0755')
-            elif dir_r == 'system':
-                self.fs_config.insert(0, '/ 0 0 0755')
-                self.fs_config.insert(1, '/lost+found 0 0 0700')
-                self.fs_config.insert(2, f'{dir_r} 0 0 0755')
-            else:
-                self.fs_config.insert(0, '/ 0 0 0755')
-                self.fs_config.insert(1, f'{dir_r} 0 0 0755')
-
+            scan_dir(ext4.Volume(file).root)
+            self.fs_config.insert(0, '/ 0 2000 0755' if dir_r == 'vendor' else '/ 0 0 0755')
+            self.fs_config.insert(1, f'{dir_r} 0 2000 0755' if dir_r == 'vendor' else '/lost+found 0 0 0700')
+            self.fs_config.insert(2 if dir_r == 'system' else 1, f'{dir_r} 0 0 0755')
             self.__append('\n'.join(self.fs_config), self.CONFING_DIR + os.sep + fs_config_file)
-            if self.context:  # 11.05.18
+            if self.context:
                 self.context.sort()
                 for c in self.context:
                     if re.search('lost..found', c):
-                        self.context.insert(0, '/' + ' ' + c.split(" ")[1])
-                        self.context.insert(1, '/' + dir_r + '(/.*)? ' + c.split(" ")[1])
-                        self.context.insert(2, '/' + dir_r + ' ' + c.split(" ")[1])
-                        self.context.insert(3, '/' + dir_r + '/lost+\\found' + ' ' + c.split(" ")[1])
+                        self.context.insert(0, '/ ' + c.split()[1])
+                        self.context.insert(1, '/' + dir_r + '(/.*)? ' + c.split()[1])
+                        self.context.insert(2, f'/{dir_r} {c.split()[1]}')
+                        self.context.insert(3, '/' + dir_r + '/lost+\\found ' + c.split()[1])
                         break
 
                 for c in self.context:
                     if re.search('/system/system/build..prop ', c):
                         self.context.insert(3, '/lost+\\found' + ' u:object_r:rootfs:s0')
-                        self.context.insert(4, '/' + dir_r + '/' + dir_r + '(/.*)? ' + c.split(" ")[1])
+                        self.context.insert(4, '/' + dir_r + '/' + dir_r + '(/.*)? ' + c.split()[1])
                         break
-                self.__append('\n'.join(self.context), contexts)  # 11.05.18
+                self.__append('\n'.join(self.context), contexts)
 
     @staticmethod
     def fix_moto(input_file):
@@ -292,20 +248,14 @@ class Extractor:
         finally:
             ...
 
-    def main(self, target, output_dir, work):
-        self.BASE_DIR = (os.path.realpath(os.path.dirname(target)) + os.sep)
+    def main(self, target, output_dir, work, target_type: str = 'img'):
         self.BASE_DIR_ = output_dir + os.sep
         self.EXTRACT_DIR = os.path.realpath(os.path.dirname(output_dir)) + os.sep + self.__out_name(
-            os.path.basename(output_dir))  # output_dir
-        self.OUTPUT_IMAGE_FILE = self.BASE_DIR + os.path.basename(target)
-        self.OUTPUT_MYIMAGE_FILE = os.path.basename(target)
-        self.MYFileName = os.path.basename(self.OUTPUT_IMAGE_FILE).replace(".img", "")
+            os.path.basename(output_dir))
+        self.OUTPUT_IMAGE_FILE = (os.path.realpath(os.path.dirname(target)) + os.sep) + os.path.basename(target)
         self.FileName = self.__out_name(os.path.basename(target), out=0)
-        target_type = 'img'
         self.CONFING_DIR = work + os.sep + 'config'
         if target_type == 's_img':
-            print(".....Convert %s to %s" % (
-                os.path.basename(target), os.path.basename(target).replace(".img", ".raw.img")))
             simg2img(target)
             target_type = 'img'
         if target_type == 'img':
