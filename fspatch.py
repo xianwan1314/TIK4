@@ -7,21 +7,25 @@ def scanfs(file) -> dict:
     filesystem_config = {}
     with open(file, "r") as file_:
         for i in file_.readlines():
-            filepath, *other = i.strip().split()
+            try:
+                filepath, *other = i.strip().split()
+            except Exception or BaseException:
+                print(f'[W] Skip {i}')
+                continue
             filesystem_config[filepath] = other
-            if long := len(other) > 4:
-                print(f"[Warn] {i[0]} has too much data-{long}.")
+            if (long := len(other)) > 4:
+                print(f"[W] {i[0]} has too much data-{long}.")
     return filesystem_config
 
 
 def scan_dir(folder) -> list:
-    allfiles = ['/']
+    allfiles = ['/', '/lost+found']
     if os.name == 'nt':
         yield os.path.basename(folder).replace('\\', '')
     elif os.name == 'posix':
         yield os.path.basename(folder).replace('/', '')
     else:
-        return ''
+        yield os.path.basename(folder)
     for root, dirs, files in os.walk(folder, topdown=True):
         for dir_ in dirs:
             yield os.path.join(root, dir_).replace(folder, os.path.basename(folder)).replace('\\', '/')
@@ -71,6 +75,8 @@ def fs_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
                     gid = '0'
                 mode = '0755'  # dir path always 755
                 config = [uid, gid, mode]
+            elif not os.path.exists(filepath):
+                config = ['0', '0', '0755']
             elif islink(filepath):
                 uid = '0'
                 if ("system/bin" in i) or ("system/xbin" in i) or ("vendor/bin" in i):
@@ -113,7 +119,7 @@ def fs_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
     return new_fs, new_add
 
 
-def main(dir_path, fs_config) -> None:
+def main(dir_path, fs_config):
     new_fs, new_add = fs_patch(scanfs(os.path.abspath(fs_config)), dir_path)
     with open(fs_config, "w", encoding='utf-8', newline='\n') as f:
         f.writelines([i + " " + " ".join(new_fs[i]) + "\n" for i in sorted(new_fs.keys())])
