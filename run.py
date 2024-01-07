@@ -11,7 +11,8 @@ import zipfile
 from argparse import Namespace
 from configparser import ConfigParser
 from io import BytesIO
-from ApkParse.main import ApkFile
+if sys.version_info.major == 3 and not sys.version_info.minor > 12:
+    from ApkParse.main import ApkFile
 import banner
 from Magisk import Magisk_patch
 
@@ -489,7 +490,8 @@ class Tool:
         if op_menu == '0':
             return
         elif op_menu == '1':
-            self.sim_app()
+            if sys.version_info.major == 3 and not sys.version_info.minor > 12:
+                self.sim_app()
         elif op_menu == '2':
             self.magisk_patch()
         else:
