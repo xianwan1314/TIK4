@@ -16,19 +16,19 @@ def wcscmp(str_a, str_b):
 
 
 class Ext4Error(Exception):
-    pass
+    ...
 
 
 class BlockMapError(Ext4Error):
-    pass
+    ...
 
 
 class EndOfStreamError(Ext4Error):
-    pass
+    ...
 
 
 class MagicError(Ext4Error):
-    pass
+    ...
 
 
 # ----------------------------- LOW LEVEL ------------------------------
@@ -68,6 +68,7 @@ class ext4_dir_entry_2(ext4_struct):
         # Variable length field "name" missing at 0x8
     ]
 
+    @staticmethod
     def _from_buffer_copy(raw, offset=0, platform64=True):
         struct = ext4_dir_entry_2.from_buffer_copy(raw, offset)
         struct.name = raw[offset + 0x8: offset + 0x8 + struct.name_len]
@@ -152,7 +153,7 @@ class ext4_group_descriptor(ext4_struct):
 
 class ext4_inode(ext4_struct):
     EXT2_GOOD_OLD_INODE_SIZE = 128
-    # Every field passing 128 bytes is "additional data", whose size is specified by i_extra_isize.
+    # Every field ...ing 128 bytes is "additional data", whose size is specified by i_extra_isize.
 
     # i_mode
     S_IXOTH = 0x1  # Others can execute
@@ -390,6 +391,7 @@ class ext4_xattr_entry(ext4_struct):
         # Variable length field "e_name" missing at 0x10
     ]
 
+    @staticmethod
     def _from_buffer_copy(raw, offset=0, platform64=True):
         struct = ext4_xattr_entry.from_buffer_copy(raw, offset)
         struct.e_name = raw[offset + 0x10: offset + 0x10 + struct.e_name_len]
@@ -442,12 +444,7 @@ class MappingEntry:
         yield self.block_count
 
     def __repr__(self):
-        return "{type:s}({file_block_idx!r:s}, {disk_block_idx!r:s}, {blocK_count!r:s})".format(
-            blocK_count=self.block_count,
-            disk_block_idx=self.disk_block_idx,
-            file_block_idx=self.file_block_idx,
-            type=type(self).__name__
-        )
+        return f"{type(self).__name__:s}({self.file_block_idx!r:s}, {self.disk_block_idx!r:s}, {self.block_count!r:s})"
 
     def copy(self):
         return MappingEntry(self.file_block_idx, self.disk_block_idx, self.block_count)
@@ -463,6 +460,7 @@ class MappingEntry:
 
         return result
 
+    @staticmethod
     def optimize(entries):
         entries.sort(key=lambda entry: entry.file_block_idx)
 
@@ -492,8 +490,7 @@ class Volume:
         self.platform64 = (self.superblock.s_feature_incompat & ext4_superblock.INCOMPAT_64BIT) != 0
 
         if not ignore_magic and self.superblock.s_magic != 0xEF53:
-            raise MagicError("Invalid magic value in superblock: 0x{magic:04X} (expected 0xEF53)".format(
-                magic=self.superblock.s_magic))
+            raise MagicError(f"Invalid magic value in superblock: 0x{self.superblock.s_magic:04X} (expected 0xEF53)")
 
         # Group descriptors
         self.group_descriptors = [None] * (self.superblock.s_inodes_count // self.superblock.s_inodes_per_group)
@@ -504,16 +501,15 @@ class Volume:
             self.group_descriptors[group_desc_idx] = self.read_struct(ext4_group_descriptor, group_desc_offset)
 
     def __repr__(self):
-        return "{type_name:s}(volume_name = {volume_name!r:s}, uuid = {uuid!r:s}, last_mounted = {last_mounted!r:s})".format(
-            last_mounted=self.superblock.s_last_mounted,
-            type_name=type(self).__name__,
-            uuid=self.uuid,
-            volume_name=self.superblock.s_volume_name
-        )
+        return f"{type(self).__name__:s}(volume_name = {self.superblock.s_volume_name!r:s}, uuid = {self.uuid!r:s}, last_mounted = {self.superblock.s_last_mounted!r:s})"
 
     @property
     def block_size(self):
         return 1 << (10 + self.superblock.s_log_block_size)
+
+    @property
+    def get_block_count(self):
+        return self.superblock.s_blocks_count
 
     def get_inode(self, inode_idx, file_type=InodeType.UNKNOWN):
         group_idx, inode_table_entry_idx = self.get_inode_group(inode_idx)
@@ -574,13 +570,9 @@ class Inode:
                 uuid=self.volume.uuid
             )
         else:
-            return "{type_name:s}(offset = 0x{offset:X}, volume_uuid = {uuid!r:s})".format(
-                offset=self.offset,
-                type_name=type(self).__name__,
-                uuid=self.volume.uuid
-            )
+            return f"{type(self).__name__:s}(offset = 0x{self.offset:X}, volume_uuid = {self.volume.uuid!r:s})"
 
-    def _parse_xattrs(self, raw_data, offset, prefix_override: dict = None):
+    def _parse_xattrs(self, raw_data, offset):
         prefixes = {
             0: "",
             1: "user.",
@@ -598,16 +590,13 @@ class Inode:
         while i < len(raw_data):
             xattr_entry = ext4_xattr_entry._from_buffer_copy(raw_data, i, platform64=self.volume.platform64)
 
-            if (
-                    xattr_entry.e_name_len | xattr_entry.e_name_index | xattr_entry.e_value_offs | xattr_entry.e_value_inum) == 0:
+            if not (
+                    xattr_entry.e_name_len | xattr_entry.e_name_index | xattr_entry.e_value_offs | xattr_entry.e_value_inum):
                 # End of ext4_xattr_entry list
                 break
 
-            if not xattr_entry.e_name_index in prefixes:
-                raise Ext4Error("Unknown attribute prefix {prefix:d} in inode {inode:d}".format(
-                    inode=self.inode_idx,
-                    prefix=xattr_entry.e_name_index
-                ))
+            if xattr_entry.e_name_index not in prefixes:
+                raise Ext4Error(f"Unknown attribute prefix {xattr_entry.e_name_index:d} in inode {self.inode_idx:d}")
 
             xattr_name = prefixes[xattr_entry.e_name_index] + xattr_entry.e_name.decode("iso-8859-2")
 
@@ -617,11 +606,7 @@ class Inode:
 
                 if not self.volume.ignore_flags and (xattr_inode.inode.i_flags & ext4_inode.EXT4_EA_INODE_FL) != 0:
                     raise Ext4Error(
-                        "Inode {value_indoe:d} associated with the extended attribute {xattr_name!r:s} of inode {inode:d} is not marked as large extended attribute value.".format(
-                            inode=self.inode_idx,
-                            value_inode=xattr_inode.inode_idx,
-                            xattr_name=xattr_name
-                        ))
+                        f"Inode {xattr_inode.inode_idx:d} associated with the extended attribute {xattr_name!r:s} of inode {self.inode_idx:d} is not marked as large extended attribute value.")
 
                 # TODO Use xattr_entry.e_value_size or xattr_inode.inode.i_size?
                 xattr_value = xattr_inode.open_read().read()
@@ -649,28 +634,23 @@ class Inode:
 
     def get_inode(self, *relative_path, decode_name=None):
         if not self.is_dir:
-            raise Ext4Error("Inode {inode:d} is not a directory.".format(inode=self.inode_idx))
+            raise Ext4Error(f"Inode {self.inode_idx:d} is not a directory.")
 
         current_inode = self
 
         for i, part in enumerate(relative_path):
             if not self.volume.ignore_flags and not current_inode.is_dir:
                 current_path = "/".join(relative_path[:i])
-                raise Ext4Error("{current_path!r:s} (Inode {inode:d}) is not a directory.".format(
-                    current_path=current_path,
-                    inode=inode_idx
-                ))
+                raise Ext4Error(f"{current_path!r:s} (Inode {inode_idx:d}) is not a directory."
+                                )
 
             file_name, inode_idx, file_type = next(
                 filter(lambda entry: entry[0] == part, current_inode.open_dir(decode_name)), (None, None, None))
 
             if inode_idx is None:
                 current_path = "/".join(relative_path[:i])
-                raise FileNotFoundError("{part!r:s} not found in {current_path!r:s} (Inode {inode:d}).".format(
-                    current_path=current_path,
-                    inode=current_inode.inode_idx,
-                    part=part
-                ))
+                raise FileNotFoundError(
+                    f"{part!r:s} not found in {current_path!r:s} (Inode {current_inode.inode_idx:d}).")
 
             current_inode = current_inode.volume.get_inode(inode_idx, file_type)
 
@@ -764,11 +744,11 @@ class Inode:
             decode_name = lambda raw: raw.decode("utf8")
 
         if not self.volume.ignore_flags and not self.is_dir:
-            raise Ext4Error("Inode ({inode:d}) is not a directory.".format(inode=self.inode_idx))
+            raise Ext4Error(f"Inode ({self.inode_idx:d}) is not a directory.")
 
         # # Hash trees are compatible with linear arrays
         if (self.inode.i_flags & ext4_inode.EXT4_INDEX_FL) != 0:
-            pass
+            ...
 
         # Read raw directory content
         raw_data = self.open_read().read()
@@ -796,16 +776,14 @@ class Inode:
 
                 if not self.volume.ignore_magic and header.eh_magic != 0xF30A:
                     raise MagicError(
-                        "Invalid magic value in extent header at offset 0x{header_offset:X} of inode {inode:d}: 0x{header_magic:04X} (expected 0xF30A)".format(
-                            header_magic=header.eh_magic,
-                            header_offset=self.inode_idx,
-                            inode=self.inode_idx
-                        ))
+                        f"Invalid magic value in extent header at offset 0x{self.inode_idx:X} of"
+                        f" inode {self.inode_idx:d}: 0x{header.eh_magic:04X} (expected 0xF30A)")
 
                 if header.eh_depth != 0:
                     indices = self.volume.read_struct(ext4_extent_idx * header.eh_entries,
                                                       header_offset + ctypes.sizeof(ext4_extent_header))
-                    for idx in indices: nodes.put_nowait(idx.ei_leaf * self.volume.block_size)
+                    for idx in indices:
+                        nodes.put_nowait(idx.ei_leaf * self.volume.block_size)
                 else:
                     extents = self.volume.read_struct(ext4_extent * header.eh_entries,
                                                       header_offset + ctypes.sizeof(ext4_extent_header))
@@ -832,7 +810,7 @@ class Inode:
                 unit=units[unit_idx - 1]
             )
 
-    def xattrs(self, check_inline=True, check_block=True, force_inline=False, prefix_override: dict = None):
+    def xattrs(self, check_inline=True, check_block=True, force_inline=False):
         # Inline xattrs
         inline_data_offset = self.offset + ext4_inode.EXT2_GOOD_OLD_INODE_SIZE + self.inode.i_extra_isize
         inline_data_length = self.offset + self.volume.superblock.s_inode_size - inline_data_offset
@@ -841,16 +819,17 @@ class Inode:
             inline_data = self.volume.read(inline_data_offset, inline_data_length)
             xattrs_header = ext4_xattr_ibody_header.from_buffer_copy(inline_data)
 
-            # TODO Find way to detect inline xattrs without checking the h_magic field to enable error detection with the h_magic field.
+            # TODO Find way to detect inline xattrs without checking the h_magic field to enable error detection with
+            #  the h_magic field.
             if force_inline or xattrs_header.h_magic == 0xEA020000:
                 offset = 4 * ((ctypes.sizeof(
-                    ext4_xattr_ibody_header) + 3) // 4)  # The ext4_xattr_entry following the header is aligned on a 4-byte boundary
+                    ext4_xattr_ibody_header) + 3) // 4)
+                # The ext4_xattr_entry following the header is aligned on a 4-byte boundary
             try:
-                for xattr_name, xattr_value in self._parse_xattrs(inline_data[offset:], 0,
-                                                                  prefix_override=prefix_override):
+                for xattr_name, xattr_value in self._parse_xattrs(inline_data[offset:], 0):
                     yield xattr_name, xattr_value
-            except:
-                pass
+            except BaseException and Exception:
+                ...
         # xattr block(s)
         if check_block and self.inode.i_file_acl != 0:
             xattrs_block_start = self.inode.i_file_acl * self.volume.block_size
@@ -860,26 +839,21 @@ class Inode:
             if not self.volume.ignore_magic and xattrs_header.h_magic != 0xEA020000:
                 try:
                     raise MagicError(
-                        "Invalid magic value in xattrs block header at offset 0x{xattrs_block_start:X} of inode {inode:d}: 0x{xattrs_header} (expected 0xEA020000)".format(
-                            inode=self.inode_idx,
-                            xattrs_block_start=xattrs_block_start,
-                            xattrs_header=xattrs_header.h_magic
-                        ))
-                except:
-                    pass
+                        f"Invalid magic value in xattrs block header at offset 0x{xattrs_block_start:X} of "
+                        f"inode {self.inode_idx:d}: 0x{xattrs_header.h_magic} (expected 0xEA020000)"
+                    )
+                except BaseException and Exception:
+                    ...
 
             if xattrs_header.h_blocks != 1:
                 raise Ext4Error(
-                    "Invalid number of xattr blocks at offset 0x{xattrs_block_start:X} of inode {inode:d}: {xattrs_header:d} (expected 1)".format(
-                        inode=self.inode_idx,
-                        xattrs_header=xattrs_header.h_blocks,
-                        xattrs_block_start=xattrs_block_start
-                    ))
+                    f"Invalid number of xattr blocks at offset 0x{xattrs_block_start:X} "
+                    f"of inode {self.inode_idx:d}: {xattrs_header.h_blocks:d} (expected 1)")
 
             offset = 4 * ((ctypes.sizeof(
-                ext4_xattr_header) + 3) // 4)  # The ext4_xattr_entry following the header is aligned on a 4-byte boundary
-            for xattr_name, xattr_value in self._parse_xattrs(xattrs_block[offset:], -offset,
-                                                              prefix_override=prefix_override):
+                ext4_xattr_header) + 3) // 4)
+            # The ext4_xattr_entry following the header is aligned on a 4-byte boundary
+            for xattr_name, xattr_value in self._parse_xattrs(xattrs_block[offset:], -offset):
                 yield xattr_name, xattr_value
 
 
@@ -900,12 +874,7 @@ class BlockReader:
         self.block_map = block_map
 
     def __repr__(self):
-        return "{type_name:s}(byte_size = {size!r:s}, block_map = {block_map!r:s}, volume_uuid = {uuid!r:s})".format(
-            block_map=self.block_map,
-            size=self.byte_size,
-            type_name=type(self).__name__,
-            uuid=self.volume.uuid
-        )
+        return f"{type(self).__name__:s}(byte_size = {self.byte_size!r:s}, block_map = {self.block_map!r:s}, volume_uuid = {self.volume.uuid!r:s})"
 
     def get_block_mapping(self, file_block_idx):
         disk_block_idx = None
