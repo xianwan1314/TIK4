@@ -238,11 +238,12 @@ class Extractor:
                 data = f.read(15360)
                 if data:
                     o.write(data)
-        try:
-            os.remove(input_file)
-            os.rename(output_file, input_file)
-        finally:
-            pass
+        if os.path.exists(output_file):
+            try:
+                os.remove(input_file)
+                os.rename(output_file, input_file)
+            finally:
+                ...
 
     def fix_size(self):
         orig_size = os.path.getsize(self.OUTPUT_IMAGE_FILE)
