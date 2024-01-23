@@ -1319,7 +1319,7 @@ def undtbo(project, infile):
         if dtbo_files.startswith('dtbo.'):
             dts_files = dtbo_files.replace("dtbo", 'dts')
             yecho(f"正在反编译{dtbo_files}为{dts_files}")
-            if call(f'dtc -@ -I "dtb" -O "dts" {dtbodir + os.sep + "dtbo_files" + os.sep + dtbo_files} -o "{dtbodir + os.sep + "dts_files" + os.sep + dts_files}"') != 0:
+            if call(f'dtc -@ -I "dtb" -O "dts" {dtbodir + os.sep + "dtbo_files" + os.sep + dtbo_files} -o "{dtbodir + os.sep + "dts_files" + os.sep + dts_files}"', out=1) != 0:
                 ywarn(f"反编译{dtbo_files}失败！")
     ysuc("完成！")
     time.sleep(1)
