@@ -11,6 +11,7 @@ import zipfile
 from argparse import Namespace
 from configparser import ConfigParser
 from io import BytesIO
+
 if sys.version_info.major == 3 and not sys.version_info.minor > 12:
     from ApkParse.main import ApkFile
 import banner
@@ -262,7 +263,7 @@ class setting:
         print('\033[31m---------------------------------\033[0m')
         print(f"\033[93m作者:\033[0m \033[92mColdWindScholar\033[0m")
         print(f"\033[93m开源地址:\033[0m \033[91mhttps://github.com/ColdWindScholar/TIK\033[0m")
-        print(f"\033[93m软件版本:\033[0m \033[44mDelta Edition\033[0m")
+        print(f"\033[93m软件版本:\033[0m \033[44mAlpha Edition\033[0m")
         print(f"\033[93m开源协议:\033[0m \033[68mGNU General Public License v3.0 \033[0m")
         print('\033[31m---------------------------------\033[0m')
         print(f"\033[93m特别鸣谢:\033[0m")
@@ -361,6 +362,7 @@ class Tool:
     """
     Free Android Rom Tool
     """
+
     def __init__(self):
         self.pro = None
 
@@ -371,8 +373,8 @@ class Tool:
         if settings.banner != "6":
             print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
         else:
-            print("="*50)
-        print("\033[92;44m Delta Edition \033[0m")
+            print("=" * 50)
+        print("\033[92;44m Alpha Edition \033[0m")
         if settings.online == 'true':
             try:
                 content = json.loads(requests.get('https://v1.jinrishici.com/all.json', timeout=2).content.decode())
@@ -1186,7 +1188,7 @@ def dboot(infile, orig):
             print("Ramdisk Not Found.. %s" % e)
             return
         cpio = utils.findfile("cpio.exe" if os.name != 'posix' else 'cpio',
-                        ebinner).replace(
+                              ebinner).replace(
             '\\', "/")
         call(exe="busybox ash -c \"find | sed 1d | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % cpio, sp=1,
              shstate=True)
@@ -1326,8 +1328,8 @@ def undtbo(project, infile):
 def makedtbo(sf, project):
     dtbodir = project + os.sep + os.path.basename(sf).split('.')[0]
     rmdire(dtbodir + os.sep + 'new_dtbo_files')
-    if os.path.exists(project + os.sep + os.path.basename(sf).split('.')[0] + '.img'): os.remove(
-        project + os.sep + os.path.basename(sf).split('.')[0] + '.img')
+    if os.path.exists(project + os.sep + os.path.basename(sf).split('.')[0] + '.img'):
+        os.remove(project + os.sep + os.path.basename(sf).split('.')[0] + '.img')
     os.makedirs(dtbodir + os.sep + 'new_dtbo_files')
     for dts_files in os.listdir(dtbodir + os.sep + 'dts_files'):
         new_dtbo_files = dts_files.replace('dts', 'dtbo')
