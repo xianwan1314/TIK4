@@ -525,9 +525,10 @@ class Tool:
             else:
                 patch = Magisk_patch(boots[op_menu], '', MAGISAPK=mapk)
                 patch.auto_patch()
-                if os.path.exists(os.path.join(project, 'new-boot.img')):
-                    os.remove(boots[op_menu])
-                    shutil.move(os.path.join(project, 'new-boot.img'), boots[op_menu])
+                if os.path.exists(os.path.join(LOCALDIR, 'new-boot.img')):
+                    out = os.path.join(project, "boot_patched.img")
+                    shutil.move(os.path.join(LOCALDIR, 'new-boot.img'), out)
+                    LOGS(f"Moved to:{out}")
                     LOGS("修补完成")
                 else:
                     LOGE("修补失败")
