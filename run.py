@@ -1719,6 +1719,8 @@ def unpack(file, info, project):
                 if os.path.getsize(project + os.sep + v) == 0:
                     os.remove(project + os.sep + v)
                 else:
+                    if os.path.exists(project + os.sep + v.replace('_a', '')) or os.path.exists(project + os.sep + v.replace('_b', '')):
+                        continue
                     if v.endswith('_a.img'):
                         shutil.move(project + os.sep + v, project + os.sep + v.replace('_a', ''))
                     elif v.endswith('_b.img'):
