@@ -35,19 +35,19 @@ def scan_dir(folder) -> list:
             yield rv
 
 
-def islink(file) -> str and None:
+def islink(file) -> str:
     if os.name == 'nt':
         if not os.path.isdir(file):
             with open(file, 'rb') as f:
-                if f.read(12) == b'!<symlink>\xff\xfe':
-                    return f.read().decode("utf-8").replace('\x00', '')
+                if f.read(10) == b'!<symlink>':
+                    return f.read().decode("utf-16")[:-1]
                 else:
-                    return
+                    return ''
     elif os.name == 'posix':
         if os.path.islink(file):
             return os.readlink(file)
         else:
-            return
+            return ''
 
 
 def fs_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
@@ -61,6 +61,8 @@ def fs_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
             for c in i:
                 tmp += c if c.isprintable() else '*'
             i = tmp
+        if ' ' in i:
+            i = i.replace(' ', '*')
         if fs_file.get(i):
             new_fs[i] = fs_file[i]
         else:
