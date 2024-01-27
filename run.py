@@ -168,7 +168,7 @@ class setting:
            ----[IMG设置]-------
            5> UTC时间戳 \033[93m[{settings.utcstamp}]\033[0m
            6> 创建sparse \033[93m[{settings.pack_sparse}]\033[0m
-           7> 文件系统 \033[93m[{settings.diyimgtype}]\033[0m\n
+           7> 文件系统 \033[93m[{settings.diyimgtype}]\033[0m
            8> 支持旧内核 \033[93m[{settings.erofs_old_kernel}]\033[0m\n
            0>返回上一级菜单
            --------------------------
