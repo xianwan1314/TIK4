@@ -152,7 +152,9 @@ class setting:
             "6": lambda: settings.change('pack_sparse', '1' if input(
                 "  Img是否打包为sparse(压缩体积)[1/0]\n  请输入序号:") == '1' else "0"),
             "7": lambda: settings.change('diyimgtype',
-                                         '1' if input(f"  打包镜像格式[1]同解包格式 [2]可选择:") == '2' else '')
+                                         '1' if input(f"  打包镜像格式[1]同解包格式 [2]可选择:") == '2' else ''),
+            "8": lambda: settings.change('erofs_old_kernel',
+                                         '1' if input(f"  EROFS打包是否支持旧内核[1/0]") == '1' else '0')
         }
         cls()
         print(f'''
@@ -167,6 +169,7 @@ class setting:
            5> UTC时间戳 \033[93m[{settings.utcstamp}]\033[0m
            6> 创建sparse \033[93m[{settings.pack_sparse}]\033[0m
            7> 文件系统 \033[93m[{settings.diyimgtype}]\033[0m\n
+           8> 支持旧内核 \033[93m[{settings.erofs_old_kernel}]\033[0m\n
            0>返回上一级菜单
            --------------------------
         ''')
@@ -1385,8 +1388,11 @@ def inpacker(name, project, form, ftype, json_=None):
     size = img_size0 / int(settings.BLOCKSIZE)
     size = int(size)
     if ftype == 'erofs':
+        other_ = ''
+        if settings.erofs_old_kernel == '1':
+            other_ = '-E legacy-compress'
         call(
-            f'mkfs.erofs -z{settings.erofslim}  -T {utc} --mount-point=/{name} --fs-config-file={fs_config} --product-out={os.path.dirname(out_img)} --file-contexts={file_contexts} {out_img} {in_files}')
+            f'mkfs.erofs {other_} -z{settings.erofslim}  -T {utc} --mount-point=/{name} --fs-config-file={fs_config} --product-out={os.path.dirname(out_img)} --file-contexts={file_contexts} {out_img} {in_files}')
     else:
         if settings.pack_e2 == '0':
             call(
