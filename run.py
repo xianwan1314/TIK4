@@ -1427,7 +1427,7 @@ def inpacker(name, project, form, ftype, json_=None):
 
 
 def versize(size):
-    size_ = size + 409600
+    size_ = size
     diff_size = size_
     for i_ in range(20):
         if not i_:
