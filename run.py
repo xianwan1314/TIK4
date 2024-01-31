@@ -1415,10 +1415,7 @@ def inpacker(name, project, form, ftype, json_=None):
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
         except:
             ...
-        if 'dat_ver' in json_.keys():
-            utils.img2sdat(out_img, project + os.sep + "TI_out", int(json_['dat_ver']), name)
-        else:
-            utils.img2sdat(out_img, project + os.sep + "TI_out", 4, name)
+        utils.img2sdat(out_img, project + os.sep + "TI_out", int(json_.get('dat_ver', '4')), name)
         try:
             os.remove(out_img)
         except:
