@@ -1597,17 +1597,17 @@ def inpayload(supersize, project):
             partname.append(sf.replace('.img', ''))
             if gettype(project + os.sep + 'payload' + os.sep + sf) in ['ext', 'erofs']:
                 super_list.append(sf.replace('.img', ''))
-            pimages.append(f"{project}{os.sep}payload{os.sep}{sf.replace('.img', '')}.img")
+            pimages.append(f"{project}{os.sep}payload{os.sep}{sf}")
             yecho(f"预打包:{sf}")
     inparts = f"--partition_names={':'.join(partname)} --new_partitions={':'.join(pimages)}"
     yecho(f"当前Super逻辑分区表：{super_list}")
-    with open(project + os.sep + "payload" + os.sep + "dynamic_partitions_info.txt", 'w', encoding='utf-8',
+    with open(project + os.sep + "payload" + os.sep + "parts_info.txt", 'w', encoding='utf-8',
               newline='\n') as txt:
         txt.write(f"super_partition_groups={settings.super_group}\n")
         txt.write(f"qti_dynamic_partitions_size={supersize}\n")
         txt.write(f"qti_dynamic_partitions_partition_list={' '.join(super_list)}\n")
     call(
-        f"delta_generator --out_file={out} {inparts} --dynamic_partition_info_file={project + os.sep + 'payload' + os.sep + 'dynamic_partitions_info.txt'}")
+    f"delta_generator --out_file={out} {inparts} --dynamic_partition_info_file={os.path.join(project, 'payload', 'parts_info.txt')}")
     LOGS("成功创建payload!") if call(
         f"delta_generator --in_file={out} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0 else LOGE(
         "创建payload失败！")
