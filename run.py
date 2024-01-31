@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 import json
-import os
-from os import path as o_path
 import platform as plat
 import re
 import shutil
@@ -11,14 +9,17 @@ import zipfile
 from argparse import Namespace
 from configparser import ConfigParser
 from io import BytesIO
+from os import path as o_path
 
 if sys.version_info.major == 3 and not sys.version_info.minor > 12:
     from ApkParse.main import ApkFile
 import banner
 from Magisk import Magisk_patch
+import os
 
 if os.name == 'nt':
     import ctypes
+
     ctypes.windll.kernel32.SetConsoleTitleW("TIK4")
 else:
     sys.stdout.write("\x1b]2;TIK4\x07")
@@ -63,7 +64,7 @@ class json_edit:
         with open(self.file, 'r+', encoding='utf-8') as pf:
             try:
                 return json.loads(pf.read())
-            except:
+            except (Exception, BaseException):
                 return {}
 
     def write(self, data):
@@ -95,8 +96,8 @@ def rmdire(path):
 
 if os.name == 'posix' and os.geteuid() == 0:
     try:
-        os.chmod(binner, 0o777)
-    except:
+        os.chmod(binner, int('7777', 8))
+    except (Exception, BaseException):
         ...
 
 
@@ -382,7 +383,7 @@ class Tool:
                 shiju = content['content']
                 fr = content['origin']
                 another = content['author']
-            except:
+            except (Exception, BaseException):
                 print(f"\033[36m “开源，是一场无问西东的前行”\033[0m\n")
             else:
                 print(f"\033[36m “{shiju}”")
@@ -408,7 +409,7 @@ class Tool:
             if url:
                 try:
                     downloader.download([url], LOCALDIR)
-                except:
+                except (Exception, BaseException):
                     ...
                 self.unpackrom()
         elif op_pro == '00':
@@ -598,7 +599,7 @@ class Tool:
                             app[str(cs)] = (path, apkname, apk.get_package())
                             path = path.replace(project, '').replace('\\', '/')
                             print(
-                                f'''\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}]:{apk.get_package()}\n    \033[0m\033[35m({path})\033[0m''')
+                                f'\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}]:{apk.get_package()}\n    \033[0m\033[35m({path})\033[0m')
                         del apk
         print("\033[33m-------------------------------\033[0m")
         print(f"  --共读取了\033[32m{cs}\033[0m个APK。--")
@@ -774,7 +775,7 @@ def subbed(project):
                 else:
                     gen = gen_sh_engine(project)
                 call(
-                    f'busybox ash {gen} {(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh").replace(os.sep, "/")}')
+                    f'busybox ash {gen} {os.path.join(binner, "subs", mysubs[int(op_pro)], "main.sh").replace(os.sep, "/")}')
                 f_remove(gen)
             else:
                 ywarn(f"{mysubs[int(op_pro)]}为环境插件，不可运行！")
@@ -832,7 +833,7 @@ class installmpk:
     def install(self):
         try:
             supports = self.mconf.get('module', 'supports').split()
-        except:
+        except (Exception, BaseException):
             supports = [sys.platform]
         if sys.platform not in supports:
             ywarn(f"[!]安装失败:不支持的系统{sys.platform}")
@@ -849,12 +850,12 @@ class installmpk:
         for file in track(self.inner_filenames, description="正在安装..."):
             try:
                 file = str(file).encode('cp437').decode('gbk')
-            except:
+            except (Exception, BaseException):
                 file = str(file).encode('utf-8').decode('utf-8')
             fz.extract(file, binner + os.sep + "subs" + os.sep + self.mconf.get('module', 'identifier'))
         try:
             depends = self.mconf.get('module', 'depend')
-        except:
+        except (Exception, BaseException):
             depends = ''
         minfo = {"name": "%s" % (self.mconf.get('module', 'name')),
                  "author": "%s" % (self.mconf.get('module', 'author')),
@@ -1206,7 +1207,7 @@ def dboot(infile, orig):
                 print("Pack Ramdisk Successful..")
                 try:
                     os.remove("ramdisk.cpio")
-                except:
+                except (Exception, BaseException):
                     ...
                 os.rename("ramdisk-new.cpio.%s" % comp.split('_')[0], "ramdisk.cpio")
         else:
@@ -1228,7 +1229,7 @@ def dboot(infile, orig):
         os.chdir(LOCALDIR)
         try:
             rmdire(infile)
-        except:
+        except (Exception, BaseException):
             print("删除错误...")
         print("Pack Successful...")
 
@@ -1312,7 +1313,7 @@ def undtbo(project, infile):
         os.makedirs(dtbodir + os.sep + "dtbo_files")
         try:
             os.makedirs(dtbodir + os.sep + "dts_files")
-        except:
+        except (Exception, BaseException):
             ...
     yecho("正在解压dtbo.img")
     mkdtboimg.dump_dtbo(infile, dtbodir + os.sep + "dtbo_files" + os.sep + "dtbo")
@@ -1320,7 +1321,8 @@ def undtbo(project, infile):
         if dtbo_files.startswith('dtbo.'):
             dts_files = dtbo_files.replace("dtbo", 'dts')
             yecho(f"正在反编译{dtbo_files}为{dts_files}")
-            if call(f'dtc -@ -I "dtb" -O "dts" {dtbodir + os.sep + "dtbo_files" + os.sep + dtbo_files} -o "{dtbodir + os.sep + "dts_files" + os.sep + dts_files}"', out=1) != 0:
+            if call(f'dtc -@ -I "dtb" -O "dts" {dtbodir + os.sep + "dtbo_files" + os.sep + dtbo_files} -o "{dtbodir + os.sep + "dts_files" + os.sep + dts_files}"',
+                    out=1) != 0:
                 ywarn(f"反编译{dtbo_files}失败！")
     ysuc("完成！")
     time.sleep(1)
@@ -1346,7 +1348,7 @@ def makedtbo(sf, project):
     list_ = sorted(list_, key=lambda x: int(float(x.rsplit('.', 1)[1])))
     try:
         mkdtboimg.create_dtbo(project + os.sep + os.path.basename(sf).split('.')[0] + '.img', list_, 4096)
-    except:
+    except (Exception, BaseException):
         ywarn(f"{os.path.basename(sf).split('.')[0]}.img生成失败!")
     else:
         ysuc(f"{os.path.basename(sf).split('.')[0]}.img生成完毕!")
@@ -1363,7 +1365,7 @@ def inpacker(name, project, form, ftype, json_=None):
             os.remove(dir_path + os.sep + name_ + ".new.dat")
             os.remove(dir_path + os.sep + name_ + ".patch.dat")
             os.remove(dir_path + os.sep + name_ + ".transfer.list")
-        except:
+        except (Exception, BaseException):
             ...
 
     file_contexts = project + os.sep + "config" + os.sep + name + "_file_contexts"
@@ -1411,12 +1413,12 @@ def inpacker(name, project, form, ftype, json_=None):
         rdi(name)
         try:
             os.remove(project + os.sep + "TI_out" + os.sep + name + ".patch.dat")
-        except:
+        except (Exception, BaseException):
             ...
         utils.img2sdat(out_img, project + os.sep + "TI_out", int(json_.get('dat_ver', '4')), name)
         try:
             os.remove(out_img)
-        except:
+        except (Exception, BaseException):
             ...
     if form == 'br':
         yecho(f"打包[BR]:{name}")
@@ -1641,7 +1643,7 @@ def unpack(file, info, project):
             os.remove(os.path.join(filepath, partname + ".new.dat"))
             os.remove(os.path.join(filepath, partname + '.transfer.list'))
             os.remove(os.path.join(filepath, partname + '.patch.dat'))
-        except:
+        except (Exception, BaseException):
             ...
         unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
     elif info == 'img':
@@ -1694,7 +1696,7 @@ def unpack(file, info, project):
             imgextractor.Extractor().main(file, project + os.sep + os.path.basename(file).split('.')[0], project)
         try:
             os.remove(file)
-        except:
+        except (Exception, BaseException):
             ...
     elif info == 'dat.1':
         for fd in [f for f in os.listdir(project) if re.search(r'\.new\.dat\.\d+', f)]:
@@ -1720,7 +1722,8 @@ def unpack(file, info, project):
                 if os.path.getsize(project + os.sep + v) == 0:
                     os.remove(project + os.sep + v)
                 else:
-                    if os.path.exists(project + os.sep + v.replace('_a', '')) or os.path.exists(project + os.sep + v.replace('_b', '')):
+                    if os.path.exists(project + os.sep + v.replace('_a', '')) or os.path.exists(
+                            project + os.sep + v.replace('_b', '')):
                         continue
                     if v.endswith('_a.img'):
                         shutil.move(project + os.sep + v, project + os.sep + v.replace('_a', ''))
@@ -1747,7 +1750,7 @@ def autounpack(project):
             if os.path.exists(project + os.sep + waste):
                 try:
                     os.remove(project + os.sep + waste)
-                except:
+                except (Exception, BaseException):
                     ...
         if not os.path.isdir(project + os.sep + "config"):
             os.makedirs(project + os.sep + "config")
