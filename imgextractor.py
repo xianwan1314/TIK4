@@ -119,7 +119,7 @@ class Extractor:
                         link_target = root_inode.volume.read(link_target_block * root_inode.volume.block_size,
                                                              entry_inode.inode.i_size).decode("utf8")
                 if tmp_path.find(' ', 1, len(tmp_path)) > 0:
-                    self.__append(tmp_path, os.path.join(self.CONFING_DIR, 'config', self.FileName + '_space.txt'))
+                    self.__append(tmp_path, os.path.join(self.CONFING_DIR, self.FileName + '_space.txt'))
                     self.fs_config.append(
                         f"{tmp_path.replace(' ', '_')} {uid} {gid} {mode}{cap} {link_target}")
                 else:
@@ -137,8 +137,6 @@ class Extractor:
                     scan_dir(entry_inode, entry_inode_path)
                 elif entry_inode.is_file:
                     file_target = self.EXTRACT_DIR + entry_inode_path.replace(' ', '_').replace('"', '')
-                    if os.name == 'nt':
-                        file_target = file_target.replace('\\', '/')
                     try:
                         with open(file_target, 'wb') as out:
                             out.write(entry_inode.open_read().read())
@@ -243,14 +241,14 @@ class Extractor:
                 os.remove(input_file)
                 os.rename(output_file, input_file)
             finally:
-                ...
+                pass
 
     def fix_size(self):
         orig_size = os.path.getsize(self.OUTPUT_IMAGE_FILE)
         with open(self.OUTPUT_IMAGE_FILE, 'rb+') as file:
             t = ext4.Volume(file)
             real_size = t.get_block_count * t.block_size
-            if orig_size != real_size:
+            if orig_size < real_size:
                 print(f"......Wrong Size!Fixing.......\nShould:{real_size}\nYours:{orig_size}")
                 file.truncate(real_size)
 

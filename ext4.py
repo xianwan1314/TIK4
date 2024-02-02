@@ -5,7 +5,7 @@ import math
 import queue
 
 
-def wcscmp(str_a, str_b):
+def wcs_cmp(str_a, str_b):
     for a, b in zip(str_a, str_b):
         tmp = ord(a) - ord(b)
         if tmp != 0:
@@ -511,10 +511,33 @@ class Volume:
     def get_block_count(self):
         return self.superblock.s_blocks_count
 
+    @property
+    def get_info_list(self):
+        data = [
+            ['Filesystem magic number', hex(self.superblock.s_magic).upper()],
+            ["Filesystem volume name",self.superblock.s_volume_name.decode()],
+            ["Filesystem UUID", self.uuid],
+            ['Last mounted on', self.superblock.s_last_mounted.decode()],
+            ["Block size", f"{1 << (10 + self.superblock.s_log_block_size)}"],
+            ["Block count", self.superblock.s_blocks_count],
+            ["Free inodes", self.superblock.s_free_inodes_count],
+            ["Free blocks", self.superblock.s_free_blocks_count],
+            ["Inodes per group", self.superblock.s_inodes_per_group],
+            ['Blocks per group', self.superblock.s_blocks_per_group],
+            ['Inode count', self.superblock.s_inodes_count],
+            ['Reserved GDT blocks', self.superblock.s_reserved_gdt_blocks],
+            ["Inode size", self.superblock.s_inode_size],
+            ['Filesystem created', self.superblock.s_mkfs_time],
+            ["Currect Size", self.get_block_count * self.block_size]
+        ]
+        return data
+
     def get_inode(self, inode_idx, file_type=InodeType.UNKNOWN):
         group_idx, inode_table_entry_idx = self.get_inode_group(inode_idx)
-
-        inode_table_offset = self.group_descriptors[group_idx].bg_inode_table * self.block_size
+        try:
+            inode_table_offset = self.group_descriptors[group_idx].bg_inode_table * self.block_size
+        except Exception:
+            inode_table_offset = 99 * self.block_size
         inode_offset = inode_table_offset + inode_table_entry_idx * self.superblock.s_inode_size
 
         return Inode(self, inode_offset, inode_idx, file_type)
@@ -563,12 +586,7 @@ class Inode:
 
     def __repr__(self):
         if self.inode_idx is not None:
-            return "{type_name:s}(inode_idx = {inode!r:s}, offset = 0x{offset:X}, volume_uuid = {uuid!r:s})".format(
-                inode=self.inode_idx,
-                offset=self.offset,
-                type_name=type(self).__name__,
-                uuid=self.volume.uuid
-            )
+            return f"{type(self).__name__:s}(inode_idx = {self.inode_idx!r:s}, offset = 0x{self.offset:X}, volume_uuid = {self.volume.uuid!r:s})"
         else:
             return f"{type(self).__name__:s}(offset = 0x{self.offset:X}, volume_uuid = {self.volume.uuid!r:s})"
 
@@ -625,8 +643,8 @@ class Inode:
         file_name_b, _, file_type_b = dir_b
 
         if file_type_a == InodeType.DIRECTORY == file_type_b or file_type_a != InodeType.DIRECTORY != file_type_b:
-            tmp = wcscmp(file_name_a.lower(), file_name_b.lower())
-            return tmp if tmp != 0 else wcscmp(file_name_a, file_name_b)
+            tmp = wcs_cmp(file_name_a.lower(), file_name_b.lower())
+            return tmp if tmp != 0 else wcs_cmp(file_name_a, file_name_b)
         else:
             return -1 if file_type_a == InodeType.DIRECTORY else 1
 
@@ -805,10 +823,7 @@ class Inode:
             units = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"]
             unit_idx = min(int(math.log(self.inode.i_size, 1024)), len(units))
 
-            return "{size:.2f} {unit:s}".format(
-                size=self.inode.i_size / (1024 ** unit_idx),
-                unit=units[unit_idx - 1]
-            )
+            return f"{self.inode.i_size / (1024 ** unit_idx):.2f} {units[unit_idx - 1]:s}"
 
     def xattrs(self, check_inline=True, check_block=True, force_inline=False):
         # Inline xattrs
