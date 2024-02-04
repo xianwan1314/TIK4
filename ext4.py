@@ -515,7 +515,7 @@ class Volume:
     def get_info_list(self):
         data = [
             ['Filesystem magic number', hex(self.superblock.s_magic).upper()],
-            ["Filesystem volume name",self.superblock.s_volume_name.decode()],
+            ["Filesystem volume name", self.superblock.s_volume_name.decode()],
             ["Filesystem UUID", self.uuid],
             ['Last mounted on', self.superblock.s_last_mounted.decode()],
             ["Block size", f"{1 << (10 + self.superblock.s_log_block_size)}"],
@@ -849,21 +849,21 @@ class Inode:
         if check_block and self.inode.i_file_acl != 0:
             xattrs_block_start = self.inode.i_file_acl * self.volume.block_size
             xattrs_block = self.volume.read(xattrs_block_start, self.volume.block_size)
+            if xattrs_block:
+                xattrs_header = ext4_xattr_header.from_buffer_copy(xattrs_block)
+                if not self.volume.ignore_magic and xattrs_header.h_magic != 0xEA020000:
+                    try:
+                        raise MagicError(
+                            f"Invalid magic value in xattrs block header at offset 0x{xattrs_block_start:X} of "
+                            f"inode {self.inode_idx:d}: 0x{xattrs_header.h_magic} (expected 0xEA020000)"
+                        )
+                    except BaseException and Exception:
+                        ...
 
-            xattrs_header = ext4_xattr_header.from_buffer_copy(xattrs_block)
-            if not self.volume.ignore_magic and xattrs_header.h_magic != 0xEA020000:
-                try:
-                    raise MagicError(
-                        f"Invalid magic value in xattrs block header at offset 0x{xattrs_block_start:X} of "
-                        f"inode {self.inode_idx:d}: 0x{xattrs_header.h_magic} (expected 0xEA020000)"
-                    )
-                except BaseException and Exception:
-                    ...
-
-            if xattrs_header.h_blocks != 1:
-                raise Ext4Error(
-                    f"Invalid number of xattr blocks at offset 0x{xattrs_block_start:X} "
-                    f"of inode {self.inode_idx:d}: {xattrs_header.h_blocks:d} (expected 1)")
+                if xattrs_header.h_blocks != 1:
+                    raise Ext4Error(
+                        f"Invalid number of xattr blocks at offset 0x{xattrs_block_start:X} "
+                        f"of inode {self.inode_idx:d}: {xattrs_header.h_blocks:d} (expected 1)")
 
             offset = 4 * ((ctypes.sizeof(
                 ext4_xattr_header) + 3) // 4)
