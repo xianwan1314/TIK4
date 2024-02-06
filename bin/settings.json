@@ -16,5 +16,6 @@
     "diyimgtype": "1",
     "online": "true",
     "erofs_old_kernel": "0", 
-    "version": "4.85"
+    "context":"true", 
+    "version": "4.89"
 }

@@ -334,7 +334,8 @@ class setting:
     \033[33m  > 工具设置 \033[0m\n
        1>自定义首页banner \033[93m[{settings.banner}]\033[0m\n
        2>联网模式 \033[93m[{settings.online}]\033[0m\n
-       3>检查更新 \n
+       3>Contexts修补 \033[93m[{settings.online}]\033[0m\n
+       4>检查更新 \n
        0>返回上级\n
        --------------------------
             ''')
@@ -350,6 +351,8 @@ class setting:
         elif op_pro == '2':
             settings.change('online', 'false' if settings.online == 'true' else 'true')
         elif op_pro == '3':
+            settings.change('context', 'false' if settings.context == 'true' else 'true')
+        elif op_pro == '4':
             upgrade()
         self.settings3()
 
@@ -1478,7 +1481,8 @@ def inpacker(name, project, form, ftype, json_=None):
     elif settings.diysize == '':
         img_size0 = dirsize(in_files, 1, 3, project + os.sep + "dynamic_partitions_op_list").rsize_v
     fspatch.main(in_files, fs_config)
-    contextpatch.main(in_files, file_contexts)
+    if settings.context == 'true':
+        contextpatch.main(in_files, file_contexts)
     utils.qc(fs_config)
     utils.qc(file_contexts)
     size = img_size0 / int(settings.BLOCKSIZE)
