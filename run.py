@@ -164,6 +164,8 @@ class upgrade:
     update_json = 'https://mirror.ghproxy.com/https://raw.githubusercontent.com/ColdWindScholar/Upgrade/main/TIK.json'
 
     def __init__(self):
+        if not os.path.exists(temp):
+            os.makedirs(temp)
         cls()
         with Console().status(f"[blue]正在检测新版本...[/]"):
             try:
