@@ -130,7 +130,7 @@ if os.path.basename(sys.argv[0]) == f'run_new{str() if os.name == "posix" else "
                     os.path.join(LOCALDIR, f'run{str() if os.name == "posix" else ".exe"}'))
 elif os.path.basename(sys.argv[0]) == f'run{str() if os.name == "posix" else ".exe"}':
     new = os.path.join(LOCALDIR, f'run_new{str() if os.name == "posix" else ".exe"}')
-    if os.path.join(new):
+    if os.path.exists(new):
         if sha1(os.path.join(LOCALDIR, f'run{str() if os.name == "posix" else ".exe"}')) == sha1(new):
             os.remove(new)
         else:
