@@ -176,7 +176,7 @@ class upgrade:
         else:
             if data.get('version', settings.version) != settings.version:
                 print(f'\033[31m {banner.banner1} \033[0m')
-                print(f"\033[0;32;40m发现新版本：\033[0m\033[0;36;40m{data.get('version', settings.version)}\033[0m")
+                print(f"\033[0;32;40m发现新版本：\033[0m\033[0;36;40m{settings.version} --> {data.get('version', settings.version)}\033[0m")
                 print(f"\033[0;32;40m更新日志：\n\033[0m\033[0;36;40m{data.get('log', '1.Fix Some Bugs')}\033[0m")
                 try:
                     link = data['link'][plat.system()][plat.machine()]
