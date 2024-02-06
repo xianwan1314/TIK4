@@ -210,11 +210,11 @@ class upgrade:
                     for i in self.settings.keys():
                         json2[i] = self.settings.get(i, json2.get(i, ''))
                     self.settings = json2
-                    os.rename(os.path.join(extract_path, 'bin'), os.path.join(extract_path, 'bin2'))
-                    shutil.rmtree(os.path.join(LOCALDIR, 'bin'))
-                    os.rename(os.path.join(extract_path, 'bin2'), os.path.join(extract_path, 'bin'))
+                    shutil.copytree(os.path.join(extract_path, 'bin'), os.path.join(extract_path, 'bin2'),dirs_exist_ok=True)
                     shutil.move(os.path.join(extract_path, 'run' + '' if os.name == 'posix' else '.exe'),
                                 os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe'))
+                    shutil.rmtree(os.path.join(LOCALDIR, 'bin'))
+                    shutil.copytree(os.path.join(extract_path, 'bin2'), os.path.join(extract_path, 'bin'))
                     json_edit(setfile).write(json2)
                     input("更新完毕, 任意按钮启动新程序...")
                     subprocess.Popen([os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe')])
