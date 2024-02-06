@@ -1,6 +1,4 @@
-import os, sys
 import struct
-import hashlib
 
 
 class Cert:
@@ -15,9 +13,9 @@ class Cert:
             self._ptr_add(12)
 
     def _ptr_add(self, offset) -> None:
-        '''
+        """
         self.ptr 增加offset，同时保证4字节对齐
-        '''
+        """
         self.ptr += offset
         while self.ptr % 4 != 0:
             self.ptr += 1
