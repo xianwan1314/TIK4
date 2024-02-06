@@ -124,14 +124,14 @@ def sha1(file_path):
 
 if not os.path.exists(ebinner):
     error(1, "Binary not found\nMay Not Support Your Device?")
-if os.path.basename(sys.argv[0]) == ('run_new' + '' if os.name == 'posix' else '.exe'):
-    os.remove(os.path.join(LOCALDIR, 'run' + '' if os.name == 'posix' else '.exe'))
-    shutil.copyfile(os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe'),
-                    os.path.join(LOCALDIR, 'run' + '' if os.name == 'posix' else '.exe'))
-elif os.path.basename(sys.argv[0]) == ('run' + '' if os.name == 'posix' else '.exe'):
-    new = os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe')
+if os.path.basename(sys.argv[0]) == f'run_new{str() if os.name == "posix" else ".exe"}':
+    os.remove(os.path.join(LOCALDIR, f'run{str() if os.name == "posix" else ".exe"}'))
+    shutil.copyfile(os.path.join(LOCALDIR, f'run_new{str() if os.name == "posix" else ".exe"}'),
+                    os.path.join(LOCALDIR, f'run{str() if os.name == "posix" else ".exe"}'))
+elif os.path.basename(sys.argv[0]) == f'run{str() if os.name == "posix" else ".exe"}':
+    new = os.path.join(LOCALDIR, f'run_new{str() if os.name == "posix" else ".exe"}')
     if os.path.join(new):
-        if sha1(os.path.join(LOCALDIR, 'run' + '' if os.name == 'posix' else '.exe')) == sha1(new):
+        if sha1(os.path.join(LOCALDIR, f'run{str() if os.name == "posix" else ".exe"}')) == sha1(new):
             os.remove(new)
         else:
             subprocess.Popen([new])
@@ -213,8 +213,8 @@ class upgrade:
                     self.settings = json2
                     shutil.copytree(os.path.join(extract_path, 'bin'), os.path.join(LOCALDIR, 'bin2'),
                                     dirs_exist_ok=True)
-                    shutil.move(os.path.join(extract_path, 'run' + '' if os.name == 'posix' else '.exe'),
-                                os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe'))
+                    shutil.move(os.path.join(extract_path, f'run{str() if os.name == "posix" else ".exe"}'),
+                                os.path.join(LOCALDIR, f'run_new{str() if os.name == "posix" else ".exe"}'))
                     shutil.rmtree(os.path.join(LOCALDIR, 'bin'))
                     shutil.copytree(os.path.join(LOCALDIR, 'bin2'), os.path.join(LOCALDIR, 'bin'))
                     json_edit(setfile).write(json2)
