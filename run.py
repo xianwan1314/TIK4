@@ -178,7 +178,8 @@ class upgrade:
         else:
             if data.get('version', settings.version) != settings.version:
                 print(f'\033[31m {banner.banner1} \033[0m')
-                print(f"\033[0;32;40m发现新版本：\033[0m\033[0;36;40m{settings.version} --> {data.get('version', settings.version)}\033[0m")
+                print(
+                    f"\033[0;32;40m发现新版本：\033[0m\033[0;36;40m{settings.version} --> {data.get('version', settings.version)}\033[0m")
                 print(f"\033[0;32;40m更新日志：\n\033[0m\033[0;36;40m{data.get('log', '1.Fix Some Bugs')}\033[0m")
                 try:
                     link = data['link'][plat.system()][plat.machine()]
@@ -210,7 +211,8 @@ class upgrade:
                     for i in self.settings.keys():
                         json2[i] = self.settings.get(i, json2.get(i, ''))
                     self.settings = json2
-                    shutil.copytree(os.path.join(extract_path, 'bin'), os.path.join(LOCALDIR, 'bin2'),dirs_exist_ok=True)
+                    shutil.copytree(os.path.join(extract_path, 'bin'), os.path.join(LOCALDIR, 'bin2'),
+                                    dirs_exist_ok=True)
                     shutil.move(os.path.join(extract_path, 'run' + '' if os.name == 'posix' else '.exe'),
                                 os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe'))
                     shutil.rmtree(os.path.join(LOCALDIR, 'bin'))
