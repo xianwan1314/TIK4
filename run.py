@@ -124,18 +124,21 @@ def sha1(file_path):
 
 if not os.path.exists(ebinner):
     error(1, "Binary not found\nMay Not Support Your Device?")
-if os.path.basename(sys.argv[0]) == f'run_new{str() if os.name == "posix" else ".exe"}':
-    os.remove(os.path.join(LOCALDIR, f'run{str() if os.name == "posix" else ".exe"}'))
-    shutil.copyfile(os.path.join(LOCALDIR, f'run_new{str() if os.name == "posix" else ".exe"}'),
-                    os.path.join(LOCALDIR, f'run{str() if os.name == "posix" else ".exe"}'))
-elif os.path.basename(sys.argv[0]) == f'run{str() if os.name == "posix" else ".exe"}':
-    new = os.path.join(LOCALDIR, f'run_new{str() if os.name == "posix" else ".exe"}')
-    if os.path.exists(new):
-        if sha1(os.path.join(LOCALDIR, f'run{str() if os.name == "posix" else ".exe"}')) == sha1(new):
-            os.remove(new)
-        else:
-            subprocess.Popen([new])
-            sys.exit()
+try:
+    if os.path.basename(sys.argv[0]) == f'run_new{str() if os.name == "posix" else ".exe"}':
+        os.remove(os.path.join(LOCALDIR, f'run{str() if os.name == "posix" else ".exe"}'))
+        shutil.copyfile(os.path.join(LOCALDIR, f'run_new{str() if os.name == "posix" else ".exe"}'),
+                        os.path.join(LOCALDIR, f'run{str() if os.name == "posix" else ".exe"}'))
+    elif os.path.basename(sys.argv[0]) == f'run{str() if os.name == "posix" else ".exe"}':
+        new = os.path.join(LOCALDIR, f'run_new{str() if os.name == "posix" else ".exe"}')
+        if os.path.exists(new):
+            if sha1(os.path.join(LOCALDIR, f'run{str() if os.name == "posix" else ".exe"}')) == sha1(new):
+                os.remove(new)
+            else:
+                subprocess.Popen([new])
+                sys.exit()
+except (Exception, BaseException):
+    ...
 
 
 class set_utils:
