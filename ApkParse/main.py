@@ -73,7 +73,6 @@ class ApkFile:
                 self.main_activity]
 
     def get_app_name(self) -> str:
-        ret = ""
         if self.flag:
             ret = self.app_name
         else:
@@ -89,9 +88,7 @@ class ApkFile:
         return ret
 
     def get_main_activity(self) -> str:
-        if self.flag:
-            ret = self.main_activity
-        else:
+        if not self.flag:
             # 先定位android.intent.action.MAIN，之后找上两级的element，确定element为activity则成功获取到结果
             for item in self.manifest.node_ptr.iter("action"):
                 if item.get("{http://schemas.android.com/apk/res/android}name") != "android.intent.action.MAIN":
