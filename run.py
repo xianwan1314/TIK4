@@ -334,7 +334,7 @@ class setting:
     \033[33m  > 工具设置 \033[0m\n
        1>自定义首页banner \033[93m[{settings.banner}]\033[0m\n
        2>联网模式 \033[93m[{settings.online}]\033[0m\n
-       3>Contexts修补 \033[93m[{settings.online}]\033[0m\n
+       3>Contexts修补 \033[93m[{settings.context}]\033[0m\n
        4>检查更新 \n
        0>返回上级\n
        --------------------------
