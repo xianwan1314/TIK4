@@ -213,6 +213,7 @@ class upgrade:
                     json2 = json_edit(os.path.join(extract_path, 'bin', 'settings.json')).read()
                     for i in self.settings.keys():
                         json2[i] = self.settings.get(i, json2.get(i, ''))
+                    json2['version'] = data.get('version', settings.version)
                     self.settings = json2
                     shutil.copytree(os.path.join(extract_path, 'bin'), os.path.join(LOCALDIR, 'bin2'),
                                     dirs_exist_ok=True)
