@@ -186,7 +186,7 @@ class upgrade:
                 if not link:
                     input("未发现适用于您设备的更新，请前往https://github.com/ColdWindScholar/TIK下载源代码自行更新")
                     return
-                if input("\033[0;33;40m是否更新?[1/0]\033[0m"):
+                if input("\033[0;33;40m是否更新?[1/0]\033[0m") == '1':
                     print("正在下载新版本...")
                     try:
                         downloader.download(link, temp)
