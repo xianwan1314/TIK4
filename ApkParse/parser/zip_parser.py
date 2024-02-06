@@ -1,14 +1,12 @@
-from copy import deepcopy
+import bz2
+import logging  # TODO 完善log配置
+import lzma
 import os
 import struct
-from typing import Dict, List
-
 # 压缩算法
 import zlib
-import bz2
-import lzma
-
-import logging  # TODO 完善log配置
+from copy import deepcopy
+from typing import Dict
 
 # logging.basicConfig(format=)
 
@@ -261,7 +259,7 @@ class ZipFile:
         self.file_size: int = os.path.getsize(fpath)
         try:
             fpin = open(fpath, 'rb')
-        except Exception as e:
+        except Exception:
             print(f'Can not read file: {fpath}')
             return
         self.file_data: bytes = fpin.read()
@@ -303,8 +301,8 @@ class ZipFile:
         # 因为local file header之间可以随意插入任何数据
 
     def get_file(self, file_name: bytes) -> bytes:
-        '''通过文件名获取文件
-        '''
+        """通过文件名获取文件
+        """
         cd = self.cds[file_name]
         lf = LocalFileHeader(self.file_data, cd)
 
@@ -314,7 +312,7 @@ class ZipFile:
     def has_file(self, file_name: bytes) -> bool:
         try:
             self.cds[file_name]
-        except KeyError as e:
+        except KeyError:
             return False
         return True
 
