@@ -217,9 +217,10 @@ class upgrade:
                                 os.path.join(LOCALDIR, f'run_new{str() if os.name == "posix" else ".exe"}'))
                     shutil.rmtree(os.path.join(LOCALDIR, 'bin'))
                     shutil.copytree(os.path.join(LOCALDIR, 'bin2'), os.path.join(LOCALDIR, 'bin'))
+                    shutil.rmtree(os.path.join(LOCALDIR, 'bin2'))
                     json_edit(setfile).write(json2)
                     input("更新完毕, 任意按钮启动新程序...")
-                    subprocess.Popen([os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe')])
+                    subprocess.Popen([os.path.join(LOCALDIR, f'run_new{str() if os.name == "posix" else ".exe"}')])
                     sys.exit()
             else:
                 input("\033[0;32;40m你正在使用最新版本！任意按钮返回！\033[0m")
