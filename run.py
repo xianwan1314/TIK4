@@ -189,7 +189,7 @@ class upgrade:
                 if input("\033[0;33;40m是否更新?[1/0]\033[0m") == '1':
                     print("正在下载新版本...")
                     try:
-                        downloader.download(link, temp)
+                        downloader.download([link], temp)
                     except (BaseException, Exception):
                         input("下载错误，请稍后重试")
                         return
