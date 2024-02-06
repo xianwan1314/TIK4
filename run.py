@@ -138,6 +138,65 @@ settings = set_utils(setfile)
 settings.load_set()
 
 
+class upgrade:
+    update_json = 'https://mirror.ghproxy.com/https://raw.githubusercontent.com/ColdWindScholar/Upgrade/main/TIK.json'
+
+    def __init__(self):
+        cls()
+        with Console().status(f"[blue]正在检测新版本...[/]"):
+            try:
+                data = requests.get(self.update_json).json()
+            except (Exception, BaseException):
+                data = None
+        if not data:
+            input("链接服务器失败, 按任意按钮返回")
+            return
+        else:
+            if data.get('version', settings.version) != settings.version:
+                print(f'\033[31m {banner.banner1} \033[0m')
+                print(f"\033[0;32;40m发现新版本：\033[0m\033[0;36;40m{data.get('version', settings.version)}\033[0m")
+                print(f"\033[0;32;40m更新日志：\n\033[0m\033[0;36;40m{data.get('log', '1.Fix Some Bugs')}\033[0m")
+                try:
+                    link = data['link'][plat.system()][plat.machine()]
+                except (Exception, BaseException):
+                    input("未发现适用于您设备的更新，请前往https://github.com/ColdWindScholar/TIK下载源代码自行更新")
+                    return
+                if input("\033[0;33;40m是否更新?[1/0]\033[0m"):
+                    print("正在下载新版本...")
+                    try:
+                        downloader.download(link, temp)
+                    except (BaseException, Exception):
+                        input("下载错误，请稍后重试")
+                        return
+                    print("开始更新，请不要关闭工具...")
+                    upgrade_pkg = os.path.join(temp, os.path.basename(link))
+                    extract_path = os.path.join(temp, 'update')
+                    if os.path.exists(extract_path):
+                        rmdire(extract_path)
+                    try:
+                        zipfile.ZipFile(upgrade_pkg).extractall(extract_path)
+                    except (Exception, BaseException):
+                        input("更新文件损坏， 无法更新")
+                        return
+                    self.settings = json_edit(setfile).read()
+                    json2 = json_edit(os.path.join(extract_path, 'bin', 'settings.json')).read()
+                    for i in self.settings.keys():
+                        json2[i] = self.settings.get(i, json2.get(i, ''))
+                    self.settings = json2
+                    shutil.rmtree(os.path.join(LOCALDIR, 'bin'))
+                    shutil.copy(os.path.join(extract_path, 'bin'), LOCALDIR)
+                    shutil.move(os.path.join(extract_path, 'run' + '' if os.name == 'posix' else '.exe'),
+                                os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe'))
+                    json_edit(setfile).write(json2)
+                    input("更新完毕, 任意按钮启动新程序...")
+
+                    call("tool_new" + '' if os.name == 'posix' else '.exe', kz='N')
+                    sys.exit()
+            else:
+                input("\033[0;32;40m你正在使用最新版本！任意按钮返回！\033[0m")
+                return
+
+
 class setting:
     def settings1(self):
         actions = {
@@ -241,6 +300,7 @@ class setting:
     \033[33m  > 工具设置 \033[0m\n
        1>自定义首页banner \033[93m[{settings.banner}]\033[0m\n
        2>联网模式 \033[93m[{settings.online}]\033[0m\n
+       3>检查更新 \n
        0>返回上级\n
        --------------------------
             ''')
@@ -255,6 +315,8 @@ class setting:
                     settings.change('banner', banner_i)
         elif op_pro == '2':
             settings.change('online', 'false' if settings.online == 'true' else 'true')
+        elif op_pro == '3':
+            upgrade()
         self.settings3()
 
     @staticmethod
