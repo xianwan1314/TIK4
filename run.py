@@ -3,6 +3,7 @@ import json
 import platform as plat
 import re
 import shutil
+import subprocess
 import sys
 import time
 import zipfile
@@ -189,8 +190,11 @@ class upgrade:
                                 os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe'))
                     json_edit(setfile).write(json2)
                     input("更新完毕, 任意按钮启动新程序...")
-
-                    call("tool_new" + '' if os.name == 'posix' else '.exe', kz='N')
+                    with open(os.path.join(temp, 'update.sh'), 'w', encoding='utf-8') as s:
+                        s.write(f"rm -rf {os.path.join(LOCALDIR, 'tool' + '' if os.name == 'posix' else '.exe')}")
+                        s.write(f"mv {os.path.join(LOCALDIR, 'tool_new' + '' if os.name == 'posix' else '.exe')} {os.path.join(LOCALDIR, 'tool' + '' if os.name == 'posix' else '.exe')}")
+                        s.write(os.path.join(LOCALDIR, 'tool' + '' if os.name == 'posix' else '.exe'))
+                    subprocess.Popen([ebinner+"busybox", 'ash', os.path.join(temp, 'update.sh')])
                     sys.exit()
             else:
                 input("\033[0;32;40m你正在使用最新版本！任意按钮返回！\033[0m")
