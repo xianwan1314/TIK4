@@ -210,8 +210,9 @@ class upgrade:
                     for i in self.settings.keys():
                         json2[i] = self.settings.get(i, json2.get(i, ''))
                     self.settings = json2
+                    os.rename(os.path.join(extract_path, 'bin'), os.path.join(extract_path, 'bin2'))
                     shutil.rmtree(os.path.join(LOCALDIR, 'bin'))
-                    shutil.copy(os.path.join(extract_path, 'bin'), LOCALDIR)
+                    os.rename(os.path.join(extract_path, 'bin2'), os.path.join(extract_path, 'bin'))
                     shutil.move(os.path.join(extract_path, 'run' + '' if os.name == 'posix' else '.exe'),
                                 os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe'))
                     json_edit(setfile).write(json2)
