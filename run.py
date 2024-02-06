@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import hashlib
 import json
 import platform as plat
 import re
@@ -113,8 +114,28 @@ def error(code, message):
     sys.exit(1)
 
 
+def sha1(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as f:
+            return hashlib.sha1(f.read()).hexdigest()
+    else:
+        return ''
+
+
 if not os.path.exists(ebinner):
     error(1, "Binary not found\nMay Not Support Your Device?")
+if os.path.basename(sys.argv[0]) == ('run_new' + '' if os.name == 'posix' else '.exe'):
+    os.remove(os.path.join(LOCALDIR, 'run' + '' if os.name == 'posix' else '.exe'))
+    shutil.copyfile(os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe'),
+                    os.path.join(LOCALDIR, 'run' + '' if os.name == 'posix' else '.exe'))
+elif os.path.basename(sys.argv[0]) == ('run' + '' if os.name == 'posix' else '.exe'):
+    new = os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe')
+    if os.path.join(new):
+        if sha1(os.path.join(LOCALDIR, 'run' + '' if os.name == 'posix' else '.exe')) == sha1(new):
+            os.remove(new)
+        else:
+            subprocess.Popen([new])
+            sys.exit()
 
 
 class set_utils:
@@ -190,11 +211,7 @@ class upgrade:
                                 os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe'))
                     json_edit(setfile).write(json2)
                     input("更新完毕, 任意按钮启动新程序...")
-                    with open(os.path.join(temp, 'update.sh'), 'w', encoding='utf-8') as s:
-                        s.write(f"rm -rf {os.path.join(LOCALDIR, 'tool' + '' if os.name == 'posix' else '.exe')}")
-                        s.write(f"mv {os.path.join(LOCALDIR, 'tool_new' + '' if os.name == 'posix' else '.exe')} {os.path.join(LOCALDIR, 'tool' + '' if os.name == 'posix' else '.exe')}")
-                        s.write(os.path.join(LOCALDIR, 'tool' + '' if os.name == 'posix' else '.exe'))
-                    subprocess.Popen([ebinner+"busybox", 'ash', os.path.join(temp, 'update.sh')])
+                    subprocess.Popen([os.path.join(LOCALDIR, 'run_new' + '' if os.name == 'posix' else '.exe')])
                     sys.exit()
             else:
                 input("\033[0;32;40m你正在使用最新版本！任意按钮返回！\033[0m")
