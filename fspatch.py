@@ -19,7 +19,7 @@ def scanfs(file) -> dict:
 
 
 def scan_dir(folder) -> list:
-    allfiles = ['/', '/lost+found']
+    allfiles = ['/', '/lost+found', f'/{os.path.basename(folder)}/lost+found', f'/{os.path.basename(folder)}/']
     if os.name == 'nt':
         yield os.path.basename(folder).replace('\\', '')
     elif os.name == 'posix':
