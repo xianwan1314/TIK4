@@ -114,7 +114,7 @@ class ApkFile:
                     category.__next__()  # ElementDepthFirstIterator为啥没有一个判空的方法？？
                 except:
                     continue
-                for i in category:
+                for _ in category:
                     # print(item.get("{http://schemas.android.com/apk/res/android}name"))
                     if item.get(
                             "{http://schemas.android.com/apk/res/android}name") != "android.intent.category.LAUNCHER":
@@ -182,29 +182,29 @@ class ApkFile:
             return self.common_k_v.get('versionName', '')
 
     def get_file(self, fname: bytes) -> bytes:
-        '''
+        """
         通过文件名获取文件，文件名需要转换为bytes
-        '''
+        """
         return self.zip.get_file(fname)
 
     def get_manifest(self) -> str:
-        '''
+        """
         获取xml格式的manifest文件
-        '''
+        """
         return self.manifest.get_xml_str()
 
     def get_resources(self, res_id: int) -> list:
-        '''
+        """
         输入资源id, 如 0x7f100010
-        return: 
+        return:
             [(key,value), (key,value)...]
-        '''
+        """
         return self.resources.get_resources(res_id)
 
     def unzip(self, out_path):
-        '''
+        """
         解压apk中的全部文件
-        '''
+        """
         zip_file = self.zip
         for fname in zip_file.cds.keys():
             out_fname = os.path.join(out_path.encode('utf-8'), fname)
@@ -219,7 +219,7 @@ class ApkFile:
                 pass
 
     def re_zip(self, tmp_path: str, out_path: str, quiet: bool = True):
-        '''
+        """
         解压apk文件，再重新zip打包，某些apk可能有较复杂对抗，
         无法直接用jeb等工具打开，可以用此方法重打包后再用jeb等其他分析工具分析
         **此功能调用系统的zip命令进行打包，没有重签名**
@@ -227,7 +227,7 @@ class ApkFile:
         params:
             tmp_path: 解压用的临时文件夹
             out_path: 最终输出的文件名
-        '''
+        """
 
         self.unzip(tmp_path)
         if quiet:
