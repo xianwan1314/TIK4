@@ -94,6 +94,8 @@ def rmdire(path):
             shutil.rmtree(path)
         except PermissionError:
             ywarn("无法删除文件夹，权限不足")
+        else:
+            ysuc("删除成功！")
 
 
 if os.name == 'posix' and os.geteuid() == 0:
@@ -518,7 +520,6 @@ class Tool:
                 if op in projects.keys():
                     if input(f"  确认删除{projects[op]}？[1/0]") == '1':
                         rmdire(o_path.join(LOCALDIR, projects[op]))
-                        ysuc("删除成功！")
                     else:
                         ywarn("取消删除")
         elif op_pro == '0':
