@@ -272,7 +272,7 @@ class ZipFile:
         # 从后往前读取第一个长度满足条件的文件尾
         try:
             end_len = 0
-            while (end_len < 22):
+            while end_len < 22:
                 if end_len != 0:
                     data = data[:-end_len]
                 ecd_start = data.rfind(END_CENTDIR_TAG)
@@ -288,7 +288,7 @@ class ZipFile:
         cd_count = 0
         offset = 0
         try:
-            while (cd_count < self.ecd.entries_num_all):
+            while cd_count < self.ecd.entries_num_all:
                 cd_count += 1
                 tmp_cd = CentralDirectory(data, offset)
                 offset += tmp_cd.fname_len + tmp_cd.extra_field_len \

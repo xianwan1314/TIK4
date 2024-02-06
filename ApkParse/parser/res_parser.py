@@ -561,7 +561,7 @@ class ResTableEntry:
          self.flag,
          self.key_str_id) = struct.unpack("<2HI", buff[offset: offset + 8])
 
-        if (self.flag & self.FLAG_COMPLEX):  # 逆向apk一般用不到这个数据
+        if self.flag & self.FLAG_COMPLEX:  # 逆向apk一般用不到这个数据
             (self.ref_parant,
              self.count) = struct.unpack("<2I", buff[offset + 8: offset + 16])
 
@@ -613,7 +613,7 @@ class ResTablePackage(ResChunkHeader):
         self.tp_types: Dict[int, List[ResTableType]] = {}
 
         self.ptr = self.key_str_offset + self.key_str_pool.size
-        while (self.ptr < self.size):
+        while self.ptr < self.size:
             next_chunk_type = struct.unpack("<H", self.buff[self.ptr: self.ptr + 2])[0]
             # print(self.ptr, next_chunk_type)
             if next_chunk_type == RES_TABLE_TYPE_SPEC_TYPE:
@@ -721,14 +721,14 @@ class Axml(ResChunkHeader):
         self.node_ptr = None
         first_tag = ""
         count = 0
-        while (self.ptr < self.size):
+        while self.ptr < self.size:
             next_chunk_type = struct.unpack("<H", self.buff[self.ptr: self.ptr + 2])[0]
 
             # 出现频率高的类型往前放，提高效率
             if next_chunk_type == RES_XML_START_ELEMENT_TYPE:
                 tmp = StartElement(self.buff[self.ptr:])
                 tmp_node = self._create_node(tmp)
-                if tmp_node == None:
+                if tmp_node is None:
                     self._ptr_add(tmp.size)
                     continue
                 if count == 0:  # first_node
@@ -890,7 +890,7 @@ class Arsc(ResChunkHeader):
         self.string_pool: StringPool = None
         self.table_packages: Dict[int, ResTablePackage] = {}
 
-        while (self.ptr < self.size):
+        while self.ptr < self.size:
             next_chunk_type = struct.unpack("<H", self.buff[self.ptr: self.ptr + 2])[0]
 
             if next_chunk_type == RES_STRING_POOL_TYPE:
@@ -898,7 +898,7 @@ class Arsc(ResChunkHeader):
                 self._ptr_add(self.string_pool.size)
             elif next_chunk_type == RES_TABLE_PACKAGE_TYPE:
                 tmp_tp = ResTablePackage(self.buff[self.ptr:], self.string_pool)
-                if (not self.table_packages.get(tmp_tp.id, None)):  # 不覆盖之前获取到的包，以第一个获取到的为准
+                if not self.table_packages.get(tmp_tp.id, None):  # 不覆盖之前获取到的包，以第一个获取到的为准
                     self.table_packages[tmp_tp.id] = tmp_tp
                 self._ptr_add(tmp_tp.size)
             else:
