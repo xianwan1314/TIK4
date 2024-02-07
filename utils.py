@@ -20,6 +20,7 @@ import sparse_img
 from os import getcwd
 import platform as plat
 from lpunpack import SparseImage
+
 DataImage = blockimgdiff.DataImage
 # -----
 # ====================================================
@@ -127,7 +128,8 @@ class dbkxyt:
                         lines.insert(add_line,
                                      'package_extract_zstd "images/{}.zst" "/dev/block/by-name/{}"\n'.format(t, t[:-4]))
                     else:
-                        lines.insert(add_line, 'package_extract_file "images/{}" "/dev/block/by-name/{}"\n'.format(t, t[:-4]))
+                        lines.insert(add_line,
+                                     'package_extract_file "images/{}" "/dev/block/by-name/{}"\n'.format(t, t[:-4]))
             for t in os.listdir(dir_):
                 if not t.startswith("preloader_") and not os.path.isdir(dir_ + t) and t.endswith('.img'):
                     print("Add Flash method {} to update-binary".format(t))
@@ -137,7 +139,8 @@ class dbkxyt:
                         lines.insert(add_line,
                                      'package_extract_zstd "images/{}.zst" "/dev/block/by-name/{}"\n'.format(t, t[:-4]))
                     else:
-                        lines.insert(add_line, 'package_extract_file "images/{}" "/dev/block/by-name/{}"\n'.format(t, t[:-4]))
+                        lines.insert(add_line,
+                                     'package_extract_file "images/{}" "/dev/block/by-name/{}"\n'.format(t, t[:-4]))
                         move(os.path.join(dir_, t), os.path.join(dir_ + "images", t))
             script.seek(0)
             script.truncate()
@@ -432,14 +435,6 @@ def findfolder(dir__, folder_name):
 
 
 # ----CLASSES
-class jzxs(object):
-    def __init__(self, master):
-        self.master = master
-        self.set()
-
-    def set(self):
-        self.master.geometry('+{}+{}'.format(int(self.master.winfo_screenwidth() / 2 - self.master.winfo_width() / 2),
-                                             int(self.master.winfo_screenheight() / 2 - self.master.winfo_height() / 2)))
 
 
 class vbpatch:
