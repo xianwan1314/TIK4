@@ -588,15 +588,11 @@ class Tool:
         cls()
         print(" \n\033[31m>定制菜单 \033[0m\n")
         print(f"  项目：{self.pro}\n")
-        print('\033[33m    0> 返回上级     1> 应用精简\033[0m\n')
-        print('\033[36m    2> 面具修补     3> 暂定\033[0m\n')
+        print('\033[33m    0> 返回上级     1> 面具修补\033[0m\n')
         op_menu = input("    请输入编号: ")
         if op_menu == '0':
             return
         elif op_menu == '1':
-            if sys.version_info.major == 3 and not sys.version_info.minor > 12:
-                self.sim_app()
-        elif op_menu == '2':
             self.magisk_patch()
         else:
             ywarn('   Input error!')
@@ -643,93 +639,6 @@ class Tool:
             ywarn('Input Error!')
         input("任意按钮继续")
         self.magisk_patch()
-
-    def sim_app(self):
-        cls()
-        dir_app = {}
-        added = []
-        cs = 0
-        project = LOCALDIR + os.sep + self.pro
-        print(" \n\033[31m>应用精简 \033[0m\n")
-        print(f"  项目：{self.pro}\n请选择带APK的文件夹")
-        for root, dirs, files in os.walk(project):
-            for d in dirs:
-                path = os.path.join(root, d)
-                for i in os.listdir(str(path)):
-                    if os.path.isfile(os.path.join(str(path), i, i + '.apk')):
-                        if str(path) in added:
-                            continue
-                        else:
-                            added.append(str(path))
-                        cs += 1
-                        dir_app[str(cs)] = path
-                        print(f'\033[33m[{cs}]\033[0m--\033[94m[{path.replace(project, "")}]\033[0m')
-        print("\033[33m-------------------------------\033[0m")
-        print("\033[33m    [00] 返回\033[0m\n")
-        added.clear()
-        op_menu = input("    请输入编号: ")
-        if op_menu == '00':
-            return
-        elif op_menu in dir_app.keys():
-            self.sim_app_2(dir_app[op_menu])
-        else:
-            ywarn('Input Error!')
-        input("任意按钮继续")
-        self.sim_app()
-
-    def sim_app_2(self, app_path):
-        cls()
-        app = {}
-        cs = 0
-        project = LOCALDIR + os.sep + self.pro
-        print(" \n\033[31m>应用精简 \033[0m\n")
-        print(f"  项目：{self.pro}\n")
-        for root, dirs, files in os.walk(app_path):
-            for f in files:
-                with Console().status("[red]正在读取...[/]"):
-                    if f.endswith('.apk'):
-                        path = os.path.join(root, f)
-                        try:
-                            apk = ApkFile(path)
-                        except KeyError:
-                            continue
-                        else:
-                            cs += 1
-                            apkname = apk.get_app_name()
-                            app[str(cs)] = (path, apkname, apk.get_package())
-                            path = path.replace(project, '').replace('\\', '/')
-                            print(
-                                f'\033[33m[{cs}]\033[0m--\033[94m[{apkname if apkname else "None"}]:{apk.get_package()}\n    \033[0m\033[35m({path})\033[0m')
-                        del apk
-        print("\033[33m-------------------------------\033[0m")
-        print(f"  --共读取了\033[32m{cs}\033[0m个APK。--")
-        print("\033[33m  [01] 移除 [00] 返回\033[0m\n")
-        op_menu = input("    请输入编号: ")
-        if op_menu == '00':
-            return
-        elif op_menu == '01':
-            op_menu = input("输入你想精简的序号[空格分割]:")
-            if op_menu.isdigit() and op_menu in app.keys():
-                print(f"正在精简{app[op_menu][1:]}")
-                rmdire(os.path.dirname(app[op_menu][0]))
-            elif ' ' in op_menu:
-                for u in op_menu.split():
-                    if u in app.keys():
-                        print(f"正在精简{app[u][1:]}")
-                        rmdire(os.path.dirname(app[u][0]))
-        elif op_menu in app.keys():
-            print(f"\033[33m如何操作：{app[op_menu]}\033[0m?")
-            print("\033[33m  [01] 移除 [00] 返回\033[0m\n")
-            op_men = input("    请输入编号: ")
-            if op_men == '00':
-                ...
-            elif op_men == '01':
-                print(f"正在精简{app[op_menu][1:]}")
-                rmdire(os.path.dirname(app[op_menu][0]))
-        else:
-            ywarn('Input Error!')
-        input("任意按钮继续")
-        self.sim_app_2(app_path)
 
     def hczip(self):
         cls()
