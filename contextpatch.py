@@ -3,7 +3,17 @@
 import os
 from difflib import SequenceMatcher
 from re import escape
-fix_permission = {"/vendor/bin/hw/android.hardware.wifi@1.0": "u:object_r:hal_wifi_default_exec:s0"}
+
+fix_permission = {
+    "android.hardware.wifi": "u:object_r:hal_wifi_default_exec:s0",
+    "bin/idmap": "u:object_r:idmap_exec:s0",
+    "bin/fsck": "u:object_r:fsck_exec:s0",
+    "bin/e2fsck": "u:object_r:fsck_exec:s0",
+    "bin/logcat": "u:object_r:logcat_exec:s0",
+    "system/bin": "u:object_r:system_file:s0",
+    "/system/bin/init":	"u:object_r:init_exec:s0",
+    r"/lost\+found": "u:object_r:rootfs:s0"
+}
 
 
 def scan_context(file) -> dict:  # 读取context文件返回一个字典
@@ -35,17 +45,14 @@ def str_to_selinux(string: str):
 
 def context_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
     new_fs = {}
+    # 定义已修补过的 避免重复修补
     r_new_fs = {}
     add_new = 0
-    permission_d = None
     print("ContextPatcher: Load origin %d" % (len(fs_file.keys())) + " entries")
-    try:
-        permission_d = fs_file.get(list(fs_file)[5])
-    except IndexError:
-        ...
-    if not permission_d:
-        permission_d = [f'u:object_r:{os.path.basename(dir_path)}_file:s0']
+    # 定义默认SeLinux标签
+    permission_d = [f'u:object_r:{os.path.basename(dir_path)}_file:s0']
     for i in scan_dir(os.path.abspath(dir_path)):
+        # 把不可打印字符替换为*
         if not i.isprintable():
             tmp = ''
             for c in i:
@@ -55,15 +62,19 @@ def context_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
             i = i.replace(' ', '*')
         i = str_to_selinux(i)
         if fs_file.get(i):
+            # 如果存在直接使用默认的
             new_fs[i] = fs_file[i]
         else:
-            permission = permission_d
+            permission = None
             if r_new_fs.get(i):
                 continue
+            # 确认i不为空
             if i:
-                if i in fix_permission.keys():
-                    permission = fix_permission[i]
-                else:
+                # 搜索已定义的权限
+                for f in fix_permission.keys():
+                    if f in i:
+                        permission = fix_permission[f]
+                if not permission:
                     for e in fs_file.keys():
                         if SequenceMatcher(None, (path := os.path.dirname(i)), e).quick_ratio() >= 0.85:
                             if e == path:
@@ -72,7 +83,7 @@ def context_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
                             break
                         else:
                             permission = permission_d
-            print(f"ADD [{i} {permission}]")
+            print(f"ADD [{i} {permission}], May Not Right")
             add_new += 1
             r_new_fs[i] = permission
             new_fs[i] = permission
