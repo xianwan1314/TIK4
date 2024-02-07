@@ -12,9 +12,6 @@ from argparse import Namespace
 from configparser import ConfigParser
 from io import BytesIO
 from os import path as o_path
-
-if sys.version_info.major == 3 and not sys.version_info.minor > 12:
-    from ApkParse.main import ApkFile
 import banner
 from Magisk import Magisk_patch
 import os
