@@ -1285,8 +1285,10 @@ def undtb(project, infile):
     for i in track(os.listdir(dtbdir + os.sep + "dtb_files")):
         if i.endswith('.dtb'):
             name = i.split('.')[0]
+            dtb = os.path.join(dtbdir, 'dtb_files', name+".dtb")
+            dts = os.path.join(dtbdir, 'dtb_files', name + ".dts")
             call(
-                f'dtc -@ -I dtb -O dts {dtbdir + os.sep + "dtb_files" + os.sep + name + ".dtb"} -o {dtbdir + os.sep + "dtb_files" + os.sep + name + ".dts"}',
+                f'dtc -@ -I dtb -O dts {dtb} -o {dts}',
                 out=1)
     open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile).split(".")[0]).close()
     ysuc("反编译完成!")
