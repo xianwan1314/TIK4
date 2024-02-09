@@ -181,7 +181,7 @@ class upgrade:
             if data.get('version', settings.version) != settings.version:
                 print(f'\033[31m {banner.banner1} \033[0m')
                 print(
-                    f"\033[0;32;40m发现新版本：\033[0m\033[0;36;40m{settings.version} --> {data.get('version', settings.version)}\033[0m")
+                    f"\033[0;32;40m发现新版本：\033[0m\033[0;36;40m{settings.version} --> {data.get('version')}\033[0m")
                 print(f"\033[0;32;40m更新日志：\n\033[0m\033[0;36;40m{data.get('log', '1.Fix Some Bugs')}\033[0m")
                 try:
                     link = data['link'][plat.system()][plat.machine()]
@@ -773,15 +773,16 @@ def subbed(project):
         return
     elif op_pro.isdigit():
         if int(op_pro) in mysubs.keys():
-            if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.sh"):
-                if os.path.exists(binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.json"):
+            plugin_path = os.path.join(binner, 'subs', mysubs[int(op_pro)])
+            if os.path.exists(plugin_path + os.sep + "main.sh"):
+                if os.path.exists(plugin_path + os.sep + "main.json"):
                     gavs, value = plug_parse(
-                        binner + os.sep + "subs" + os.sep + mysubs[int(op_pro)] + os.sep + "main.json")
+                        os.path.join(plugin_path, "main.json"))
                     gen = gen_sh_engine(project, gavs, value)
                 else:
                     gen = gen_sh_engine(project)
                 call(
-                    f'busybox ash {gen} {os.path.join(binner, "subs", mysubs[int(op_pro)], "main.sh").replace(os.sep, "/")}')
+                    f'busybox ash {gen} {os.path.join(plugin_path, "main.sh").replace(os.sep, "/")}')
                 f_remove(gen)
             else:
                 ywarn(f"{mysubs[int(op_pro)]}为环境插件，不可运行！")
