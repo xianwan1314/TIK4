@@ -1331,7 +1331,8 @@ def undtbo(project, infile):
         if dtbo_files.startswith('dtbo.'):
             dts_files = dtbo_files.replace("dtbo", 'dts')
             yecho(f"正在反编译{dtbo_files}为{dts_files}")
-            if call(f'dtc -@ -I "dtb" -O "dts" {dtbodir + os.sep + "dtbo_files" + os.sep + dtbo_files} -o "{dtbodir + os.sep + "dts_files" + os.sep + dts_files}"',
+            dtbofiles = dtbodir + os.sep + "dtbo_files" + os.sep + dtbo_files
+            if call(f'dtc -@ -I "dtb" -O "dts" {dtbofiles} -o "{dtbodir + os.sep + "dts_files" + os.sep + dts_files}"',
                     out=1) != 0:
                 ywarn(f"反编译{dtbo_files}失败！")
     ysuc("完成！")
@@ -1347,8 +1348,9 @@ def makedtbo(sf, project):
     for dts_files in os.listdir(dtbodir + os.sep + 'dts_files'):
         new_dtbo_files = dts_files.replace('dts', 'dtbo')
         yecho(f"正在回编译{dts_files}为{new_dtbo_files}")
+        dtb_ = dtbodir + os.sep + "dts_files" + os.sep + dts_files
         call(
-            f'dtc -@ -I "dts" -O "dtb" {dtbodir + os.sep + "dts_files" + os.sep + dts_files} -o {dtbodir + os.sep + "new_dtbo_files" + os.sep + new_dtbo_files}',
+            f'dtc -@ -I "dts" -O "dtb" {dtb_} -o {dtbodir + os.sep + "new_dtbo_files" + os.sep + new_dtbo_files}',
             out=1)
     yecho("正在生成dtbo.img...")
     list_ = []
