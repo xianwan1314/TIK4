@@ -1302,7 +1302,8 @@ def makedtb(sf, project):
     for dts_files in os.listdir(dtbdir + os.sep + "dts_files"):
         new_dtb_files = dts_files.split('.')[0]
         yecho(f"正在回编译{dts_files}为{new_dtb_files}.dtb")
-        if call(f'dtc -@ -I "dts" -O "dtb" "{dtbdir + os.sep + "dts_files" + os.sep + dts_files}" -o "{dtbdir + os.sep}new_dtb_files{os.sep}{new_dtb_files}.dtb"',
+        dtb_ = dtbdir + os.sep + "dts_files" + os.sep + dts_files
+        if call(f'dtc -@ -I "dts" -O "dtb" "{dtb_}" -o "{dtbdir + os.sep}new_dtb_files{os.sep}{new_dtb_files}.dtb"',
                 out=1) != 0:
             ywarn("回编译dtb失败")
     with open(project + os.sep + "TI_out" + os.sep + sf, 'wb') as sff:
