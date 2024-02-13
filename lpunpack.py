@@ -620,19 +620,6 @@ class SparseImage:
 
         return self._fd.read(chunk_data_size)
 
-    @staticmethod
-    def split(num):
-        block = 10000000
-        while True:
-            if num > block:
-                yield struct.pack("B", 0) * block
-                num -= block
-            else:
-                if num > 0:
-                    return struct.pack("B", 0) * num
-                else:
-                    break
-
     def unsparse(self):
         if not self.header:
             self._fd.seek(0)
@@ -660,31 +647,19 @@ class SparseImage:
                     if chunk_header.chunk_type == 0xCAC2:
                         data = self._read_data(chunk_data_size)
                         len_data = sector_size << 9
-                        try:
-                            out.write(struct.pack("B", 0) * len_data)
-                        except (BaseException, Exception):
-                            for i in self.split(len_data):
-                                out.write(i)
+                        out.write(struct.pack("B", 0) * len_data)
                         output_len += len(data)
                         sector_base += sector_size
                     else:
                         if chunk_header.chunk_type == 0xCAC3:
                             data = self._read_data(chunk_data_size)
                             len_data = sector_size << 9
-                            try:
-                                out.write(struct.pack("B", 0) * len_data)
-                            except (BaseException, Exception):
-                                for i in self.split(len_data):
-                                    out.write(i)
+                            out.write(struct.pack("B", 0) * len_data)
                             output_len += len(data)
                             sector_base += sector_size
                         else:
                             len_data = sector_size << 9
-                            try:
-                                out.write(struct.pack("B", 0) * len_data)
-                            except (BaseException, Exception):
-                                for i in self.split(len_data):
-                                    out.write(i)
+                            out.write(struct.pack("B", 0) * len_data)
                             sector_base += sector_size
                 chunks -= 1
         return unsparse_file
