@@ -23,8 +23,8 @@ def scan_context(file) -> dict:  # 读取context文件返回一个字典
             filepath, *other = i.strip().split()
             context[filepath] = other
             if len(other) > 1:
-                print(f"[Warn] {i[0]} has too much data.Automatic processing.")
-                context[filepath] = other.replace(" ", '')
+                print(f"[Warn] {i[0]} has too much data.Skip.")
+                del context[filepath]
     return context
 
 
@@ -74,7 +74,7 @@ def context_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
                 # 搜索已定义的权限
                 for f in fix_permission.keys():
                     if f in i:
-                        permission = fix_permission[f]
+                        permission = [fix_permission[f]]
                 if not permission:
                     for e in fs_file.keys():
                         if SequenceMatcher(None, (path := os.path.dirname(i)), e).quick_ratio() >= 0.85:
