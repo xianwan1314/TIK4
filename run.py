@@ -95,13 +95,6 @@ def rmdire(path):
             ysuc("删除成功！")
 
 
-if os.name == 'posix' and os.geteuid() == 0:
-    try:
-        os.chmod(binner, int('7777', 8))
-    except (Exception, BaseException):
-        ...
-
-
 def error(code, message):
     table = Table()
     table.add_column(f'[red]ERROR:{code}', justify="center")
@@ -1285,7 +1278,7 @@ def undtb(project, infile):
     for i in track(os.listdir(dtbdir + os.sep + "dtb_files")):
         if i.endswith('.dtb'):
             name = i.split('.')[0]
-            dtb = os.path.join(dtbdir, 'dtb_files', name+".dtb")
+            dtb = os.path.join(dtbdir, 'dtb_files', name + ".dtb")
             dts = os.path.join(dtbdir, 'dtb_files', name + ".dts")
             call(
                 f'dtc -@ -I dtb -O dts {dtb} -o {dts}',
