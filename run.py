@@ -49,6 +49,8 @@ binner = o_path.join(LOCALDIR, "bin")
 setfile = o_path.join(LOCALDIR, "bin", "settings.json")
 platform = plat.machine()
 ostype = plat.system()
+if os.getenv('PREFIX') == "/data/data/com.termux/files/usr":
+    ostype = 'Android'
 ebinner = o_path.join(binner, ostype, platform) + os.sep
 temp = o_path.join(binner, 'temp')
 
