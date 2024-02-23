@@ -19,10 +19,6 @@ class Ext4Error(Exception):
     ...
 
 
-class BlockMapError(Ext4Error):
-    ...
-
-
 class EndOfStreamError(Ext4Error):
     ...
 
@@ -512,6 +508,10 @@ class Volume:
         return self.superblock.s_blocks_count
 
     @property
+    def get_mount_point(self):
+        return self.superblock.s_last_mounted.decode()
+
+    @property
     def get_info_list(self):
         data = [
             ['Filesystem magic number', hex(self.superblock.s_magic).upper()],
@@ -855,11 +855,12 @@ class Inode:
                     # Perhaps you think this code is a bit foolish, but that's all others can do
                     print(f"Invalid magic value in xattrs block header at offset 0x{xattrs_block_start:X} of "
                           f"inode {self.inode_idx:d}: 0x{xattrs_header.h_magic} (expected 0xEA020000)")
+                    return '', ''
 
                 if xattrs_header.h_blocks != 1:
-                    print(
-                        f"Invalid number of xattr blocks at offset 0x{xattrs_block_start:X} "
-                        f"of inode {self.inode_idx:d}: {xattrs_header.h_blocks:d} (expected 1)")
+                    print(f"Invalid number of xattr blocks at offset 0x{xattrs_block_start:X} "
+                          f"of inode {self.inode_idx:d}: {xattrs_header.h_blocks:d} (expected 1)")
+                    return '', ''
 
             offset = 4 * ((ctypes.sizeof(
                 ext4_xattr_header) + 3) // 4)

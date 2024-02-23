@@ -13,6 +13,7 @@ from configparser import ConfigParser
 from io import BytesIO
 from os import path as o_path
 import banner
+import ext4
 from Magisk import Magisk_patch
 import os
 
@@ -1700,6 +1701,11 @@ def unpack(file, info, project):
         filepath = os.path.dirname(file)
         unpack(os.path.join(filepath, file), gettype(os.path.join(filepath, file)), project)
     elif info == 'ext':
+        with open(file, 'rb+') as e:
+            mount = ext4.Volume(e).get_mount_point
+            if mount[:1] == '/':
+                mount = mount[1:]
+            parts[mount] = 'ext'
         with Console().status(f"[yellow]正在提取{os.path.basename(file)}[/]"):
             imgextractor.Extractor().main(file, project + os.sep + os.path.basename(file).split('.')[0], project)
         try:
