@@ -5,6 +5,8 @@ from difflib import SequenceMatcher
 from re import escape
 
 fix_permission = {
+    "system/app/*/.apk": "u:object_r:system_file:s0",
+    "data-app/.apk": "u:object_r:system_file:s0",
     "android.hardware.wifi": "u:object_r:hal_wifi_default_exec:s0",
     "bin/idmap": "u:object_r:idmap_exec:s0",
     "bin/fsck": "u:object_r:fsck_exec:s0",
@@ -52,7 +54,7 @@ def context_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
     add_new = 0
     print("ContextPatcher: Load origin %d" % (len(fs_file.keys())) + " entries")
     # 定义默认SeLinux标签
-    permission_d = [f'u:object_r:{os.path.basename(dir_path)}_file:s0']
+    permission_d = [f'u:object_r:{os.path.basename(dir_path).replace("_a", "")}_file:s0']
     for i in scan_dir(os.path.abspath(dir_path)):
         # 把不可打印字符替换为*
         if not i.isprintable():
@@ -78,7 +80,7 @@ def context_patch(fs_file, dir_path) -> tuple:  # 接收两个字典对比
                         permission = [fix_permission[f]]
                 if not permission:
                     for e in fs_file.keys():
-                        if SequenceMatcher(None, (path := os.path.dirname(i)), e).quick_ratio() >= 0.85:
+                        if SequenceMatcher(None, (path := os.path.dirname(i)), e).quick_ratio() >= 0.75:
                             if e == path:
                                 continue
                             permission = fs_file[e]

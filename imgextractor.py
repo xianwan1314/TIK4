@@ -92,6 +92,9 @@ class Extractor:
                     continue
                 entry_inode = root_inode.volume.get_inode(entry_inode_idx, entry_type)
                 entry_inode_path = root_path + '/' + entry_name
+                if entry_inode_path[-1:] == '/' and not entry_inode.is_dir:
+                    continue
+
                 mode = self.__get_perm(entry_inode.mode_str)
                 uid = entry_inode.inode.i_uid
                 gid = entry_inode.inode.i_gid
@@ -258,6 +261,14 @@ class Extractor:
         self.OUTPUT_IMAGE_FILE = (os.path.realpath(os.path.dirname(target)) + os.sep) + os.path.basename(target)
         self.FileName = self.__out_name(os.path.basename(target), out=0)
         self.CONFING_DIR = work + os.sep + 'config'
+        with open(self.OUTPUT_IMAGE_FILE, 'rb+') as file:
+            mount = ext4.Volume(file).get_mount_point
+            if mount[:1] == '/':
+                mount = mount[1:]
+            if self.__out_name(os.path.basename(output_dir)) != mount:
+                print(f"[N]:Your File Name Not Right , We will Extract {self.OUTPUT_IMAGE_FILE} to {mount}")
+                self.EXTRACT_DIR = os.path.realpath(os.path.dirname(output_dir)) + os.sep + mount
+                self.FileName = mount
         if target_type == 's_img':
             simg2img(target)
             target_type = 'img'
