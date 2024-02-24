@@ -1705,7 +1705,8 @@ def unpack(file, info, project):
             mount = ext4.Volume(e).get_mount_point
             if mount[:1] == '/':
                 mount = mount[1:]
-            parts[mount] = 'ext'
+            if mount:
+                parts[mount] = 'ext'
         with Console().status(f"[yellow]正在提取{os.path.basename(file)}[/]"):
             imgextractor.Extractor().main(file, project + os.sep + os.path.basename(file).split('.')[0], project)
         try:
