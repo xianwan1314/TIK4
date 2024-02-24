@@ -28,7 +28,7 @@
 
 【 **软件架构  同时支持** 】
 
-1. 手机 Termux Proot Ubuntu 20.04及以上版本 Arm64[aarch64] 或者 <Linux Deploy> Chroot Ubuntu 20.04及以上版本 Arm64[aarch64] 【推荐chroot，效率更高】
+1. 手机 Termux  Arm64[aarch64] 原生支持 或者 [<Linux Deploy>/Termux] Chroot Ubuntu 20.04及以上版本 Arm64[aarch64] 【推荐chroot，效率更高】
 
 2. 虚拟机或实体机 Ubuntu 20.04及以上版本 x86_64[x64] 
 
