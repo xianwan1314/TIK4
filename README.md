@@ -52,6 +52,11 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
 1. Sakura
 2. Affggh
 3. Yeliqin666
+#### **支持系统**
+1. Android-(Termux) | ARM64
+2. Windows(7 AND NEWER) | AMD64 X86 ARM64
+3. Linux | ARM64 X86_64
+4. Macos | ARM64 X86_64
 ####  **安装教程** 
 
     git clone https://github.com/ColdWindScholar/TIK
