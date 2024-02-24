@@ -1,7 +1,8 @@
 ##  TIK4.0
 #### Powered By MIO-KITCHEN-ENVS
 ####  **介绍** 
-
+> [!CAUTION]
+> 免费软件， 未经允许禁止商用 | Free software, unauthorized commercial use prohibited
 
 1.  【 **TI Kitchen 4.0** 】 是一个永久开源的ROM工具箱，支持安卓全版本
 
