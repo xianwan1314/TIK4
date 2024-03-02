@@ -1705,6 +1705,9 @@ def unpack(file, info, project):
             mount = ext4.Volume(e).get_mount_point
             if mount[:1] == '/':
                 mount = mount[1:]
+            if '/' in mount:
+                mount = mount.split('/')
+                mount = mount[len(mount) - 1]
             if mount and os.path.basename(file).split('.')[0] != 'mi_ext':
                 parts[mount] = 'ext'
         with Console().status(f"[yellow]正在提取{os.path.basename(file)}[/]"):
