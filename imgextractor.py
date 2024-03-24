@@ -11,10 +11,15 @@ if os.name == 'nt':
 from timeit import default_timer as dti
 from utils import simg2img
 
+try:
+    from pycase import ensure_dir_case_sensitive
+except ImportError:
+    ensure_dir_case_sensitive = lambda *x: ...
+
 
 class Extractor:
     def __init__(self):
-        self.CONFING_DIR = None
+        self.CONFIG_DIR = None
         self.FileName = ""
         self.OUTPUT_IMAGE_FILE = ""
         self.EXTRACT_DIR = ""
@@ -121,7 +126,7 @@ class Extractor:
                         link_target = root_inode.volume.read(link_target_block * root_inode.volume.block_size,
                                                              entry_inode.inode.i_size).decode("utf8")
                 if tmp_path.find(' ', 1, len(tmp_path)) > 0:
-                    self.__append(tmp_path, os.path.join(self.CONFING_DIR, self.FileName + '_space.txt'))
+                    self.__append(tmp_path, os.path.join(self.CONFIG_DIR, self.FileName + '_space.txt'))
                     self.fs_config.append(
                         f"{tmp_path.replace(' ', '_')} {uid} {gid} {mode}{cap} {link_target}")
                 else:
@@ -133,6 +138,11 @@ class Extractor:
                         dir_target = dir_target[:-1]
                     if not os.path.isdir(dir_target):
                         os.makedirs(dir_target)
+                        if os.name == 'nt' and windll.shell32.IsUserAnAdmin():
+                            try:
+                                ensure_dir_case_sensitive(dir_target)
+                            except (Exception, BaseException):
+                                ...
                     if os.name == 'posix' and os.geteuid() == 0:
                         os.chmod(dir_target, int(mode, 8))
                         os.chown(dir_target, uid, gid)
@@ -143,7 +153,7 @@ class Extractor:
                         with open(file_target, 'wb') as out:
                             out.write(entry_inode.open_read().read())
                     except Exception and BaseException as e:
-                        print(f'[E] Cannot Write {file_target}, Because of {e}')
+                        print(f'[E] Cannot Write to {file_target}, Reason: {e}')
                     if os.name == 'posix' and os.geteuid() == 0:
                         os.chmod(file_target, int(mode, 8))
                         os.chown(file_target, uid, gid)
@@ -181,16 +191,16 @@ class Extractor:
                         finally:
                             ...
 
-        if not os.path.isdir(self.CONFING_DIR):
-            os.makedirs(self.CONFING_DIR)
-        self.__append(os.path.getsize(self.OUTPUT_IMAGE_FILE), self.CONFING_DIR + os.sep + self.FileName + '_size.txt')
+        if not os.path.isdir(self.CONFIG_DIR):
+            os.makedirs(self.CONFIG_DIR)
+        self.__append(os.path.getsize(self.OUTPUT_IMAGE_FILE), self.CONFIG_DIR + os.sep + self.FileName + '_size.txt')
         with open(self.OUTPUT_IMAGE_FILE, 'rb') as file:
             dir_r = self.FileName
             scan_dir(ext4.Volume(file).root)
             self.fs_config.insert(0, '/ 0 2000 0755' if dir_r == 'vendor' else '/ 0 0 0755')
             self.fs_config.insert(1, f'{dir_r} 0 2000 0755' if dir_r == 'vendor' else '/lost+found 0 0 0700')
             self.fs_config.insert(2 if dir_r == 'system' else 1, f'{dir_r} 0 0 0755')
-            self.__append('\n'.join(self.fs_config), self.CONFING_DIR + os.sep + self.FileName + '_fs_config')
+            self.__append('\n'.join(self.fs_config), self.CONFIG_DIR + os.sep + self.FileName + '_fs_config')
             p1 = p2 = 0
             if self.context:
                 self.context.sort()
@@ -207,7 +217,7 @@ class Extractor:
                         p2 = 1
                     if p1 == p2 == 1:
                         break
-                self.__append('\n'.join(self.context), self.CONFING_DIR + os.sep + self.FileName + "_file_contexts")
+                self.__append('\n'.join(self.context), self.CONFIG_DIR + os.sep + self.FileName + "_file_contexts")
 
     @staticmethod
     def fix_moto(input_file):
@@ -250,7 +260,9 @@ class Extractor:
             t = ext4.Volume(file)
             real_size = t.get_block_count * t.block_size
             if orig_size < real_size:
-                print(f"......Wrong Size!Fixing.......\nShould:{real_size}\nYours:{orig_size}")
+                print(
+                    f"......Your image is smaller than expected! Expanding the file.......\n"
+                    f"Expected:{real_size}\nGot:{orig_size}")
                 file.truncate(real_size)
 
     def main(self, target: str, output_dir: str, work: str, target_type: str = 'img'):
@@ -258,7 +270,7 @@ class Extractor:
             os.path.basename(output_dir))
         self.OUTPUT_IMAGE_FILE = (os.path.realpath(os.path.dirname(target)) + os.sep) + os.path.basename(target)
         self.FileName = self.__out_name(os.path.basename(target), out=0)
-        self.CONFING_DIR = work + os.sep + 'config'
+        self.CONFIG_DIR = work + os.sep + 'config'
         with open(self.OUTPUT_IMAGE_FILE, 'rb+') as file:
             mount = ext4.Volume(file).get_mount_point
             if mount[:1] == '/':
@@ -266,8 +278,11 @@ class Extractor:
             if '/' in mount:
                 mount = mount.split('/')
                 mount = mount[len(mount) - 1]
+            if [True for i in [".", "@", "#"] if i in mount]:
+                mount = ""
             if self.__out_name(os.path.basename(output_dir)) != mount and mount and self.FileName != 'mi_ext':
-                print(f"[N]:Your File Name Not Right , We will Extract {self.OUTPUT_IMAGE_FILE} to {mount}")
+                print(
+                    f"[N]:Filename appears to be wrong , We will Extract {self.OUTPUT_IMAGE_FILE} to {mount}")
                 self.EXTRACT_DIR = os.path.realpath(os.path.dirname(output_dir)) + os.sep + mount
                 self.FileName = mount
         if target_type == 's_img':
