@@ -1219,16 +1219,14 @@ def dboot(infile, orig):
             os.rename("ramdisk-new.cpio", "ramdisk.cpio")
         if comp == "cpio":
             flag = "-n"
-        ramdisk = True
     else:
-        ramdisk = False
+        os.chdir(infile)
     if call("magiskboot repack %s %s" % (flag, orig)) != 0:
         print("Pack boot Fail...")
         return
     else:
-        if ramdisk:
-            os.remove(orig)
-            os.rename(infile + os.sep + "new-boot.img", orig)
+        os.remove(orig)
+        os.rename(infile + os.sep + "new-boot.img", orig)
         os.chdir(LOCALDIR)
         try:
             rmdire(infile)
