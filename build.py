@@ -54,6 +54,10 @@ if os.name == 'nt':
         shutil.move(local + os.sep + "dist" + os.sep + "run.exe", local)
     if os.path.exists(local + os.sep + "bin" + os.sep + "Linux"):
         shutil.rmtree(local + os.sep + "bin" + os.sep + "Linux")
+    if os.path.exists(local + os.sep + "bin" + os.sep + "Android"):
+        shutil.rmtree(local + os.sep + "bin" + os.sep + "Android")
+    if os.path.exists(local + os.sep + "bin" + os.sep + "Darwin"):
+        shutil.rmtree(local + os.sep + "bin" + os.sep + "Darwin")
 elif os.name == 'posix':
     if os.path.exists(local + os.sep + "dist" + os.sep + "run"):
         shutil.move(local + os.sep + "dist" + os.sep + "run", local)
