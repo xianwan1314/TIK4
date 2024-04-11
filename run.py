@@ -1613,8 +1613,8 @@ def inpayload(supersize, project):
         txt.write(f"super_partition_groups={settings.super_group}\n")
         txt.write(f"qti_dynamic_partitions_size={supersize}\n")
         txt.write(f"qti_dynamic_partitions_partition_list={' '.join(super_list)}\n")
-    call(
-        f"delta_generator --out_file={out} {inparts} --dynamic_partition_info_file={os.path.join(project, 'payload', 'parts_info.txt')}")
+    os.system(
+        f"{ebinner}delta_generator --out_file={out} {inparts} --dynamic_partition_info_file={os.path.join(project, 'payload', 'parts_info.txt')}")
     LOGS("成功创建payload!") if call(
         f"delta_generator --in_file={out} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0 else LOGE(
         "创建payload失败！")
