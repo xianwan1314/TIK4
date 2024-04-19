@@ -544,6 +544,7 @@ class Tool:
             ywarn("  Input error!")
         input("任意按钮继续")
         self.main()
+
     @staticmethod
     def dis_avb(fstab):
         print(f"正在处理: {fstab}")
@@ -564,7 +565,8 @@ class Tool:
         if not os.path.exists(fstab):
             return
         with open(fstab, "r") as sf:
-            details = re.sub(",fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized+wrappedkey_v0", "", sf.read())
+            details = re.sub(",fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized+wrappedkey_v0", "",
+                             sf.read())
         details = re.sub(",fileencryption=aes-256-xts:aes-256-cts:v2+emmc_optimized+wrappedkey_v0", ",", details)
         details = re.sub(",fileencryption=aes-256-xts:aes-256-cts:v2", "", details)
         details = re.sub(",metadata_encryption=aes-256-xts:wrappedkey_v0", "", details)
