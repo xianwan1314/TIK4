@@ -625,14 +625,12 @@ class Tool:
             for root, dirs, files in os.walk(LOCALDIR + os.sep + self.pro):
                 for file in files:
                     if file.startswith("fstab."):
-                        fstab_path = os.path.join(root, file)
-                        self.dis_avb(fstab_path)
+                        self.dis_avb(os.path.join(root, file))
         elif op_menu == '3':
             for root, dirs, files in os.walk(LOCALDIR + os.sep + self.pro):
                 for file in files:
                     if file.startswith("fstab."):
-                        fstab_path = os.path.join(root, file)
-                        self.dis_data_encryption(fstab_path)
+                        self.dis_data_encryption(os.path.join(root, file))
         else:
             ywarn('   Input error!')
         input("任意按钮继续")
