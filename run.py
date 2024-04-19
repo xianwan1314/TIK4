@@ -544,6 +544,37 @@ class Tool:
             ywarn("  Input error!")
         input("任意按钮继续")
         self.main()
+    @staticmethod
+    def dis_avb(fstab):
+        print(f"正在处理: {fstab}")
+        if not os.path.exists(fstab):
+            return
+        with open(fstab, "r") as sf:
+            details = re.sub(",avb_keys=.*avbpubkey", "", sf.read())
+        details = re.sub(",avb=vbmeta_system", ",", details)
+        details = re.sub(",avb=vbmeta_vendor", "", details)
+        details = re.sub(",avb=vbmeta", "", details)
+        details = re.sub(",avb", "", details)
+        with open(fstab, "w") as tf:
+            tf.write(details)
+
+    @staticmethod
+    def dis_data_encryption(fstab):
+        print(f"正在处理: {fstab}")
+        if not os.path.exists(fstab):
+            return
+        with open(fstab, "r") as sf:
+            details = re.sub(",fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized+wrappedkey_v0", "", sf.read())
+        details = re.sub(",fileencryption=aes-256-xts:aes-256-cts:v2+emmc_optimized+wrappedkey_v0", ",", details)
+        details = re.sub(",fileencryption=aes-256-xts:aes-256-cts:v2", "", details)
+        details = re.sub(",metadata_encryption=aes-256-xts:wrappedkey_v0", "", details)
+        details = re.sub(",fileencryption=aes-256-xts:wrappedkey_v0", "", details)
+        details = re.sub(",metadata_encryption=aes-256-xts", "", details)
+        details = re.sub(",fileencryption=aes-256-xts", "", details)
+        details = re.sub(",fileencryption=ice", "", details)
+        details = re.sub('fileencryption', 'encryptable', details)
+        with open(fstab, "w") as tf:
+            tf.write(details)
 
     def project(self):
         project_dir = LOCALDIR + os.sep + self.pro
@@ -579,14 +610,27 @@ class Tool:
 
     def custom_rom(self):
         cls()
-        print(" \n\033[31m>定制菜单 \033[0m\n")
+        print(" \033[31m>定制菜单 \033[0m\n")
         print(f"  项目：{self.pro}\n")
-        print('\033[33m    0> 返回上级     1> 面具修补\033[0m\n')
+        print('\033[33m    0> 返回上级  1> 面具修补\033[0m\n')
+        print('\033[33m    2> 去除avb   3> 去除data加密\033[0m\n')
         op_menu = input("    请输入编号: ")
         if op_menu == '0':
             return
         elif op_menu == '1':
             self.magisk_patch()
+        elif op_menu == '2':
+            for root, dirs, files in os.walk(LOCALDIR + os.sep + self.pro):
+                for file in files:
+                    if file.startswith("fstab."):
+                        fstab_path = os.path.join(root, file)
+                        self.dis_avb(fstab_path)
+        elif op_menu == '3':
+            for root, dirs, files in os.walk(LOCALDIR + os.sep + self.pro):
+                for file in files:
+                    if file.startswith("fstab."):
+                        fstab_path = os.path.join(root, file)
+                        self.dis_data_encryption(fstab_path)
         else:
             ywarn('   Input error!')
         input("任意按钮继续")
