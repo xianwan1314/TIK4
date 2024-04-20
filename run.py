@@ -1440,9 +1440,7 @@ def inpacker(name, project, form, ftype, json_=None):
     size = img_size0 / int(settings.BLOCKSIZE)
     size = int(size)
     if ftype == 'erofs':
-        other_ = ''
-        if settings.erofs_old_kernel == '1':
-            other_ = '-E legacy-compress'
+        other_ = '-E legacy-compress' if settings.erofs_old_kernel == '1' else ''
         call(
             f'mkfs.erofs {other_} -z{settings.erofslim}  -T {utc} --mount-point=/{name} --fs-config-file={fs_config} --product-out={os.path.dirname(out_img)} --file-contexts={file_contexts} {out_img} {in_files}')
     elif ftype == 'f2fs':
