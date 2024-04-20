@@ -1781,7 +1781,7 @@ def unpack(file, info, project):
                        os.path.join(filepath, partname + ".new.dat"), os.path.join(filepath, partname + ".img"))
         unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
     elif info == 'erofs':
-        call(f'extract.erofs -i {os.path.abspath(file)} -o {project} -x ')
+        call(f'extract.erofs -i {os.path.abspath(file)} -o {project} -x')
     elif info == 'f2fs':
         call(f'extract.f2fs -o {project} {os.path.abspath(file)}')
     elif info == 'super':
