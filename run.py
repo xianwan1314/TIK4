@@ -1432,10 +1432,11 @@ def inpacker(name, project, form, ftype, json_=None):
     elif settings.diysize == '':
         img_size0 = dirsize(in_files, 1, 3, project + os.sep + "dynamic_partitions_op_list").rsize_v
     fspatch.main(in_files, fs_config)
-    if settings.context == 'true':
+    if settings.context == 'true' and os.path.exists(file_contexts):
         contextpatch.main(in_files, file_contexts)
+    if os.path.exists(file_contexts):
+        utils.qc(file_contexts)
     utils.qc(fs_config)
-    utils.qc(file_contexts)
     size = img_size0 / int(settings.BLOCKSIZE)
     size = int(size)
     if ftype == 'erofs':
@@ -1445,14 +1446,18 @@ def inpacker(name, project, form, ftype, json_=None):
         call(
             f'mkfs.erofs {other_} -z{settings.erofslim}  -T {utc} --mount-point=/{name} --fs-config-file={fs_config} --product-out={os.path.dirname(out_img)} --file-contexts={file_contexts} {out_img} {in_files}')
     else:
-        if settings.pack_e2 == '0':
-            call(
-                f'make_ext4fs -J -T {utc} -S {file_contexts} -l {img_size0} -C {fs_config} -L {name} -a {name} {out_img} {in_files}')
+        if os.path.exists(file_contexts):
+            if settings.pack_e2 == '0':
+                call(
+                    f'make_ext4fs -J -T {utc} -S {file_contexts} -l {img_size0} -C {fs_config} -L {name} -a {name} {out_img} {in_files}')
+            else:
+                call(
+                    f'mke2fs -O ^has_journal -L {name} -I 256 -M /{name} -m 0 -t ext4 -b {settings.BLOCKSIZE} {out_img} {size}')
+                call(
+                    f"e2fsdroid -e -T {utc} -S {file_contexts} -C {fs_config} -a /{name} -f {in_files} {out_img}")
         else:
             call(
-                f'mke2fs -O ^has_journal -L {name} -I 256 -M /{name} -m 0 -t ext4 -b {settings.BLOCKSIZE} {out_img} {size}')
-            call(
-                f"e2fsdroid -e -T {utc} -S {file_contexts} -C {fs_config} -a /{name} -f {in_files} {out_img}")
+                f'make_ext4fs -J -T {utc} -l {img_size0} -C {fs_config} -L {name} -a {name} {out_img} {in_files}')
     if settings.pack_sparse == '1' or form in ['dat', 'br']:
         call(f"img2simg {out_img} {out_img}.s")
         os.remove(out_img)
