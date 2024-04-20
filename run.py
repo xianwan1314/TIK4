@@ -1445,6 +1445,8 @@ def inpacker(name, project, form, ftype, json_=None):
             other_ = '-E legacy-compress'
         call(
             f'mkfs.erofs {other_} -z{settings.erofslim}  -T {utc} --mount-point=/{name} --fs-config-file={fs_config} --product-out={os.path.dirname(out_img)} --file-contexts={file_contexts} {out_img} {in_files}')
+    elif ftype == 'f2fs':
+        pass
     else:
         if os.path.exists(file_contexts):
             if settings.pack_e2 == '0':
@@ -1780,6 +1782,8 @@ def unpack(file, info, project):
         unpack(os.path.join(filepath, partname + ".img"), gettype(os.path.join(filepath, partname + ".img")), project)
     elif info == 'erofs':
         call(f'extract.erofs -i {os.path.abspath(file)} -o {project} -x ')
+    elif info == 'f2fs':
+        call(f'extract.f2fs -o {project} {os.path.abspath(file)}')
     elif info == 'super':
         lpunpack.unpack(os.path.abspath(file), project)
         for v in os.listdir(project):
