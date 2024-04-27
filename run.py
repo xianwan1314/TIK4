@@ -1667,7 +1667,7 @@ def inpayload(supersize, project):
     print("生成签名...")
     os.system(f'{ebinner}delta_generator -in_file={out} -signature_size=256 -out_hash_file={project + os.sep + "payload" + os.sep}payload_sig_file.bin -out_metadata_hash_file={project + os.sep + "payload" + os.sep}metadata_sig_file.bin')
     print("写入签名...")
-    os.system(f'{ebinner}delta_generator -in_file={out} -signature_size=256 -signature_file={project + os.sep + "payload" + os.sep}payload_sig_file.bin -metadata_signature_file={project + os.sep + "payload" + os.sep}metadata_sig_file.bin -out_file={project + os.sep + "TI_out" + os.sep + "payload" + os.sep + "payload.bin"}')
+    os.system(f'{ebinner}delta_generator -in_file={out} -signature_size=256 -metadata_signature_file={project + os.sep + "payload" + os.sep}metadata_sig_file.bin -out_file={project + os.sep + "TI_out" + os.sep + "payload" + os.sep + "payload.bin"}')
     if os.path.exists(out):
         os.remove(out)
     out = project + os.sep + 'TI_out' + os.sep + 'payload' + os.sep + 'payload.bin'
