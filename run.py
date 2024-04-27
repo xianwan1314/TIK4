@@ -1664,7 +1664,10 @@ def inpayload(supersize, project):
         txt.write(f"qti_dynamic_partitions_partition_list={' '.join(super_list)}\n")
     os.system(
         f"{ebinner}delta_generator --out_file={out} {inparts} --dynamic_partition_info_file={os.path.join(project, 'payload', 'parts_info.txt')}")
-    LOGS("成功创建payload!") if call(
+    if not os.path.exists(out):
+        input("错误 ，未写入文件")
+    else:
+        LOGS("成功创建payload!") if call(
         f"delta_generator --in_file={out} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0 else LOGE(
         "创建payload失败！")
     input("任意按钮继续")
