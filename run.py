@@ -1664,7 +1664,9 @@ def inpayload(supersize, project):
         txt.write(f"qti_dynamic_partitions_partition_list={' '.join(super_list)}\n")
     os.system(
         f"{ebinner}delta_generator --out_file={out} {inparts} --dynamic_partition_info_file={os.path.join(project, 'payload', 'parts_info.txt')}")
+    print("生成签名...")
     os.system(f'{ebinner}delta_generator -in_file={out} -signature_size=256 -out_hash_file={project + os.sep + "payload" + os.sep}payload_sig_file.bin -out_metadata_hash_file={project + os.sep + "payload" + os.sep}metadata_sig_file.bin')
+    print("写入签名...")
     os.system(f'{ebinner}delta_generator -in_file={out} -signature_size=256 -signature_file={project + os.sep + "payload" + os.sep}payload_sig_file.bin -metadata_signature_file={project + os.sep + "payload" + os.sep}metadata_sig_file.bin -out_file={project + os.sep + "TI_out" + os.sep + "payload" + os.sep + "payload.bin"}')
     if os.path.exists(out):
         os.remove(out)
