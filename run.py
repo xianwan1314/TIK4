@@ -110,6 +110,9 @@ def error(exception_type, exception, traceback):
     sys.exit(1)
 
 
+sys.excepthook = error
+
+
 def sha1(file_path):
     if os.path.exists(file_path):
         with open(file_path, 'rb') as f:
@@ -1669,8 +1672,8 @@ def inpayload(supersize, project):
         input("错误 ，未写入文件")
     else:
         LOGS("成功创建payload!") if call(
-        f"delta_generator --in_file={out} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0 else LOGE(
-        "创建payload失败！")
+            f"delta_generator --in_file={out} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0 else LOGE(
+            "创建payload失败！")
     input("任意按钮继续")
 
 
@@ -1853,5 +1856,4 @@ def autounpack(project):
 
 
 if __name__ == '__main__':
-    sys.excepthook = error
     Tool().main()
