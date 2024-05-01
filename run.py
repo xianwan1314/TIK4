@@ -119,7 +119,7 @@ def sha1(file_path):
 
 
 if not os.path.exists(ebinner):
-    error(1, "Binary not found\nMay Not Support Your Device?")
+    raise Exception("Binary not found\nMay Not Support Your Device?")
 try:
     if os.path.basename(sys.argv[0]) == f'run_new{str() if os.name == "posix" else ".exe"}':
         os.remove(os.path.join(LOCALDIR, f'run{str() if os.name == "posix" else ".exe"}'))
