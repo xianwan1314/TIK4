@@ -1295,7 +1295,7 @@ def unpackboot(file, project):
         return
     if os.access(project + os.sep + name + os.sep + "ramdisk.cpio", os.F_OK):
         comp = gettype(project + os.sep + name + os.sep + "ramdisk.cpio")
-        print("Ramdisk is %s" % comp)
+        print(f"Ramdisk is {comp}")
         with open(project + os.sep + name + os.sep + "comp", "w") as f:
             f.write(comp)
         if comp != "unknow":
