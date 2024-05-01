@@ -98,10 +98,11 @@ def rmdire(path):
             ysuc("删除成功！")
 
 
-def error(code, message):
+def error(exception_type, exception, traceback):
+    cls()
     table = Table()
-    table.add_column(f'[red]ERROR:{code}', justify="center")
-    table.add_row(f'[yellow]{message}')
+    table.add_column(f'[red]ERROR:{exception_type.__name__}[/]', justify="center")
+    table.add_row(f'[yellow]{exception}')
     table.add_section()
     table.add_row(f'[green]Report:https://github.com/ColdWindScholar/TIK/issues')
     Console().print(table)
@@ -1852,4 +1853,5 @@ def autounpack(project):
 
 
 if __name__ == '__main__':
+    sys.excepthook = error
     Tool().main()
