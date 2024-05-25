@@ -1,4 +1,4 @@
-##  TIK4.0
+##  TIK5.0
 #### Powered By MIO-KITCHEN-ENVS
 ####  **介绍** 
 > [!CAUTION]
@@ -106,5 +106,5 @@ Note: WSL 可能存在权限出错的问题 请自行判断测试！
 2.  此工具不含任何【破坏系统、获取数据】等其他不法代码 ！！！
 
 3.  **如果由于用户利用root权限对工具中的工程目录进行操作导致的数据丢失、损毁，不承担任何责任 ！！！** 
-####  [TIK4.0](https://github.com/ColdWindScholar/TIK) 
+####  [TIK5.0](https://github.com/ColdWindScholar/TIK) 
 #### ColdWindScholar(3590361911@qq.com).All rights reserved.

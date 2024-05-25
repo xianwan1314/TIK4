@@ -544,9 +544,10 @@ class Tool:
                 self.project()
             else:
                 ywarn("  Input error!")
+                input("任意按钮继续")
         else:
             ywarn("  Input error!")
-        input("任意按钮继续")
+            input("任意按钮继续")
         self.main()
 
     @staticmethod
@@ -611,7 +612,7 @@ class Tool:
             self.custom_rom()
         else:
             ywarn('   Input error!')
-        input("任意按钮继续")
+            input("任意按钮继续")
         self.project()
 
     def custom_rom(self):
