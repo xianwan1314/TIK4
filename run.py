@@ -363,7 +363,7 @@ class setting:
         print('\033[31m---------------------------------\033[0m')
         print(f"\033[93m作者:\033[0m \033[92mColdWindScholar\033[0m")
         print(f"\033[93m开源地址:\033[0m \033[91mhttps://github.com/ColdWindScholar/TIK\033[0m")
-        print(f"\033[93m软件版本:\033[0m \033[44mAlpha Edition\033[0m")
+        print(f"\033[93m软件版本:\033[0m \033[44mState Edition\033[0m")
         print(f"\033[93m开源协议:\033[0m \033[68mGNU General Public License v3.0 \033[0m")
         print('\033[31m---------------------------------\033[0m')
         print(f"\033[93m特别鸣谢:\033[0m")
@@ -474,7 +474,7 @@ class Tool:
             print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
         else:
             print("=" * 50)
-        print("\033[92;44m Alpha Edition \033[0m")
+        print("\033[93;44m State Edition \033[0m")
         if settings.online == 'true':
             try:
                 content = json.loads(requests.get('https://v1.jinrishici.com/all.json', timeout=2).content.decode())

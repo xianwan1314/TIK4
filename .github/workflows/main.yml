@@ -18,11 +18,11 @@ jobs:
       - name: Rename Tool
         run: |
           cd TIK-win
-          move ./TIK-win.zip ../TIK-4-${{ github.run_number }}-win.zip
+          move ./TIK-win.zip ../TIK-5-${{ github.run_number }}-win.zip
           cd ..
           cd TIK-linux
           ls
-          move ./TIK-linux.zip ../TIK-4-${{ github.run_number }}-linux.zip
+          move ./TIK-linux.zip ../TIK-5-${{ github.run_number }}-linux.zip
           cd ..
       - name: Upload release
         uses: ncipollo/release-action@v1
@@ -30,11 +30,11 @@ jobs:
           allowUpdates: true
           omitBodyDuringUpdate: true
           removeArtifacts: true
-          name: "TIK-4.${{ github.run_number }}"
+          name: "TIK-5.${{ github.run_number }}"
           tag: "CI_BUILD_${{ github.run_number }}"
           body: |
             Build times: ${{ github.run_number }}
-            Version: 4
+            Version: 5
             Note:If u cannot run it in linux,you may need do "chmod a+x ./*"
             Minimum support: Ubuntu 20.04 (64bit),Windows Vista (32bit)
           artifacts: "*.zip"
