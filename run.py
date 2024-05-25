@@ -705,8 +705,7 @@ class Tool:
                                 os.path.join(project, f), os.F_OK):
                             shutil.copy(os.path.join(project, str(f)), os.path.join(project, 'TI_out'))
         elif chose == '2':
-            code = input("打包卡线一体限制机型代号:")
-            utils.dbkxyt(os.path.join(project, 'TI_out') + os.sep, code, binner + os.sep + 'extra_flash.zip')
+            utils.dbkxyt(os.path.join(project, 'TI_out') + os.sep, input("打包卡线一体限制机型代号:"), binner + os.sep + 'extra_flash.zip')
         else:
             return
         zip_file(os.path.basename(project) + ".zip", project + os.sep + 'TI_out', project + os.sep, LOCALDIR + os.sep)
@@ -747,10 +746,10 @@ class Tool:
                 self.project()
             else:
                 ywarn("Input Error")
-                time.sleep(0.3)
+                input("任意按钮继续")
         else:
             ywarn("Input error!")
-            time.sleep(0.3)
+            input("任意按钮继续")
 
 
 def get_all_file_paths(directory) -> Ellipsis:
@@ -760,7 +759,7 @@ def get_all_file_paths(directory) -> Ellipsis:
             yield os.path.join(root, filename)
 
 
-class zip_file(object):
+class zip_file:
     def __init__(self, file, dst_dir, local, path=None):
         if not path:
             path = LOCALDIR + os.sep
