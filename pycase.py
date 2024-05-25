@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-set directory case sensitive on Windows directly with ctypes
+set directory case-sensitive on Windows directly with ctypes
 
 **requires WSL to be enabled**
 
