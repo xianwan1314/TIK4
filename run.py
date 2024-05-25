@@ -20,9 +20,9 @@ import os
 if os.name == 'nt':
     import ctypes
 
-    ctypes.windll.kernel32.SetConsoleTitleW("TIK4")
+    ctypes.windll.kernel32.SetConsoleTitleW("TIK5")
 else:
-    sys.stdout.write("\x1b]2;TIK4\x07")
+    sys.stdout.write("\x1b]2;TIK5\x07")
     sys.stdout.flush()
 import extract_dtb
 import requests
@@ -342,7 +342,7 @@ class setting:
         if op_pro == "0":
             return
         elif op_pro == '1':
-            print(f"  首页banner: [1]TIK4 [2]镰刀斧头 [3]TIK2 [4]原神 [5]DXY [6]None")
+            print(f"  首页banner: [1]TIK5 [2]镰刀斧头 [3]TIK2 [4]原神 [5]DXY [6]None")
             banner_i = input("  请输入序号: ")
             if banner_i.isdigit():
                 if 0 < int(banner_i) < 7:
