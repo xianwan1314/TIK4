@@ -4,7 +4,7 @@
 > [!CAUTION]
 > 免费软件， 未经允许禁止商用 | Free software, unauthorized commercial use prohibited
 
-1.  【 **TI Kitchen 4.0** 】 是一个永久开源的ROM工具箱，支持安卓全版本
+1.  【 **TI Kitchen 5.0** 】 是一个永久开源的ROM工具箱，支持安卓全版本
 
 
 1. 已支持大多常见镜像的分解/打包，较完善支持erofs/V-AB分区等
