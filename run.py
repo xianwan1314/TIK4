@@ -438,7 +438,7 @@ def plug_parse(js_on):
                                     text, value = option.split('|')
                                     self.gavs[radio_var_name] = value
                                     print(f"[{cs}] {text}")
-                                    gavs["%s" % cs] = value
+                                    gavs[str(cs)] = value
                                 print("---------------------------")
                                 op_in = input("请输入您的选择:")
                                 self.gavs[radio_var_name] = gavs[op_in] if op_in in gavs.keys() else gavs["1"]
@@ -496,7 +496,7 @@ class Tool:
             if os.path.isdir(o_path.join(LOCALDIR, pros)):
                 pro += 1
                 print(f"   [{pro}]  {pros}\n")
-                projects['%s' % pro] = pros
+                projects[str(pro)] = pros
         print("  --------------------------------------")
         print("\033[33m  [55] 解压  [66] 退出  [77] 设置  [88] 下载ROM\033[0m\n")
         op_pro = input("  请输入序号：")
@@ -861,7 +861,7 @@ class installmpk:
         with zipfile.ZipFile(mpk, 'r') as myfile:
             with myfile.open('info') as info_file:
                 self.mconf.read_string(info_file.read().decode('utf-8'))
-            with myfile.open('%s' % (self.mconf.get('module', 'resource')), 'r') as inner_file:
+            with myfile.open(self.mconf.get('module', 'resource'), 'r') as inner_file:
                 self.inner_zipdata = inner_file.read()
                 self.inner_filenames = zipfile.ZipFile(BytesIO(self.inner_zipdata)).namelist()
         print('''
@@ -908,12 +908,12 @@ class installmpk:
             depends = self.mconf.get('module', 'depend')
         except (Exception, BaseException):
             depends = ''
-        minfo = {"name": "%s" % (self.mconf.get('module', 'name')),
-                 "author": "%s" % (self.mconf.get('module', 'author')),
-                 "version": "%s" % (self.mconf.get('module', 'version')),
-                 "identifier": "%s" % (self.mconf.get('module', 'identifier')),
-                 "describe": "%s" % (self.mconf.get('module', 'describe')),
-                 "depend": "%s" % depends}
+        minfo = {"name": self.mconf.get('module', 'name'),
+                 "author": self.mconf.get('module', 'author'),
+                 "version": self.mconf.get('module', 'version'),
+                 "identifier": self.mconf.get('module', 'identifier'),
+                 "describe": self.mconf.get('module', 'describe'),
+                 "depend": depends}
         with open(binner + os.sep + "subs" + os.sep + self.mconf.get('module', 'identifier') + os.sep + "info.json",
                   'w') as f:
             json.dump(minfo, f, indent=2)
