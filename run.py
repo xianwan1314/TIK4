@@ -556,11 +556,20 @@ class Tool:
         if not os.path.exists(fstab):
             return
         with open(fstab, "r") as sf:
-            details = re.sub(",avb_keys=.*avbpubkey", "", sf.read())
-        details = re.sub(",avb=vbmeta_system", ",", details)
+            details = sf.read()
+        if not re.search(",avb=vbmeta_system", details):
+            # it may be "system /system erofs ro avb=vbmeta_system,..."
+            details = re.sub("avb=vbmeta_system,", "", details)
+        else:
+            details = re.sub(",avb=vbmeta_system", ",", details)
+        if not re.search(",avb", details):
+            # it may be "product /product ext4 ro avb,..."
+            details = re.sub("avb,", "", details)
+        else:
+            details = re.sub(",avb", "", details)
+        details = re.sub(",avb_keys=.*avbpubkey", "", details)
         details = re.sub(",avb=vbmeta_vendor", "", details)
         details = re.sub(",avb=vbmeta", "", details)
-        details = re.sub(",avb", "", details)
         with open(fstab, "w") as tf:
             tf.write(details)
 
