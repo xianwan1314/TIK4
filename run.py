@@ -110,7 +110,7 @@ def error(exception_type, exception, traceback):
     sys.exit(1)
 
 
-sys.excepthook = error
+# sys.excepthook = error
 
 
 def sha1(file_path):

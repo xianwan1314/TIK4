@@ -326,10 +326,7 @@ def main(filename, outdir):
 
     path = os.path.join(path, outdir)
 
-    if os.path.exists(path):
-        shutil.rmtree(path)
-        os.mkdir(path)
-    else:
+    if not os.path.exists(path):
         os.mkdir(path)
 
     print("Saving ProFile.xml")
