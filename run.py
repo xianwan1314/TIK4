@@ -364,7 +364,7 @@ class setting:
         print('\033[31m---------------------------------\033[0m')
         print(f"\033[93m作者:\033[0m \033[92mColdWindScholar\033[0m")
         print(f"\033[93m开源地址:\033[0m \033[91mhttps://github.com/ColdWindScholar/TIK\033[0m")
-        print(f"\033[93m软件版本:\033[0m \033[44mStable Edition\033[0m")
+        print(f"\033[93m软件版本:\033[0m \033[44mAlpha Edition\033[0m")
         print(f"\033[93m开源协议:\033[0m \033[68mGNU General Public License v3.0 \033[0m")
         print('\033[31m---------------------------------\033[0m')
         print(f"\033[93m特别鸣谢:\033[0m")
@@ -475,7 +475,7 @@ class Tool:
             print(f'\033[31m {getattr(banner, "banner%s" % settings.banner)} \033[0m')
         else:
             print("=" * 50)
-        print("\033[93;44m Stable Edition \033[0m")
+        print("\033[93;44m Alpha Edition \033[0m")
         if settings.online == 'true':
             try:
                 content = json.loads(requests.get('https://v1.jinrishici.com/all.json', timeout=2).content.decode())
@@ -535,7 +535,7 @@ class Tool:
                 input("任意按钮继续")
         elif op_pro == '66':
             cls()
-            ysuc("\n感谢使用TI-KITCHEN4,再见！")
+            ysuc("\n感谢使用TI-KITCHEN5,再见！")
             sys.exit(0)
         elif op_pro == '77':
             setting()
@@ -1624,7 +1624,7 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse):
 
 def packpayload(project):
     if ostype != 'Linux':
-        print(f"不支持当前系统:{ostype},目前只支持:Linux")
+        print(f"不支持当前系统:{ostype},目前只支持:Linux(aarch64&x86)")
         input("任意按钮继续")
         return
     if os.path.exists(project + os.sep + 'payload'):
@@ -1635,7 +1635,7 @@ def packpayload(project):
     else:
         os.makedirs(project + os.sep + 'payload')
     ywarn(f"请将所有分区镜像放置于{project + os.sep}payload中！")
-    yecho("很耗时、很费CPU、很费内存，由于无官方签名故意义不大，请考虑后使用")
+    yecho("这项功能很耗时、很费CPU、很费内存，若无官方签名则意义不大，请考虑后使用")
     if not os.listdir(project + os.sep + 'payload'):
         print("您似乎没有要打包的分区，要移动下列分区打包吗：")
         move_list = []
