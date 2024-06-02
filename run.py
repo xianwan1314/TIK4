@@ -1593,6 +1593,8 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse):
                         group_size_b += img_size
                         superpa += f"--partition {image}_a:readonly:{img_size}:{settings.super_group}_a --image {image}_a={Imgdir}{os.sep}{image}.img --partition {image}_b:readonly:0:{settings.super_group}_b "
                 else:
+                    if not os.path.exists(Imgdir + os.sep + image + ".img") and os.path.exists(Imgdir + os.sep + image + "_a.img"):
+                        os.rename(Imgdir + os.sep + image + "_a.img", Imgdir + os.sep + image + ".img")
                     img_size = os.path.getsize(Imgdir + os.sep + image + ".img")
                     superpa += f"--partition {image}:readonly:{img_size}:{settings.super_group} --image {image}={Imgdir}{os.sep}{image}.img "
                     group_size_a += img_size
