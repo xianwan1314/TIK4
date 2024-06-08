@@ -1329,7 +1329,7 @@ def unpackboot(file, project):
 
 
 def undtb(project, infile):
-    dtbdir = project + os.sep + os.path.basename(infile).split(".")[0] + "_dtbs"
+    dtbdir = project + os.sep + os.path.basename(infile).split(".")[0] 
     rmdire(dtbdir)
     if not os.path.exists(dtbdir):
         os.makedirs(dtbdir)
@@ -1343,13 +1343,13 @@ def undtb(project, infile):
             call(
                 f'dtc -@ -I dtb -O dts {dtb} -o {dts}',
                 out=1)
-    open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile).split(".")[0], 'w').close()
+    open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile).split(".")[0] + "_dtbs", 'w').close()
     ysuc("反编译完成!")
     time.sleep(1)
 
 
 def makedtb(sf, project):
-    dtbdir = project + os.sep + sf + "_dtbs"
+    dtbdir = project + os.sep + sf
     rmdire(dtbdir + os.sep + "new_dtb_files")
     os.makedirs(dtbdir + os.sep + "new_dtb_files")
     for dts_files in os.listdir(dtbdir + os.sep + "dts_files"):
