@@ -1343,7 +1343,7 @@ def undtb(project, infile):
             call(
                 f'dtc -@ -I dtb -O dts {dtb} -o {dts}',
                 out=1)
-    open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile).split(".")[0]).close()
+    open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile).split(".")[0], 'w').close()
     ysuc("反编译完成!")
     time.sleep(1)
 
