@@ -20,9 +20,9 @@ import os
 if os.name == 'nt':
     import ctypes
 
-    ctypes.windll.kernel32.SetConsoleTitleW("TIK5")
+    ctypes.windll.kernel32.SetConsoleTitleW("TIK5_Alpha")
 else:
-    sys.stdout.write("\x1b]2;TIK5\x07")
+    sys.stdout.write("\x1b]2;TIK5_Alpha\x07")
     sys.stdout.flush()
 import extract_dtb
 import requests
@@ -106,6 +106,7 @@ def error(exception_type, exception, traceback):
     table.add_row(f'[yellow]{exception}')
     table.add_section()
     table.add_row(f'[green]Report:https://github.com/ColdWindScholar/TIK/issues')
+    table.add_row(f'[red]务必说明操作环境、系统版本，并尽量向开发者提供镜像文件并复现错误场景！')
     Console().print(table)
     input()
     sys.exit(1)
@@ -176,14 +177,15 @@ class upgrade:
             except (Exception, BaseException):
                 data = None
         if not data:
-            input("链接服务器失败, 按任意按钮返回")
+            input("连接服务器失败, 按任意按钮返回")
             return
         else:
             if data.get('version', settings.version) != settings.version:
                 print(f'\033[31m {banner.banner1} \033[0m')
                 print(
-                    f"\033[0;32;40m发现新版本：\033[0m\033[0;36;40m{settings.version} --> {data.get('version')}\033[0m")
+                    f"\033[0;32;40m发现版本：\033[0m\033[0;36;40m{settings.version} --> {data.get('version')}\033[0m")
                 print(f"\033[0;32;40m更新日志：\n\033[0m\033[0;36;40m{data.get('log', '1.Fix Some Bugs')}\033[0m")
+                input("注意，交流群与release中的构建始终为最新开发环境版本，本功能仅用于检测近期较为稳定的构建")
                 try:
                     link = data['link'][plat.system()][plat.machine()]
                 except (Exception, BaseException):
@@ -242,9 +244,9 @@ class setting:
             "3": lambda: settings.change('pack_e2', '0' if input(
                 "  打包方案: [1]make_ext4fs [2]mke2fs+e2fsdroid:") == '1' else '1'),
             "6": lambda: settings.change('pack_sparse', '1' if input(
-                "  Img是否打包为sparse(压缩体积)[1/0]\n  请输入序号:") == '1' else "0"),
+                "  Img是否打包为sparse镜像(压缩体积)[1/0]\n  请输入序号:") == '1' else "0"),
             "7": lambda: settings.change('diyimgtype',
-                                         '1' if input(f"  打包镜像格式[1]同解包格式 [2]可选择:") == '2' else ''),
+                                         '1' if input(f"  打包镜像系统[1]同解包格式 [2]可选择:") == '2' else ''),
             "8": lambda: settings.change('erofs_old_kernel',
                                          '1' if input(f"  EROFS打包是否支持旧内核[1/0]") == '1' else '0')
         }
@@ -280,7 +282,7 @@ class setting:
         elif op_pro == '5':
             if input("  设置打包UTC时间戳[1]自动 [2]自定义:") == "2":
                 utcstamp = input("  请输入: ")
-                settings.change('utcstamp', utcstamp if utcstamp.isdigit() else '1230768000')
+                settings.change('utcstamp', utcstamp if utcstamp.isdigit() else '1717840117')
             else:
                 settings.change('utcstamp', '')
         else:
@@ -373,7 +375,6 @@ class setting:
         print('YukongA')
         print("\033[0m")
         print('\033[31m---------------------------------\033[0m')
-        input('\033[92m Powered By MIO-KITCHEN-ENVS\033[0m')
 
     def __init__(self):
         cls()
@@ -877,7 +878,7 @@ class installmpk:
         print('''
          \033[36m
         ----------------
-           MIO-PACKAGE
+           安装新插件
         ----------------
         ''')
         print("插件名称：" + self.mconf.get('module', 'name'))
@@ -1577,7 +1578,7 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse):
     superpa += f"-block-size={settings.SBLOCKSIZE} "
     for imag in os.listdir(Imgdir):
         if imag.endswith('.img'):
-            image = imag.split('.')[0].replace("_a", "").replace("_b", "")
+            image = imag.replace("_a.img", "").replace("_b.img", "").replace(".img", "")
             if f'partition {image}:readonly' not in superpa and f'partition {image}_a:readonly' not in superpa:
                 if stype in ['VAB', 'AB']:
                     if os.path.isfile(Imgdir + os.sep + image + "_a.img") and os.path.isfile(
@@ -1660,7 +1661,7 @@ def packpayload(project):
     elif checkssize == '3':
         supersize = tool_auto_size
     else:
-        supersize = input("请输入super分区大小（字节数）	")
+        supersize = input("请输入super分区大小（字节数）： ")
     yecho(f"打包到{project}/TI_out/payload...")
     inpayload(supersize, project)
 
