@@ -1170,7 +1170,7 @@ def packChoo(project):
                 if types[f] == 'bootimg':
                     dboot(project + os.sep + parts[f], project + os.sep + parts[f] + ".img")
                 elif types[f] == 'dtb':
-                    makedtb(project + os.sep + parts[f], project)
+                    makedtb(parts[f], project)
                 elif types[f] == 'dtbo':
                     makedtbo(parts[f], project)
                 else:
@@ -1196,7 +1196,7 @@ def packChoo(project):
                 if types[f] == 'bootimg':
                     dboot(project + os.sep + parts[f], project + os.sep + parts[f] + ".img")
                 elif types[f] == 'dtb':
-                    makedtb(project + os.sep + parts[f], project)
+                    makedtb(parts[f], project)
                 elif types[f] == 'dtbo':
                     makedtbo(parts[f], project)
                 else:
@@ -1227,7 +1227,7 @@ def packChoo(project):
                 if types[int(filed)] == 'bootimg':
                     dboot(project + os.sep + parts[int(filed)], project + os.sep + parts[int(filed)] + ".img")
                 elif types[int(filed)] == 'dtb':
-                    makedtb(project + os.sep + parts[int(filed)], project)
+                    makedtb(parts[int(filed)], project)
                 elif types[int(filed)] == 'dtbo':
                     makedtbo(parts[int(filed)], project)
                 else:
@@ -1343,7 +1343,7 @@ def undtb(project, infile):
             call(
                 f'dtc -@ -I dtb -O dts {dtb} -o {dts}',
                 out=1)
-    open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile).split(".")[0] + "_dtbs", 'w').close()
+    open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile).split(".")[0], 'w').close()
     ysuc("反编译完成!")
     time.sleep(1)
 
