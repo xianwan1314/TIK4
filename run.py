@@ -1691,7 +1691,6 @@ def inpayload(supersize, project):
         LOGS("成功创建payload!") if call(
             f"delta_generator --in_file={out} --properties_file={project + os.sep + 'config' + os.sep}payload_properties.txt") == 0 else LOGE(
             "创建payload失败！")
-    input("任意按钮继续")
 
 
 def unpack(file, info, project):
