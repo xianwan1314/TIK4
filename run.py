@@ -1365,7 +1365,6 @@ def makedtb(sf, project):
                 with open(os.path.abspath(dtb), 'rb') as f:
                     sff.write(f.read())
     ysuc("回编译完成！")
-    input("任意按钮继续")
 
 
 def undtbo(project, infile):
