@@ -102,12 +102,18 @@ def rmdire(path):
 def error(exception_type, exception, traceback):
     cls()
     table = Table()
+    try:
+        version = settings.version
+    except:
+        version = 'Unknown'
     table.add_column(f'[red]ERROR:{exception_type.__name__}[/]', justify="center")
     table.add_row(f'[yellow]Describe:{exception}')
-    table.add_row(f'[yellow]Lines:{exception.__traceback__.tb_lineno}\tModule:{exception.__traceback__.tb_frame.f_globals["__name__"]}')
+    table.add_row(
+        f'[yellow]Lines:{exception.__traceback__.tb_lineno}\tModule:{exception.__traceback__.tb_frame.f_globals["__name__"]}')
     table.add_section()
-    table.add_row(f'[blue]Platform:[purple]{plat.machine()}\t[blue]System:[purple]{plat.uname().system} {plat.uname().release}')
-    table.add_row(f'[blue]Python:[purple]{sys.version[:6]}\t[blue]Tool Version:[purple]{settings.version}')
+    table.add_row(
+        f'[blue]Platform:[purple]{plat.machine()}\t[blue]System:[purple]{plat.uname().system} {plat.uname().release}')
+    table.add_row(f'[blue]Python:[purple]{sys.version[:6]}\t[blue]Tool Version:[purple]{version}')
     table.add_section()
     table.add_row(f'[green]Report:https://github.com/ColdWindScholar/TIK/issues')
     Console().print(table)
@@ -719,7 +725,8 @@ class Tool:
                                 os.path.join(project, f), os.F_OK):
                             shutil.copy(os.path.join(project, str(f)), os.path.join(project, 'TI_out'))
         elif chose == '2':
-            utils.dbkxyt(os.path.join(project, 'TI_out') + os.sep, input("打包卡线一体限制机型代号:"), binner + os.sep + 'extra_flash.zip')
+            utils.dbkxyt(os.path.join(project, 'TI_out') + os.sep, input("打包卡线一体限制机型代号:"),
+                         binner + os.sep + 'extra_flash.zip')
         else:
             return
         zip_file(os.path.basename(project) + ".zip", project + os.sep + 'TI_out', project + os.sep, LOCALDIR + os.sep)
@@ -1346,7 +1353,8 @@ def undtb(project, infile):
             call(
                 f'dtc -@ -I dtb -O dts {dtb} -o {dts}',
                 out=1)
-    open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile).split(".")[0], 'w').close()
+    open(project + os.sep + os.sep + "config" + os.sep + "dtbinfo_" + os.path.basename(infile).split(".")[0],
+         'w').close()
     ysuc("反编译完成!")
     time.sleep(1)
 
@@ -1599,7 +1607,8 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse):
                         group_size_b += img_size
                         superpa += f"--partition {image}_a:readonly:{img_size}:{settings.super_group}_a --image {image}_a={Imgdir}{os.sep}{image}.img --partition {image}_b:readonly:0:{settings.super_group}_b "
                 else:
-                    if not os.path.exists(Imgdir + os.sep + image + ".img") and os.path.exists(Imgdir + os.sep + image + "_a.img"):
+                    if not os.path.exists(Imgdir + os.sep + image + ".img") and os.path.exists(
+                            Imgdir + os.sep + image + "_a.img"):
                         os.rename(Imgdir + os.sep + image + "_a.img", Imgdir + os.sep + image + ".img")
 
                     img_size = os.path.getsize(Imgdir + os.sep + image + ".img")
