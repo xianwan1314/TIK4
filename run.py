@@ -1416,7 +1416,6 @@ def makedtbo(sf, project):
         ywarn(f"{os.path.basename(sf).split('.')[0]}.img生成失败!")
     else:
         ysuc(f"{os.path.basename(sf).split('.')[0]}.img生成完毕!")
-    input("任意按钮继续")
 
 
 def inpacker(name, project, form, ftype, json_=None):
