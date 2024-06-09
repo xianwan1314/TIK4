@@ -8,6 +8,12 @@ on:
       - "build.py"
   pull_request:
   workflow_dispatch:
+    inputs:
+      BUILD_VER:
+        description: 'Ver.(beta/dev/stable)'
+        required: true
+        default: 'dev'
+
 jobs:
   build:
     needs: [build-win,build-linux]
@@ -18,11 +24,11 @@ jobs:
       - name: Rename Tool
         run: |
           cd TIK-win
-          move ./TIK-win.zip ../TIK-5-${{ github.run_number }}-win.zip
+          move ./TIK-win.zip ../TIK-5-${{ github.run_number }}-${{ github.event.inputs.BUILD_VER }}-win.zip
           cd ..
           cd TIK-linux
           ls
-          move ./TIK-linux.zip ../TIK-5-${{ github.run_number }}-linux.zip
+          move ./TIK-linux.zip ../TIK-5-${{ github.run_number }}-${{ github.event.inputs.BUILD_VER }}-linux.zip
           cd ..
       - name: Upload release
         uses: ncipollo/release-action@v1
