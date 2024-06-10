@@ -20,7 +20,7 @@
 【 **识别分解 打包支持** 】
 
 1. 【 *.zip, *.br, *.dat, ext4/2 *.img, bootimg 等】传统镜像识别-分解-打包
-2. 【 Super.img <A-onloy/AB/V-AB>, bootimg<header3>, erofs *.img,  等】较新镜像识别-分解-打包
+2. 【 Super.img <A-onloy/AB/V-AB>, bootimg<header3>, erofs *.img,  F2FS(本工具LINUX 64BIT版本支持) 等】较新镜像识别-分解-打包
 3. 【 dtbo，dtb , TWRP, ops, ofp, ozip, payload.bin, *.win000-004, *.dat.1~20等】特殊文件的解包/打包
 4. 较完善适配最新 **安卓14** **Erofs** **动态分区** **V-AB分区**
 
