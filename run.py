@@ -1172,7 +1172,13 @@ def packChoo(project):
             else:
                 form = 'img'
             if settings.diyimgtype == '1':
-                imgtype = "erofs" if input("手动打包所有分区格式为：[1]ext4 [2]erofs:") == "2" else "ext"
+                imgtype = input("手动打包所有分区格式为：[1]ext4 [2]erofs [3]f2fs:")
+                if imgtype == '1':
+                    imgtype = 'ext'
+                elif imgtype == '2':
+                    imgtype = "erofs"
+                else:
+                    imgtype = 'f2fs'
             else:
                 imgtype = 'ext'
             for f in track(parts.keys()):
@@ -1194,7 +1200,13 @@ def packChoo(project):
             else:
                 form = 'img'
             if settings.diyimgtype == '1':
-                imgtype = "erofs" if input("手动打包所有分区格式为：[1]ext4 [2]erofs") == "2" else "ext"
+                imgtype = input("手动打包所有分区格式为：[1]ext4 [2]erofs [3]f2fs:")
+                if imgtype == '1':
+                    imgtype = 'ext'
+                elif imgtype == '2':
+                    imgtype = "erofs"
+                else:
+                    imgtype = 'f2fs'
             else:
                 imgtype = 'ext'
             for f in parts.keys():
@@ -1220,7 +1232,13 @@ def packChoo(project):
         elif filed.isdigit():
             if int(filed) in parts.keys():
                 if settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
-                    imgtype = "erofs" if input("  手动打包所有分区格式为：[1]ext4 [2]erofs") == "2" else "ext"
+                    imgtype = input("手动打包所有分区格式为：[1]ext4 [2]erofs [3]f2fs:")
+                    if imgtype == '1':
+                        imgtype = 'ext'
+                    elif imgtype == '2':
+                        imgtype = "erofs"
+                    else:
+                        imgtype = 'f2fs'
                 else:
                     imgtype = 'ext'
                 if settings.diyimgtype == '1' and types[int(filed)] not in ['bootimg', 'dtb', 'dtbo']:
@@ -1468,10 +1486,12 @@ def inpacker(name, project, form, ftype, json_=None):
         call(
             f'mkfs.erofs {other_} -z{settings.erofslim}  -T {utc} --mount-point=/{name} --fs-config-file={fs_config} --product-out={os.path.dirname(out_img)} --file-contexts={file_contexts} {out_img} {in_files}')
     elif ftype == 'f2fs':
+        size_f2fs = (54 * 1024 * 1024) + img_size1
+        size_f2fs = int(size_f2fs*1.15)+1
         with open(out_img, 'wb') as f:
-            f.truncate(img_size0)
-        call(f'make_f2fs {out_img} -O extra_attr -O inode_checksum -O sb_checksum -O compression -f')
-        call(f'sload_f2fs -f {in_files} -C {fs_config} -s {file_contexts} -t /odm {out_img} -c')
+            f.truncate(size_f2fs)
+        call(f'mkfs.f2fs {out_img} -O extra_attr -O inode_checksum -O sb_checksum -O compression -f')
+        call(f'sload.f2fs -f {in_files} -C {fs_config} -s {file_contexts} -t /{name} {out_img} -c')
     else:
         if os.path.exists(file_contexts):
             if settings.pack_e2 == '0':
