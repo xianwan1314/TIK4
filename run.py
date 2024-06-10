@@ -1468,7 +1468,10 @@ def inpacker(name, project, form, ftype, json_=None):
         call(
             f'mkfs.erofs {other_} -z{settings.erofslim}  -T {utc} --mount-point=/{name} --fs-config-file={fs_config} --product-out={os.path.dirname(out_img)} --file-contexts={file_contexts} {out_img} {in_files}')
     elif ftype == 'f2fs':
-        pass
+        with open(out_img, 'wb') as f:
+            f.truncate(img_size0)
+        call(f'make_f2fs {out_img} -O extra_attr -O inode_checksum -O sb_checksum -O compression -f')
+        call(f'sload_f2fs -f {in_files} -C {fs_config} -s {file_contexts} -t /odm {out_img} -c')
     else:
         if os.path.exists(file_contexts):
             if settings.pack_e2 == '0':
