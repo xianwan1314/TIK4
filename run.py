@@ -383,7 +383,7 @@ class setting:
         print("Yeliqin666")
         print('YukongA')
         print("\033[0m")
-        print('\033[31m---------------------------------\033[0m')
+        input('\033[31m---------------------------------\033[0m')
 
     def __init__(self):
         cls()
