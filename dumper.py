@@ -9,8 +9,6 @@ from multiprocessing import cpu_count
 
 import zstandard
 
-from utils import ZstdImageExtract
-from utils import gettype
 import update_metadata_pb2 as um
 
 flatten = lambda l: [item for sublist in l for item in sublist]
