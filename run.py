@@ -17,6 +17,8 @@ import ext4
 from Magisk import Magisk_patch
 import os
 
+from dumper import Dumper
+
 if os.name == 'nt':
     import ctypes
 
@@ -1727,13 +1729,15 @@ def inpayload(supersize, project):
 
 
 def unpack(file, info, project):
+    if not os.path.exists(file):
+        file = os.path.join(project, file)
     json_ = json_edit(os.path.join(project, 'config', 'parts_info'))
     parts = json_.read()
     if not os.path.exists(project + os.sep + 'config'):
         os.makedirs(project + os.sep + 'config')
     yecho(f"[{info}]解包{os.path.basename(file)}中...")
     if info == 'sparse':
-        simg2img(file)
+        simg2img(os.path.join(project, file))
         unpack(file, gettype(file), project)
     elif info == 'dtbo':
         undtbo(project, os.path.abspath(file))
@@ -1781,13 +1785,25 @@ def unpack(file, info, project):
         opscrypto.main(args)
     elif info == 'payload':
         yecho(f"{os.path.basename(file)}所含分区列表：")
-        os.system(f'{ebinner}payload-dumper-go -l {file}')
+        with open(file, 'rb') as pay:
+            print(f'{(parts := [i.partition_name for i in utils.payload_reader(pay).partitions])}')
         extp = input("请输入需要解压的分区名(空格隔开)/all[全部]	")
         if extp == 'all':
-            os.system(f"{ebinner}payload-dumper-go -o {project} {file}")
+            Dumper(
+                file,
+                project,
+                diff=False,
+                old='old',
+                images=parts
+            ).run()
         else:
-            for p in extp.split():
-                os.system(f'{ebinner}payload-dumper-go -p {p} -o {project} {file}')
+            Dumper(
+                file,
+                project,
+                diff=False,
+                old='old',
+                images=[p for p in extp.split()]
+            ).run()
     elif info == 'win000':
         for fd in [f for f in os.listdir(project) if re.search(r'\.win\d+', f)]:
             with open(project + os.path.basename(fd).rsplit('.', 1)[0], 'ab') as ofd:
