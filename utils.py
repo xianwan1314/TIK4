@@ -23,8 +23,10 @@ import platform as plat
 import update_metadata_pb2 as um
 from lpunpack import SparseImage
 
+
 def u64(x):
     return struct.unpack(">Q", x)[0]
+
 
 DataImage = blockimgdiff.DataImage
 # -----
@@ -113,6 +115,7 @@ class ZstdImageExtract:
             os.remove(self.file)
             os.rename(self.output, self.file)
 
+
 def payload_reader(payloadfile):
     if payloadfile.read(4) != b'CrAU':
         print(f"Magic Check Fail\n")
@@ -127,6 +130,8 @@ def payload_reader(payloadfile):
     dam = um.DeltaArchiveManifest()
     dam.ParseFromString(manifest)
     return dam
+
+
 class aesencrypt:
     @staticmethod
     def encrypt(key, file_path, outfile):
