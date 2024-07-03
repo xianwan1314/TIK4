@@ -1786,7 +1786,7 @@ def unpack(file, info, project):
     elif info == 'payload':
         yecho(f"{os.path.basename(file)}所含分区列表：")
         with open(file, 'rb') as pay:
-            print(f'{(parts := [i.partition_name for i in utils.payload_reader(pay).partitions])}')
+            print(f'{(parts_ := [i.partition_name for i in utils.payload_reader(pay).partitions])}')
         extp = input("请输入需要解压的分区名(空格隔开)/all[全部]	")
         if extp == 'all':
             Dumper(
@@ -1794,7 +1794,7 @@ def unpack(file, info, project):
                 project,
                 diff=False,
                 old='old',
-                images=parts
+                images=parts_
             ).run()
         else:
             Dumper(
