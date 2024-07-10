@@ -1561,6 +1561,7 @@ def packsuper(project):
         supertype = 'AB'
     else:
         supertype = 'A_only'
+    isreadonly = input("是否设置为只读分区？[1/0]")
     ifsparse = input("是否打包为sparse镜像？[1/0]")
     if not os.listdir(project + os.sep + 'super'):
         print("您似乎没有要打包的分区，要移动下列分区打包吗：")
@@ -1593,10 +1594,11 @@ def packsuper(project):
         supersize = input("请输入super分区大小（字节数）:")
     yecho("打包到TI_out/super.img...")
     insuper(project + os.sep + 'super', project + os.sep + 'TI_out' + os.sep + "super.img", supersize, supertype,
-            ifsparse)
+            ifsparse, isreadonly)
 
 
-def insuper(Imgdir, outputimg, ssize, stype, sparse):
+def insuper(Imgdir, outputimg, ssize, stype, sparsev, isreadonly):
+    attr = "readonly" if isreadonly == '1' else "none"
     group_size_a = 0
     group_size_b = 0
     for root, dirs, files in os.walk(Imgdir):
@@ -1613,7 +1615,7 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse):
     for imag in os.listdir(Imgdir):
         if imag.endswith('.img'):
             image = imag.replace("_a.img", "").replace("_b.img", "").replace(".img", "")
-            if f'partition {image}:readonly' not in superpa and f'partition {image}_a:readonly' not in superpa:
+            if f'partition {image}:{attr}' not in superpa and f'partition {image}_a:{attr}' not in superpa:
                 if stype in ['VAB', 'AB']:
                     if os.path.isfile(Imgdir + os.sep + image + "_a.img") and os.path.isfile(
                             Imgdir + os.sep + image + "_b.img"):
@@ -1621,7 +1623,7 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse):
                         img_sizeb = os.path.getsize(Imgdir + os.sep + image + "_b.img")
                         group_size_a += img_sizea
                         group_size_b += img_sizeb
-                        superpa += f"--partition {image}_a:readonly:{img_sizea}:{settings.super_group}_a --image {image}_a={Imgdir}{os.sep}{image}_a.img --partition {image}_b:readonly:{img_sizeb}:{settings.super_group}_b --image {image}_b={Imgdir}{os.sep}{image}_b.img "
+                        superpa += f"--partition {image}_a:{attr}:{img_sizea}:{settings.super_group}_a --image {image}_a={Imgdir}{os.sep}{image}_a.img --partition {image}_b:{attr}:{img_sizeb}:{settings.super_group}_b --image {image}_b={Imgdir}{os.sep}{image}_b.img "
                     else:
                         if not os.path.exists(Imgdir + os.sep + image + ".img") and os.path.exists(
                                 Imgdir + os.sep + image + "_a.img"):
@@ -1630,14 +1632,14 @@ def insuper(Imgdir, outputimg, ssize, stype, sparse):
                         img_size = os.path.getsize(Imgdir + os.sep + image + ".img")
                         group_size_a += img_size
                         group_size_b += img_size
-                        superpa += f"--partition {image}_a:readonly:{img_size}:{settings.super_group}_a --image {image}_a={Imgdir}{os.sep}{image}.img --partition {image}_b:readonly:0:{settings.super_group}_b "
+                        superpa += f"--partition {image}_a:{attr}:{img_size}:{settings.super_group}_a --image {image}_a={Imgdir}{os.sep}{image}.img --partition {image}_b:{attr}:0:{settings.super_group}_b "
                 else:
                     if not os.path.exists(Imgdir + os.sep + image + ".img") and os.path.exists(
                             Imgdir + os.sep + image + "_a.img"):
                         os.rename(Imgdir + os.sep + image + "_a.img", Imgdir + os.sep + image + ".img")
 
                     img_size = os.path.getsize(Imgdir + os.sep + image + ".img")
-                    superpa += f"--partition {image}:readonly:{img_size}:{settings.super_group} --image {image}={Imgdir}{os.sep}{image}.img "
+                    superpa += f"--partition {image}:{attr}:{img_size}:{settings.super_group} --image {image}={Imgdir}{os.sep}{image}.img "
                     group_size_a += img_size
                 print(f"已添加分区:{image}")
     supersize = ssize
