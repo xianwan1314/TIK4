@@ -22,7 +22,10 @@ fix_permission = {
 def scan_context(file) -> dict:  # 读取context文件返回一个字典
     context = {}
     with open(file, "r", encoding='utf-8') as file_:
-        for i in file_.readlines():
+        for line_number, i in enumerate(file_.readlines(), start=1):
+            if not i.strip():
+                print(f"[Warn] line {line_number} is empty.Skip.")
+                continue
             filepath, *other = i.strip().split()
             filepath = filepath.replace(r'\@', '@')
             context[filepath] = other
