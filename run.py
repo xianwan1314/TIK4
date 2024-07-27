@@ -1607,7 +1607,7 @@ def insuper(Imgdir, outputimg, ssize, stype, sparsev, isreadonly):
             if os.path.isfile(file_path) and os.path.getsize(file_path) == 0:
                 os.remove(file_path)
     superpa = f"--metadata-size {settings.metadatasize} --super-name {settings.supername} "
-    if sparse == '1':
+    if sparsev == '1':
         superpa += "--sparse "
     if stype == 'VAB':
         superpa += "--virtual-ab "
