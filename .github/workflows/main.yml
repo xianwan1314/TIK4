@@ -37,6 +37,8 @@ jobs:
             Version: 5
             Note:If u cannot run it in linux,you may need do "chmod a+x ./*"
             Minimum support: Ubuntu 20.04 (64bit),Windows Vista (32bit)
+
+            Русский: https://github.com/randcatcraps/TIK/releases
           artifacts: "*.zip"
 
   build-win:

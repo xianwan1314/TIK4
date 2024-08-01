@@ -7,6 +7,8 @@
 > [!CAUTION]
 > 免费软件， 未经允许禁止商用 | Free software, unauthorized commercial use prohibited
 
+[Русский](../../tree/ru)
+
 1.  【 **TIK工具箱** 】 ——一个永久开源的ROM工具箱，支持安卓全版本ROM镜像的处理，目前更新到Ver.5；
 
 2. 已支持大多常见镜像的分解/打包，较完善支持erofs/V-AB分区等
