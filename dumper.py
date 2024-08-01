@@ -41,7 +41,7 @@ class Dumper:
     def open_payloadfile(self):
         return open(self.payloadpath, 'rb')
 
-    def run(self, slow=False):
+    def run(self, slow=False) -> bool:
         if self.images == "":
             partitions = self.dam.partitions
         else:
@@ -54,11 +54,11 @@ class Dumper:
                         found = True
                         break
                 if not found:
-                    print("Partition %s not found in image" % image)
+                    print(f"Partition {image} not found in image")
 
         if len(partitions) == 0:
             print("Not operating on any partitions")
-            return 0
+            return False
 
         partitions_with_ops = []
         for partition in partitions:
@@ -84,6 +84,7 @@ class Dumper:
             self.extract_slow(partitions_with_ops)
         else:
             self.multiprocess_partitions(partitions_with_ops)
+        return True
 
     def extract_slow(self, partitions):
         for part in partitions:
@@ -94,11 +95,8 @@ class Dumper:
             futures = {executor.submit(self.dump_part, part): part for part in partitions}
             for future in as_completed(futures):
                 partition_name = futures[future]['partition'].partition_name
-                try:
-                    future.result()
-                    print(f"{partition_name} Done!")
-                except Exception as exc:
-                    print(f"{partition_name} - processing generated an exception: {exc}")
+                future.result()
+                print(f"{partition_name} Done!")
 
     def validate_magic(self):
         magic = self.payloadfile.read(4)
@@ -125,8 +123,20 @@ class Dumper:
         op = operation["operation"]
 
         # assert hashlib.sha256(data).digest() == op.data_sha256_hash, 'operation data hash mismatch'
-
-        if op.type == op.REPLACE_XZ:
+        if op.type == op.REPLACE_ZSTD and payloadfile.read(4) == b'\x28\xb5\x2f\xfd':
+            op_type = op.type
+        else:
+            op_type = op.REPLACE
+        payloadfile.seek(payloadfile.tell() - 4)
+        if op_type == op.REPLACE_ZSTD:
+            dec = zstandard.ZstdDecompressor().decompressobj()
+            while processed_len < data_length:
+                data = payloadfile.read(buffsize)
+                processed_len += len(data)
+                data = dec.decompress(data)
+                out_file.write(data)
+                out_file.write(dec.flush())
+        elif op_type == op.REPLACE_XZ:
             dec = lzma.LZMADecompressor()
             out_file.seek(op.dst_extents[0].start_block * self.block_size)
             while processed_len < data_length:
@@ -138,7 +148,7 @@ class Dumper:
                     if dec.needs_input or dec.eof:
                         break
                     data = b''
-        elif op.type == op.REPLACE_BZ:
+        elif op_type == op.REPLACE_BZ:
             dec = bz2.BZ2Decompressor()
             out_file.seek(op.dst_extents[0].start_block * self.block_size)
             while processed_len < data_length:
@@ -150,25 +160,15 @@ class Dumper:
                     if dec.needs_input or dec.eof:
                         break
                     data = b''
-        elif op.type == op.REPLACE:
+        elif op_type == op.REPLACE:
             out_file.seek(op.dst_extents[0].start_block * self.block_size)
-            dec = zstandard.ZstdDecompressor().decompressobj()
-            if payloadfile.read(4) == b'\x28\xb5\x2f\xfd':
-                payloadfile.seek(payloadfile.tell() - 4)
-                while processed_len < data_length:
-                    data = payloadfile.read(buffsize)
-                    processed_len += len(data)
-                    data = dec.decompress(data)
-                    out_file.write(data)
-                out_file.write(dec.flush())
-            else:
-                payloadfile.seek(payloadfile.tell() - 4)
-                while processed_len < data_length:
+            payloadfile.seek(payloadfile.tell() - 4)
+            while processed_len < data_length:
                     data = payloadfile.read(buffsize)
                     processed_len += len(data)
                     out_file.write(data)
 
-        elif op.type == op.SOURCE_COPY:
+        elif op_type == op.SOURCE_COPY:
             if not self.diff:
                 print("SOURCE_COPY supported only for differential OTA")
                 sys.exit(-2)
@@ -181,7 +181,7 @@ class Dumper:
                     processed_len += len(data)
                     out_file.write(data)
                 processed_len = 0
-        elif op.type == op.ZERO:
+        elif op_type == op.ZERO:
             for ext in op.dst_extents:
                 out_file.seek(ext.start_block * self.block_size)
                 data_length = ext.num_blocks * self.block_size
@@ -191,16 +191,16 @@ class Dumper:
                     processed_len += len(data)
                 processed_len = 0
         else:
-            print("Unsupported type = %d" % op.type)
+            print(f"Unsupported type = {op.type:d}")
             sys.exit(-1)
         del data
 
     def dump_part(self, part):
         name = part["partition"].partition_name
-        out_file = open("%s/%s.img" % (self.out, name), "wb")
+        out_file = open(f"{self.out}/{name}.img", "wb")
 
         if self.diff:
-            old_file = open("%s/%s.img" % (self.old, name), "rb")
+            old_file = open(f"{self.old}/{name}.img", "rb")
         else:
             old_file = None
 
