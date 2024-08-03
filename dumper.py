@@ -163,7 +163,6 @@ class Dumper:
                     data = b''
         elif op_type == op.REPLACE:
             out_file.seek(op.dst_extents[0].start_block * self.block_size)
-            payloadfile.seek(payloadfile.tell() - 4)
             while processed_len < data_length:
                     data = payloadfile.read(buffsize)
                     processed_len += len(data)
